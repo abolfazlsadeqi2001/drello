@@ -1,8 +1,3 @@
-<%@page import="pages.home.models.ToTeachModel"%>
-<%@page import="java.util.Set"%>
-<%@page import="java.util.Collections"%>
-<%@page import="java.util.stream.Collectors"%>
-<%@page import="java.util.stream.Collector"%>
 <%@page import="pages.home.HomePage"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,6 +11,7 @@
 
 <meta http-equiv="content-type" content="text/html" />
 <title>Drello</title>
+<% HomePage homePage = HomePage.instance(); %>
 </head>
 <body>
 	<!-- to teach section -->
@@ -31,10 +27,7 @@
 			<td>hour</td>
 			<td>minute</td>
 		</tr>
-		<%
-			HomePage homePage = new HomePage();
-		out.print(homePage.getToTeachTableContents());
-		%>
+		<%=homePage.getToTeachTableContents() %>
 	</table>
 </body>
 </html>

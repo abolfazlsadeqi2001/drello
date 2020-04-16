@@ -18,14 +18,17 @@ import pages.home.models.ToTeachModel;
  */
 public class HomePage {
 
+	private static HomePage object;
+	private static long currentMilis;
+	private static final long UPDATE_DURATION = 60 * 1000;// EVERY 1 MINUTES UPDATE REPO
+	
 	private Set<ToTeachModel> toTeachModels = new HashSet<ToTeachModel>();
 	private String toTeachTableBody = "";
 
-	public HomePage() throws EstablishConnectionException, QueryExecutationException, ConnectionNotDefinedException {
-		setToTeachModels();
-		setToTeachTableContents();
+	private HomePage() {
+		
 	}
-
+	
 	/**
 	 * get whole toteach table contents of database append them in the
 	 * {@link #toTeachModels} as {@link pages.home.models.ToTeachModel}
@@ -104,7 +107,7 @@ public class HomePage {
 		});
 		toTeachTableBody = builder.toString();
 	}
-
+	
 	/**
 	 * return the produced values into {@link #setToTeachTableContents()} as rows of
 	 * a table
@@ -115,4 +118,22 @@ public class HomePage {
 		return toTeachTableBody;
 	}
 
+	private void updateRepository() throws EstablishConnectionException, QueryExecutationException, ConnectionNotDefinedException {
+		setToTeachModels();
+		setToTeachTableContents();
+		currentMilis = System.currentTimeMillis();
+	}
+	
+	public static HomePage instance() throws EstablishConnectionException, QueryExecutationException, ConnectionNotDefinedException {
+		if(object == null) {
+			object = new HomePage();
+		}
+		
+		long duration = System.currentTimeMillis() - currentMilis;
+		if(duration >= UPDATE_DURATION) {
+			object.updateRepository();
+		}
+		
+		return object;
+	}
 }
