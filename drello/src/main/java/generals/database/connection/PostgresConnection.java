@@ -15,9 +15,9 @@ import generals.database.connection.exceptions.QueryExecutationException;
 
 // TODO write document
 public class PostgresConnection {
-	private String url = "jdbc:postgresql://localhost:5432";
-	private String userName = ConnectionValues.getUserName();// TODO implements default value not null
-	private String password = ConnectionValues.getPassword();// TODO implements default value not null
+	private String url = "jdbc:postgresql://localhost:5432/drello";
+	private String userName = ConnectionValues.getUserName();
+	private String password = ConnectionValues.getPassword();
 
 	private Connection con;
 	private Statement statement;
@@ -29,8 +29,9 @@ public class PostgresConnection {
 	 */
 	public PostgresConnection() throws EstablishConnectionException {
 		try {
+			Class.forName("org.postgresql.Driver");
 			con = DriverManager.getConnection(url, userName, password);
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO implements error handler
 			throw new EstablishConnectionException();
 		}

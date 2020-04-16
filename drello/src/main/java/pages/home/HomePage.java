@@ -25,7 +25,7 @@ public class HomePage {
 	 */
 	public static Set<ToTeachModel> getToTeachModels() throws EstablishConnectionException,QueryExecutationException,ConnectionNotDefinedException {
 		PostgresConnection con = new PostgresConnection();
-		ResultSet result = con.queryOperator("SELECT * FROM toTeaches");
+		ResultSet result = con.queryOperator("SELECT * FROM toteaches");
 		Set<ToTeachModel> models = new HashSet<ToTeachModel>();
 		
 		try {
