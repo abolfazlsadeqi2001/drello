@@ -14,10 +14,11 @@ import java.nio.file.Path;
  * <b>warning the order must follow the top order </b>
  * and different them with a | for each parameter <br>
  * like root|1234|
+ * TODO write test
  * @author abolfazlsadeqi2001
  */
 public class ConnectionValues {
-	private static final Path POSTGRESQL_CONFIGURE_FILE_PATH = Path.of("~/.psql_configure");
+	private static final Path POSTGRESQL_CONFIGURE_FILE_PATH = Path.of("/home/abolfazlsadeqi2001/.psql_configure");
 	/**
 	 * read the configure file then return the first parameter(contain user name to connect psql database) as order is introduced in {@link ConnectionValues} class 
 	 * @return psql_user_name
@@ -25,10 +26,10 @@ public class ConnectionValues {
 	public static String getUserName() {
 		try {
 			String fileContent = Files.readString(POSTGRESQL_CONFIGURE_FILE_PATH);
-			return fileContent.split("|")[0];
+			return fileContent.split("#")[0];
 		} catch (IOException e) {
 			// TODO implements the error handler for that
-			return null;
+			return "postgres";
 		}
 	}
 	/**
@@ -38,10 +39,10 @@ public class ConnectionValues {
 	public static String getPassword() {
 		try {
 			String fileContent = Files.readString(POSTGRESQL_CONFIGURE_FILE_PATH);
-			return fileContent.split("|")[1];
+			return fileContent.split("#")[1];
 		} catch (IOException e) {
 			// TODO implements the error handler for that
-			return null;
+			return "1234";
 		}
 	}
 }
