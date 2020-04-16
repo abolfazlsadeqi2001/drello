@@ -10,13 +10,23 @@
 <meta name="view-port" content="width=device-width,initiale-scale=1.0" />
 
 <meta http-equiv="content-type" content="text/html" />
+<script type="text/javascript" src="home/toTeachFitler.js" ></script>
 <title>Drello</title>
 <% HomePage homePage = HomePage.instance(); %>
 </head>
 <body>
 	<!-- to teach section -->
 	<h1>to teach</h1>
-	<table border="2">
+	
+	<select id="classSelector">
+	
+	</select>
+	
+	<select id="lessonSelector">
+	
+	</select>
+	
+	<table class="toTeachTable" border="2">
 		<tr>
 			<td>title</td>
 			<td>lesson</td>
