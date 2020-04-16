@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<% HomePage homePage = HomePage.instance(); %>
 <meta charset="UTF-8">
 <meta name="author" content="abolfazlsadeqi2001" />
 <meta name="description" content="Home page" />
@@ -10,11 +11,13 @@
 <meta name="view-port" content="width=device-width,initiale-scale=1.0" />
 
 <meta http-equiv="content-type" content="text/html" />
-<script type="text/javascript" src="home/toTeachFitler.js" ></script>
+<script type="text/javascript">
+	var todoPlans = <%=homePage.getToTeachModels() %>;
+</script>
+<script type="text/javascript" src="home/toTeachFilter.js" ></script>
 <title>Drello</title>
-<% HomePage homePage = HomePage.instance(); %>
 </head>
-<body>
+<body onload="init()">
 	<!-- to teach section -->
 	<h1>to teach</h1>
 	
@@ -37,7 +40,6 @@
 			<td>hour</td>
 			<td>minute</td>
 		</tr>
-		<%=homePage.getToTeachTableContents() %>
 	</table>
 </body>
 </html>
