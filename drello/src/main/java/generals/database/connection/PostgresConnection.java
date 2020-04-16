@@ -13,6 +13,7 @@ import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
 
+// TODO write document
 public class PostgresConnection {
 	private String url = "jdbc:postgresql://localhost:5432";
 	private String userName = ConnectionValues.getUserName();// TODO implements default value not null
