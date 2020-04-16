@@ -18,47 +18,6 @@
 <title>Drello</title>
 </head>
 <body>
-<%
-		StringBuilder toTeachTableBody = new StringBuilder();
-			HomePage.getToTeachModels().stream().sorted((m1, m2) -> m1.compareByDate(m2))
-				.forEach(model ->{
-					toTeachTableBody.append("<tr>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getTeachingTitle());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getLessonName());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getClassNumber());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getTeacherName());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getMonth());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getDay());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getHour());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<td>");
-					toTeachTableBody.append(model.getMinutes());
-					toTeachTableBody.append("</td>");
-					
-					toTeachTableBody.append("<tr>");
-				});
-		%>
 	<!-- to teach section -->
 	<h1>to teach</h1>
 	<table border="2">
@@ -72,7 +31,10 @@
 			<td>hour</td>
 			<td>minute</td>
 		</tr>
-		<%=toTeachTableBody.toString() %>
+		<%
+			HomePage homePage = new HomePage();
+		out.print(homePage.getToTeachTableContents());
+		%>
 	</table>
 </body>
 </html>
