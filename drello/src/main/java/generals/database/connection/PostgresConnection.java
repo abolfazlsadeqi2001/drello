@@ -15,7 +15,7 @@ import generals.database.connection.exceptions.QueryExecutationException;
 
 // TODO write document
 public class PostgresConnection {
-	private String url = "jdbc:postgresql://localhost:5432/drello";
+	private String url = ConnectionValues.getURL();
 	private String userName = ConnectionValues.getUserName();
 	private String password = ConnectionValues.getPassword();
 
