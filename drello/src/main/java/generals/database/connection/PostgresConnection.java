@@ -13,7 +13,18 @@ import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
 
-// TODO write document
+/**
+ * this class provide some features to execute your sqls into psql<br>
+ * how to use:<br>
+ * <ol>
+ * 	<li>create new instance using constructore</li>
+ *  <li>if you want execute the select query use {@link #queryOperator(String)}</li>
+ *  <li>if you want execute update,delete,insert execute {@link #defaultOperators(String)}</li>
+ *  <li>call close method to close connection,statement and resultsets(you can execute infinitive numbers of sqls in an instance of this class)
+ * </ol>
+ * @author abolfazlsadeqi2001
+ *
+ */
 public class PostgresConnection {
 	private String url = ConnectionValues.getURL();
 	private String userName = ConnectionValues.getUserName();
