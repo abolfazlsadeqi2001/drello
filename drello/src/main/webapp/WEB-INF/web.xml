@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>AddToTeachRow</servlet-name>
+  	<servlet-class>apis.add.to.teach.row.AddToTeachRow</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>AddToTeachRow</servlet-name>
+  	<url-pattern>/add_to_teach_row</url-pattern>
+  </servlet-mapping>
 </web-app>
