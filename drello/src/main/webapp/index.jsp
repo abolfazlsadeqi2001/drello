@@ -18,6 +18,10 @@
 <title>Drello</title>
 </head>
 <body onload="init()">
+	<div class="nav">
+		<a href="manager_login">manager panel</a>
+		<a href="streamer_login">streamer panel</a>
+	</div>
 	<!-- to teach section -->
 	<h1>to teach</h1>
 	

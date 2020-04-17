@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import generals.configurations.configure.file.reader.exception.ReadingException;
-
+// TODO add default splitter
 /**
  * this class provide some features to read a configure file
  * ,a configure file content must look like this :<br>
