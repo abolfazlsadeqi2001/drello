@@ -6,7 +6,6 @@ package generals.html.elements.generator;
  *
  */
 public class ElementGenerator {
-	// TODO add Javascript object generator in here
 	
 	/**
 	 * this method return the options tags to use in select input

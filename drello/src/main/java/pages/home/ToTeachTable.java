@@ -23,13 +23,13 @@ public class ToTeachTable {
 	 * @throws QueryExecutationException
 	 * @throws ConnectionNotDefinedException
 	 */
-	public void updateRepository() throws EstablishConnectionException, QueryExecutationException, ConnectionNotDefinedException {
+	void updateRepository() throws EstablishConnectionException, QueryExecutationException, ConnectionNotDefinedException {
 		toTeachModels.clear();
 		setToTeachModels();
 		setJavaScriptToTeachObject();
 	}
 	
-	public String getModels() {
+	String getModels() {
 		return toTeachJavaScriptModels;
 	}
 	
