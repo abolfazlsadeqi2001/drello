@@ -1,4 +1,6 @@
-package configurations.lessons;
+package configurations.defaultvalues.select.options.lessons;
+
+import generals.html.elements.generator.ElementGenerator;
 
 /**
  * this class provides default names of lessons as a select input body
@@ -7,7 +9,7 @@ package configurations.lessons;
  */
 public class Lessons {
 	private static final String[] lessons = new String[] {
-			"Physic","Hesaban","Hendese","Gossaste","Riazi","Shimi","Farsi","Dini","Zaban","Sabke zendegi","Jame'e Shenasi","Salamat"
+			"physic","hesaban","hendese","gossaste","riazi","shimi","farsi","dini","zaban","sabke zendegi","jame'e shenasi","salamat"
 	};
 	
 	public static String selectInputBody;
@@ -17,17 +19,7 @@ public class Lessons {
 	 */
 	public static String getLessonsAsSelectOptions() {
 		if(selectInputBody == null) {// if select input body == null set it
-			StringBuilder builder = new StringBuilder();
-			
-			for (String lesson : lessons) {
-				builder.append("<option value='");
-				builder.append(lesson);
-				builder.append("'>");
-				builder.append(lesson);
-				builder.append("</option>");
-			}
-			
-			selectInputBody = builder.toString();
+			selectInputBody = ElementGenerator.getOptions(lessons);
 		}
 		
 		return selectInputBody;

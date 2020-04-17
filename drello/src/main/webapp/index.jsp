@@ -22,7 +22,7 @@
 	<h1>to teach</h1>
 	
 	<select id="classSelector">
-	
+		<%=homePage.getClassesSelectInputBody() %>
 	</select>
 	
 	<select id="lessonSelector">

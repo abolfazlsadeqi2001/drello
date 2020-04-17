@@ -1,6 +1,7 @@
 package pages.home;
 
-import configurations.lessons.Lessons;
+import configurations.defaultvalues.select.options.classes.Classes;
+import configurations.defaultvalues.select.options.lessons.Lessons;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
@@ -20,7 +21,15 @@ public class HomePage {
 	private HomePage() {}
 	
 	/**
-	 * a proxy for {@link configurations.lessons.Lessons}
+	 * a proxy for {@link configurations.defaultvalues.select.options.classes.Classes}
+	 * @return
+	 */
+	public static String getClassesSelectInputBody() {
+		return Classes.getSelectBody();
+	}
+	
+	/**
+	 * a proxy for {@link configurations.defaultvalues.select.options.lessons.Lessons}
 	 * @return
 	 */
 	public static String getLessonsSelectInputBody() {
