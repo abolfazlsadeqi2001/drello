@@ -34,7 +34,7 @@ function init(){
 	classToTeachSelector.innerHTML += classToTeachSelectoreInnerHTML;
 	// handle change event
 	classToTeachSelector.addEventListener("change",()=>{
-		classToTeachFilter = classToTeachSelector.value.toLowerCase().trim();
+		classToTeachFilter = classToTeachSelector.value;
 		doNewFilters();
 	});
 	// find lesson selector
