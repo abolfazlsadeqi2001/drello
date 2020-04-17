@@ -16,7 +16,7 @@ public class ToTeachModel {
 	private byte hour;
 	private byte minutes;
 
-	private byte classNumber;
+	private String classNumber;
 	private String lessonName;
 	private String teacherName;
 	private String teachingTitle;
@@ -53,11 +53,11 @@ public class ToTeachModel {
 		this.minutes = minutes;
 	}
 
-	public Byte getClassNumber() {
+	public String getClassNumber() {
 		return classNumber;
 	}
 
-	public void setClassNumber(byte classNumber) {
+	public void setClassNumber(String classNumber) {
 		this.classNumber = classNumber;
 	}
 

@@ -53,7 +53,7 @@ public class ToTeachTable {
 				model.setDay(result.getByte("day"));
 				model.setHour(result.getByte("hour"));
 				model.setMinutes(result.getByte("minute"));
-				model.setClassNumber(result.getByte("class"));
+				model.setClassNumber(result.getString("class"));
 				model.setTeachingTitle(result.getString("title"));
 				model.setTeacherName(result.getString("teacher"));
 				model.setLessonName(result.getString("lesson"));
@@ -92,9 +92,9 @@ public class ToTeachTable {
 			builder.append(model.getLessonName());
 			builder.append("',");
 
-			builder.append("classId:");
+			builder.append("classId:'");
 			builder.append(model.getClassNumber());
-			builder.append(",");
+			builder.append("',");
 
 			builder.append("teacher:'");
 			builder.append(model.getTeacherName());

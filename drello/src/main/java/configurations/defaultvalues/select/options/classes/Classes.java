@@ -7,9 +7,8 @@ import generals.html.elements.generator.ElementGenerator;
  * @author abolfazlsadeqi2001
  */
 public class Classes {
-		// TODO change int to string (underestandable for every body)
-		private static final int[] classes = new int[] {
-				101,102,103,111,112,113,121,122,123
+		private static final String[] classes = new String[] {
+				"10 Tajrobi","10 Riazi","10 Ensani","11 Tajrobi","11 Riazi","11 Ensani","12 Tajrobi","12 Riazi","12 Ensani"
 		};
 		
 		private static String classesSelectInputBody ;
