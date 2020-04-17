@@ -28,7 +28,10 @@ function init(){
 	}
 	// find class selector
 	classToTeachSelector = document.querySelector("#classSelector");
+	var classToTeachSelectoreInnerHTML = classToTeachSelector.innerHTML;
+	classToTeachSelector.innerHTML = "";
 	classToTeachSelector.innerHTML += "<option value='all'>all</option>";
+	classToTeachSelector.innerHTML += classToTeachSelectoreInnerHTML;
 	// handle change event
 	classToTeachSelector.addEventListener("change",()=>{
 		classToTeachFilter = classToTeachSelector.value.toLowerCase().trim();
@@ -36,7 +39,10 @@ function init(){
 	});
 	// find lesson selector
 	lessonToTeachSelector = document.querySelector("#lessonSelector");
+	var lessonToTeachSelectoreInnerHTML = lessonToTeachSelector.innerHTML;
+	lessonToTeachSelector.innerHTML = "";
 	lessonToTeachSelector.innerHTML += "<option value='all'>all</option>";
+	lessonToTeachSelector.innerHTML += lessonToTeachSelectoreInnerHTML;
 	// handle change event
 	lessonToTeachSelector.addEventListener("change",()=>{
 		lessonToTeachFilter = lessonToTeachSelector.value.toLowerCase().trim();

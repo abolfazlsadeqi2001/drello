@@ -7,6 +7,7 @@ import generals.html.elements.generator.ElementGenerator;
  * @author abolfazlsadeqi2001
  */
 public class Classes {
+		// TODO change int to string (underestandable for every body)
 		private static final int[] classes = new int[] {
 				101,102,103,111,112,113,121,122,123
 		};
