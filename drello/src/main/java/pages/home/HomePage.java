@@ -1,9 +1,9 @@
 package pages.home;
 
+import configurations.lessons.Lessons;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
-// TODO implements the order and creating on client side
 /**
  * this class provide some methods that is used by Home Page (HomePage.java is a proxy of other classes)
  * 
@@ -18,6 +18,14 @@ public class HomePage {
 	private ToTeachTable toTeachTable = new ToTeachTable();
 	
 	private HomePage() {}
+	
+	/**
+	 * a proxy for {@link configurations.lessons.Lessons}
+	 * @return
+	 */
+	public static String getLessonsSelectInputBody() {
+		return Lessons.getLessonsAsSelectOptions();
+	}
 	
 	/**
 	 * return an instance of HomePage that include all necessary elements on home page

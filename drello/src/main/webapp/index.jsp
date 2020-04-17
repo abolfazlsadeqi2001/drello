@@ -26,7 +26,7 @@
 	</select>
 	
 	<select id="lessonSelector">
-	
+		<%=homePage.getLessonsSelectInputBody() %>
 	</select>
 	
 	<table class="toTeachTable" border="2">
