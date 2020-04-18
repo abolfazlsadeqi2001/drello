@@ -24,9 +24,17 @@ if(!userName.equals(ManagerLogin.getUserName()) || !password.equals(ManagerLogin
 	session.setAttribute("password", password);
 }
 %>
+<head>
 <%HomePage homePage = HomePage.instance();%>
+<script type="text/javascript">
+	var todoPlans = <%=homePage.getToTeachModels() %>;
+</script>
+<script type="text/javascript" src="remove.js" ></script>
+</head>
 <html>
-<body>
+<body onload="init()">
+	<!-- add new to teach row -->
+	<h1>add new to teach plan</h1>
 	<form action="../add_to_teach_row" method="GET" >
 		<label>class:</label>
 		<select name="class" >
@@ -47,9 +55,13 @@ if(!userName.equals(ManagerLogin.getUserName()) || !password.equals(ManagerLogin
 		month:<input type="number" name="month" placeholder="month" min="1" max="12"/><br>
 		day:<input type="number" name="day" placeholder="day" min="1" max="31"/><br>
 		hour:<input type="number" name="hour" placeholder="hour" min="1" max="24"/><br>
-		minute:<input type="number" name="minute" placeholder="minute" min="0" max="59" />
-		<br>
+		minute:<input type="number" name="minute" placeholder="minute" min="0" max="59" /><br>
 		<input type="submit" value="add" />
 	</form>
+	<!-- to remove a row -->
+	<h1>remove</h1>
+	<table class="remove" >
+		
+	</table>
 </body>
 </html>
