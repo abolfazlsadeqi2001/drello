@@ -29,11 +29,12 @@ public class AddToTeachRow extends HttpServlet {
 
 		try {
 			ToTeachMvc.setToDatabase(model);
-			response.sendRedirect("/drello");
 		} catch (EstablishConnectionException | ConnectionNotDefinedException | QueryExecutationException e) {
 			response.setStatus(503);
 			// TODO Error Handler
 		}
+		
+		response.sendRedirect("/drello");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
