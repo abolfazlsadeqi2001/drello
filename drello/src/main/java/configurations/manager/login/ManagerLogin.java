@@ -2,14 +2,14 @@ package configurations.manager.login;
 
 import generals.configurations.configure.file.reader.ConfigureFileReader;
 import generals.configurations.configure.file.reader.exception.ReadingException;
-
+//TODO write authentication system
 /**
  * read a file then use their contents for login in manager side
  * @author abolfazlsadeqi2001
  *
  */
 public class ManagerLogin {
-	private static String path = "/home/abolfazlsadeqi2001/.manager_configure";
+	private static final String PATH = "/home/abolfazlsadeqi2001/.manager_configure";
 	
 	/**
 	 * get <mark>only</mark> user name for authentication
@@ -17,7 +17,7 @@ public class ManagerLogin {
 	 * @throws ReadingException
 	 */
 	public static String getUserName() throws ReadingException {
-		ConfigureFileReader reader = new ConfigureFileReader(path);
+		ConfigureFileReader reader = new ConfigureFileReader(PATH);
 		return reader.getParameterByIndex("#", 0);
 	}
 	/**
@@ -26,7 +26,7 @@ public class ManagerLogin {
 	 * @throws ReadingException
 	 */
 	public static String getPassword() throws ReadingException {
-		ConfigureFileReader reader = new ConfigureFileReader(path);
+		ConfigureFileReader reader = new ConfigureFileReader(PATH);
 		return reader.getParameterByIndex("#", 1);
 	}
 }
