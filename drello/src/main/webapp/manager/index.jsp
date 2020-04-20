@@ -24,6 +24,7 @@ if(!userName.equals(ManagerLogin.getUserName()) || !password.equals(ManagerLogin
 	session.setAttribute("password", password);
 }
 %>
+<title>manager panel</title>
 <head>
 <%HomePage homePage = HomePage.instance();%>
 <script type="text/javascript">
