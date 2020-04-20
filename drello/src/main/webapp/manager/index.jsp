@@ -1,33 +1,21 @@
+<%@page import="generals.defaultAuthentication.AuthenticationLocator.AuthenticationServiceTypes"%>
+<%@page import="generals.defaultAuthentication.AuthenticationLocator"%>
+<%@page import="generals.defaultAuthentication.AuthenticationService"%>
 <%@page import="pages.home.HomePage"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="configurations.manager.login.ManagerLogin"%>
-<%-- autherization --%>
-<% String userName;
-if(session.getAttribute("username") == null){
-	userName = request.getParameter("username");
-}else{
-	userName =(String) session.getAttribute("username");
-}
-
-String password;
-if(session.getAttribute("password") == null){
-	password = request.getParameter("password");
-}else{
-	password =(String) session.getAttribute("password");
-}
-
-if(!userName.equals(ManagerLogin.getUserName()) || !password.equals(ManagerLogin.getPassword())){
+<%-- authentication --%>
+<%
+AuthenticationService service = AuthenticationLocator.getService(AuthenticationServiceTypes.manager);
+if(!service.isAuthenticated(request)){
 	session.setAttribute("error", "unknown user in database");
 	response.sendRedirect("../manager_login");
-}else{
-	session.setAttribute("username", userName);
-	session.setAttribute("password", password);
 }
 %>
 <title>manager panel</title>
 <head>
-<%HomePage homePage = HomePage.instance();%>
 <script type="text/javascript">
+<%HomePage homePage = HomePage.instance();%>
 	var todoPlans = <%=homePage.getToTeachModels() %>;
 </script>
 <script type="text/javascript" src="remove.js" ></script>
