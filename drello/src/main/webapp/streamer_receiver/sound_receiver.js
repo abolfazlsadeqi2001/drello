@@ -63,7 +63,6 @@
 											// set it otherwise set 0 as default
 			audio.currentTime = currentTime;
 		} else {
-			audio.currentTime = 0;
 			audio.pause();
 		}
 		if (audio.paused) {// if the audio player is paused play it
