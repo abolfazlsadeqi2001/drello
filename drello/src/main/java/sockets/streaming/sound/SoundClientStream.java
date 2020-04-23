@@ -11,7 +11,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("sound_client")
+@ServerEndpoint("/sound_client")
 public class SoundClientStream extends SoundStreamingParent {
 	public static Set<Session> clients = new HashSet<Session>();
 

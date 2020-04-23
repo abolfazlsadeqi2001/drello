@@ -17,7 +17,7 @@ out.print("'");
 out.print(host);
 out.print("'");%>;
 var port = <%out.print(request.getLocalPort());%>;
-var url = "wss://"+host+':'+port+"/test/sound_client";
+var url = "wss://"+host+':'+port+"/drello/sound_client";
 var blobTimeDuration = <%out.print(StreamingValues.getDelay());%>;
 var mimeType = <% out.print("'");
 out.print(StreamingValues.getMimeType());
