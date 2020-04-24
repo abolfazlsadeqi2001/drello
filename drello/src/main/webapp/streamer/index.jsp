@@ -1,5 +1,5 @@
 <%@page import="configurations.board.streaming.defaultValues.CapturingDefaultValues"%>
-<%@page import="configuration.sockets.sound.streaming.StreamingValues"%>
+<%@page import="configuration.sockets.sound.streaming.SoundStreamingValues"%>
 <%@page import="generals.defaultAuthentication.AuthenticationLocator.AuthenticationServiceTypes"%>
 <%@page import="generals.defaultAuthentication.AuthenticationLocator"%>
 <%@page import="generals.defaultAuthentication.AuthenticationService"%>
@@ -10,7 +10,8 @@
 <html>
 <head>
 <%-- authentication --%>
-<% AuthenticationService service = AuthenticationLocator.getService(AuthenticationServiceTypes.streamer);
+<%
+	AuthenticationService service = AuthenticationLocator.getService(AuthenticationServiceTypes.streamer);
 if(!service.isAuthenticated(request)){
 	session.setAttribute("error", "unknown user in database");
 	response.sendRedirect("../streamer_login");
@@ -20,8 +21,8 @@ if(!service.isAuthenticated(request)){
 <script type="text/javascript">
 	var host = location.hostname;
 	var port = location.port;
-	var mimeType = <%= "'"+StreamingValues.getMimeType()+"'"%>
-	var blobTimeDuration = <%out.print(StreamingValues.getDelay());%>
+	var mimeType = <%="'"+SoundStreamingValues.getMimeType()+"'"%>
+	var blobTimeDuration = <%out.print(SoundStreamingValues.getDelay());%>
 	var captureTimeDuartion = <%=CapturingDefaultValues.getDelay()%>
 	var mainPage = "/drello";
 </script>
