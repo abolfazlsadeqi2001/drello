@@ -1,6 +1,4 @@
 var boardWS = new WebSocket(captureURL);
-var streamTime = undefined;
-var currentCaptureTime = 0;
 var points = [];
 
 var canvas;
@@ -17,31 +15,26 @@ boardWS.onclose = function(){
 	location.href = mainPage;
 }
 boardWS.onmessage = function(msg){
-	var data = msg.data;
-	if(data.charAt(0) == "#"){// if it is a streamer current timer indicator
-		streamTime = Number(data.replace("#",""));
-	}else{// if it is a canvas data object
-		// read array of points object
-		while(data.indexOf("},{") != -1){
-			data = data.replace("},{","}#{");
-		}
-		var array = data.split("#");
-		// parse array stringified objects to object
-		array.forEach(element =>{
-			element = element.trim();
-			if(element != ""){
-				var elementObj = JSON.parse(element);
-				// push parsed object to points
-				points.push(elementObj);
-			}
-		});
+	var data = e.data;
+	// read array of points object
+	while(data.indexOf("},{") != -1){
+		data = data.replace("},{","}#{");
 	}
+	var array = data.split("#");
+	// parse array stringified objects to object
+	array.forEach(element =>{
+		element = element.trim();
+		if(element != ""){
+			var elementObj = JSON.parse(element);
+			// push parsed object to points
+			points.push(elementObj);
+		}
+	});
 }
 //an interval for writing points based on time
 setInterval(function(){
-	currentCaptureTime += 100;
 	for(var i=currentIndex; i<points.length;i++){
-		if(points[i].time <= currentCaptureTime + streamTime){
+		if(points[i].time <= currentTime){
 			eventsHandler(points[i])
 			currentIndex = i;
 		}else{
