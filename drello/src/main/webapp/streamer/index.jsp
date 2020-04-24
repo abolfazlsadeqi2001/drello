@@ -25,13 +25,14 @@ if(!service.isAuthenticated(request)){
 	var captureTimeDuartion = <%=CapturingDefaultValues.getDelay()%>
 	var mainPage = "/drello";
 </script>
-<script type="text/javascript" src="record.js" ></script>
-<script type="text/javascript" src="board.js"></script>
+<%--set sound or capture script if sound or capture parameter is on --%>
+<%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"<script type='text/javascript' src='record.js' ></script>":""%>
+<%=(request.getParameter("capture") != null && request.getParameter("capture").equals("on"))?"<script type='text/javascript' src='board.js'></script>":"" %>
 <link href="index.css" rel="stylesheet" />
 <meta charset="UTF-8">
 <title>streamer</title>
 </head>
-<body onload="start();" >
+<body <%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"onload='start()'":""%> >
 	<canvas></canvas>
 	<div class="marker-container">
 		<span color="red"></span>
