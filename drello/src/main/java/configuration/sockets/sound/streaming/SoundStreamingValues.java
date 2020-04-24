@@ -1,6 +1,6 @@
 package configuration.sockets.sound.streaming;
 
-public class StreamingValues {
+public class SoundStreamingValues {
 	private static final int DELAY = 20;
 	private static final String MIME_TYPE = "audio/ogg";
 	
