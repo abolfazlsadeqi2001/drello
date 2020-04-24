@@ -13,14 +13,17 @@
 		// prepare media
 		navigator.getUserMedia = navigator.getUserMedia
 				|| navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-		// reading media
-		navigator.getUserMedia({video:false,audio:true},read,error);
 		// call init method of board (start recording board)
 		if(boardIsConnected){
 			init();
+			// reading media
+			navigator.getUserMedia({video:false,audio:true},read,error);
 		}else{
 			var interval = setInterval(function(){
 				init();
+				// reading media
+				navigator.getUserMedia({video:false,audio:true},read,error);
+				// clear intetval
 				clearInterval(interval);
 			},100);
 		}
