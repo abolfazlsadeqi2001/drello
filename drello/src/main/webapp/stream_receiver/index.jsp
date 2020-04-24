@@ -1,4 +1,4 @@
-<%@page import="configuration.sockets.sound.streaming.StreamingValues"%>
+<%@page import="configuration.sockets.sound.streaming.SoundStreamingValues"%>
 <html>
 <head>
 <title>stream</title>
@@ -13,23 +13,13 @@
 </style>
 <script type="text/javascript">
 //value the general variables
-var host = <%String host = request.getLocalAddr();
-if(host.equals("127.0.0.1") || host.equals("0:0:0:0:0:0:0:1")){
-	host = "localhost";
-}
-
-out.print("'");
-out.print(host);
-out.print("'");%>;
-var port = <%out.print(request.getLocalPort());%>;
-
-var blobTimeDuration = <%out.print(StreamingValues.getDelay());%>;
-var mimeType = <% out.print("'");
-out.print(StreamingValues.getMimeType());
-out.print("'");%>;
-
-var soundURL = "wss://"+host+':'+port+"/drello/sound_client";
-var captureURL = "wss://"+host+':'+port+"/drello/board_client";
+var host = location.hostname;
+var port = location.port
+var blobTimeDuration = <%out.print(SoundStreamingValues.getDelay());%>;
+var mimeType = <%out.print("'"+SoundStreamingValues.getMimeType()+"'");%>
+var mainPage = "/drello";
+var soundURL = "wss://"+host+':'+port+mainPage+"/sound_client";
+var captureURL = "wss://"+host+':'+port+mainPage+"/board_client";
 </script>
 <script type="text/javascript" src="sound_receiver.js"></script>
 <script type="text/javascript" src="board_receiver.js"></script>

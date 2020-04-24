@@ -13,6 +13,9 @@ function init(){
 	ctx = canvas.getContext("2d");
 }
 // get the points as msg and convert them to array of objects
+boardWS.onclose = function(){
+	location.href = mainPage;
+}
 boardWS.onmessage = function(msg){
 	var data = msg.data;
 	if(data.charAt(0) == "#"){// if it is a streamer current timer indicator
