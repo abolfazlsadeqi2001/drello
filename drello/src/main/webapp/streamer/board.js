@@ -16,12 +16,12 @@ var points = [];
 
 var boardURL = "wss://"+host+":"+port+"/drello/board_stream";
 var boardWS = new WebSocket(boardURL);
-var boardIsConnected = false;
 
-// ==> on open board ws
-boardWS.onopen = function(){
-	boardIsConnected = true;
+// ==> handle on close
+boardWS.onclose = function(){
+	 location.href = "/drello";
 }
+
 // ==> configure functions
 function configureCanvas(){
 	// value the canvas variables

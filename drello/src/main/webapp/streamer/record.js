@@ -2,31 +2,16 @@
 	var soundWS = new WebSocket(soundURL);// to connect to database
 	;// #depend on client.html
 	var recorder;// to record the stream
-	soundWS.onopen = function (){
-		console.log("open")
-	};
 	soundWS.onclose = function(){
-		console.log("close");
+		 location.href = "/drello";
 	};
 	// start method load on startups
 	function start() {
 		// prepare media
 		navigator.getUserMedia = navigator.getUserMedia
 				|| navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-		// call init method of board (start recording board)
-		if(boardIsConnected){
-			init();
-			// reading media
-			navigator.getUserMedia({video:false,audio:true},read,error);
-		}else{
-			var interval = setInterval(function(){
-				init();
-				// reading media
-				navigator.getUserMedia({video:false,audio:true},read,error);
-				// clear intetval
-				clearInterval(interval);
-			},100);
-		}
+		// reading media
+		navigator.getUserMedia({video:false,audio:true},read,error);
 	}
 	// stream handlers (read event)
 	function read(stream) {
