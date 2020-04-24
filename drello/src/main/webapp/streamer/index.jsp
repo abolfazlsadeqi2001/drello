@@ -16,25 +16,14 @@ if(!service.isAuthenticated(request)){
 	response.sendRedirect("../streamer_login");
 }
 %>
-<%-- set default values --%>
+<!-- set default values -->
 <script type="text/javascript">
-	<%-- setup the host addr --%>
-	var host = <%String host = request.getLocalAddr();
-	if(host.equals("127.0.0.1") || host.equals("0:0:0:0:0:0:0:1")){
-		host = "localhost";
-	}
-	
-	out.print("'");
-	out.print(host);
-	out.print("'");%>;
-	<%-- setup host port --%>
-	var port = <%out.print(request.getLocalPort());%>
-	<%-- setup mime type --%>
+	var host = location.hostname;
+	var port = location.port;
 	var mimeType = <%= "'"+StreamingValues.getMimeType()+"'"%>
-	<%-- setup stream delay --%>
 	var blobTimeDuration = <%out.print(StreamingValues.getDelay());%>
-	<%-- capture time --%>
 	var captureTimeDuartion = <%=CapturingDefaultValues.getDelay()%>
+	var mainPage = "/drello";
 </script>
 <script type="text/javascript" src="record.js" ></script>
 <script type="text/javascript" src="board.js"></script>
@@ -54,7 +43,7 @@ if(!service.isAuthenticated(request)){
 		<button id="eraser" >eraser</button>
 		<input type="number" min="2" max="100" value="10" />
 		<button id="clear">clear</button>
-		<button onclick="onCloseConnection();">finish</button>
+		<button onclick="closeConnection();">finish</button>
 	</div>
 </body>
 </html>

@@ -14,14 +14,17 @@ var eraserWidth = 10;
 var currentTime = 0;
 var points = [];
 
-var boardURL = "wss://"+host+":"+port+"/drello/board_stream";
+var boardURL = "wss://"+host+":"+port+mainPage+"/board_stream";
 var boardWS = new WebSocket(boardURL);
 
 // ==> handle on close
 boardWS.onclose = function(){
-	 location.href = "/drello";
+	 location.href = mainPage;
 }
-
+// ==> handle on message
+boardWS.onmessage = function(e){// if receive the current time from sound ws server add it to current time
+	currentTime += Number(e.data);
+}
 // ==> configure functions
 function configureCanvas(){
 	// value the canvas variables

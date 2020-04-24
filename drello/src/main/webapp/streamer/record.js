@@ -1,9 +1,9 @@
-	var soundURL = "wss://"+host+":"+port+"/drello/sound_streamer";
+	var soundURL = "wss://"+host+":"+port+mainPage+"/sound_streamer";
 	var soundWS = new WebSocket(soundURL);// to connect to database
 	;// #depend on client.html
 	var recorder;// to record the stream
 	soundWS.onclose = function(){
-		 location.href = "/drello";
+		 location.href = mainPage;
 	};
 	// start method load on startups
 	function start() {
@@ -35,4 +35,5 @@
 	function closeConnection(){
 		recorder.stop();
 		soundWS.close();
+		location.href=mainPage;
 	}
