@@ -25,6 +25,7 @@ boardWS.onmessage = function(msg){
 		var array = data.split("#");
 		// parse array stringified objects to object
 		array.forEach(element =>{
+			element = element.trim();
 			if(element != ""){
 				var elementObj = JSON.parse(element);
 				// push parsed object to points

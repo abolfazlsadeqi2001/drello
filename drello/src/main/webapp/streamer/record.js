@@ -1,5 +1,5 @@
-var url = "wss://"+host+":"+port+"/drello/sound_streamer";
-	var soundWS = new WebSocket(url);// to connect to database
+	var soundURL = "wss://"+host+":"+port+"/drello/sound_streamer";
+	var soundWS = new WebSocket(soundURL);// to connect to database
 	;// #depend on client.html
 	var recorder;// to record the stream
 	soundWS.onopen = function (){
@@ -15,6 +15,15 @@ var url = "wss://"+host+":"+port+"/drello/sound_streamer";
 				|| navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 		// reading media
 		navigator.getUserMedia({video:false,audio:true},read,error);
+		// call init method of board (start recording board)
+		if(boardIsConnected){
+			init();
+		}else{
+			var interval = setInterval(function(){
+				init();
+				clearInterval(interval);
+			},100);
+		}
 	}
 	// stream handlers (read event)
 	function read(stream) {

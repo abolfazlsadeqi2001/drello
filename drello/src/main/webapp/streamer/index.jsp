@@ -1,3 +1,4 @@
+<%@page import="configurations.board.streaming.defaultValues.CapturingDefaultValues"%>
 <%@page import="configuration.sockets.sound.streaming.StreamingValues"%>
 <%@page import="generals.defaultAuthentication.AuthenticationLocator.AuthenticationServiceTypes"%>
 <%@page import="generals.defaultAuthentication.AuthenticationLocator"%>
@@ -32,13 +33,28 @@ if(!service.isAuthenticated(request)){
 	var mimeType = <%= "'"+StreamingValues.getMimeType()+"'"%>
 	<%-- setup stream delay --%>
 	var blobTimeDuration = <%out.print(StreamingValues.getDelay());%>
+	<%-- capture time --%>
+	var captureTimeDuartion = <%=CapturingDefaultValues.getDelay()%>
 </script>
 <script type="text/javascript" src="record.js" ></script>
+<script type="text/javascript" src="board.js"></script>
+<link href="index.css" rel="stylesheet" />
 <meta charset="UTF-8">
 <title>streamer</title>
 </head>
-<body onload="start()" >
-	<!-- close stream button -->
-	<button onclick="onCloseConnection();">close stream</button>
+<body onload="start();" >
+	<canvas></canvas>
+	<div class="marker-container">
+		<span color="red"></span>
+		<span color="green"></span>
+		<span color="blue"></span>
+		<span color="black"></span>
+	</div>
+	<div class="erasers-container">
+		<button id="eraser" >eraser</button>
+		<input type="number" min="2" max="100" value="10" />
+		<button id="clear">clear</button>
+		<button onclick="onCloseConnection();">finish</button>
+	</div>
 </body>
 </html>
