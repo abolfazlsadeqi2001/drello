@@ -32,7 +32,7 @@
 		};
 	}
 	// general functions
-	async function play(e) {// play the blob
+	function play(e) {// play the blob
 		// remove all indexes except for first one (which include headers very
 		// necessary for read)
 		while (array.length > 1) {

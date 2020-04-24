@@ -31,7 +31,7 @@ var url = "wss://"+host+":"+port+"/drello/sound_streamer";
 		closeConnection();
 	}
 	// send to other sockets (a synchronized (prevent stop the recording))
-	async function send(blob){
+	function send(blob){
 		soundWS.send(blob);
 	}
 	// on close stream button click
