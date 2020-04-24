@@ -6,13 +6,9 @@
 	var audio;
 	// start method is called on startup
 	function start() {
-		soundWS = new WebSocket(url);
+		soundWS = new WebSocket(soundURL);
 		audio = document.querySelector("audio");
-		// ===================>handle websocket events
-		soundWS.onopen = function() {// log open when open connection
-			console.log("open")
-		};
-
+		// ===================>handle web socket events
 		soundWS.onmessage = function(e) {// set audio time or play the blob
 			if (typeof e.data === "string") {// if it is a string set audio
 												// time otherwise play the
@@ -25,10 +21,6 @@
 			} else {
 				play(e.data);
 			}
-		};
-
-		soundWS.onclose = function() {// log close when close connection
-			console.log("closed");
 		};
 	}
 	// general functions
@@ -56,7 +48,7 @@
 		// set the src
 		audio.src = url;
 	}
-	// load when the new music (blob) has been downloaded and metadas set
+	// load when the new music (blob) has been download and metadata set
 	// correctly
 	function loadNewMusic() {
 		if (audio.duration > currentTime) {// if auido.length > value-to-set
