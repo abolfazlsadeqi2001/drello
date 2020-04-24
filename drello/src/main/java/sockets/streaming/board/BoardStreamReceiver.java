@@ -27,8 +27,6 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 		}
 		// send all objects
 		session.getBasicRemote().sendText(BoardStreaming.getPointsObjects());
-		// send the last sent streamer time
-		session.getBasicRemote().sendText("#" + BoardStreaming.getStreamerCurrentTime());
 	}
 
 	public static void broadcastMessage(String message) {

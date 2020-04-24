@@ -9,13 +9,25 @@ var currentIndex = 0;
 function init(){
 	canvas = document.querySelector("canvas");
 	ctx = canvas.getContext("2d");
+	//an interval for writing points based on time
+	setInterval(function(){
+		for(var i=currentIndex; i<points.length;i++){
+			console.log(currentTime * 1000)
+			if(points[i].time <= currentTime*1000){
+				eventsHandler(points[i])
+				currentIndex = i;
+			}else{
+				break;
+			}
+		}
+	},100);
 }
 // get the points as msg and convert them to array of objects
 boardWS.onclose = function(){
 	location.href = mainPage;
 }
 boardWS.onmessage = function(msg){
-	var data = e.data;
+	var data = msg.data;
 	// read array of points object
 	while(data.indexOf("},{") != -1){
 		data = data.replace("},{","}#{");
@@ -25,23 +37,16 @@ boardWS.onmessage = function(msg){
 	array.forEach(element =>{
 		element = element.trim();
 		if(element != ""){
+			if(element.charAt(element.length -1) == ","){
+				element = element.substring(0,element.length -1);
+			}
+			console.log(element)
 			var elementObj = JSON.parse(element);
 			// push parsed object to points
 			points.push(elementObj);
 		}
 	});
 }
-//an interval for writing points based on time
-setInterval(function(){
-	for(var i=currentIndex; i<points.length;i++){
-		if(points[i].time <= currentTime){
-			eventsHandler(points[i])
-			currentIndex = i;
-		}else{
-			break;
-		}
-	}
-},100);
 // handle events based on their type
 function eventsHandler(obj){
 	if(obj.type == "canvas"){
