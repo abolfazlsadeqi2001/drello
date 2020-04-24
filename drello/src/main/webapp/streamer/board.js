@@ -22,8 +22,12 @@ boardWS.onclose = function(){
 	 location.href = mainPage;
 }
 // ==> handle on message
-boardWS.onmessage = function(e){// if receive the current time from sound ws server add it to current time
-	currentTime += Number(e.data);
+boardWS.onmessage = function(e){/*
+* if receive the current time from sound ws server set it to current time value
+* this function called once in on open method so we can call init method to start capturing
+*/
+	currentTime = Number(e.data);
+	init();
 }
 // ==> configure functions
 function configureCanvas(){

@@ -13,6 +13,8 @@ import javax.websocket.Session;
 
 import org.json.JSONObject;
 
+import sockets.streaming.sound.SoundStreamer;
+
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
 	private static final String CANVAS_TYPE = "canvas";
@@ -39,10 +41,11 @@ public class BoardStreaming extends BoardWebSocketParent {
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		if (isStreamerConnected) {
+		if (isStreamerConnected && SoundStreamer.getIsSoundStreaming()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
-		} else {
+		} else {// otherwise send the sound stream current time (which is the time line of board) then make the server is stream mode
+			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getCurrentMessageIndex()));
 			isStreamerConnected = true;
 		}
 		// configure session

@@ -15,7 +15,12 @@ public class SoundStreamer extends SoundStreamingParent {
 	private static ByteBuffer firstBlob = null;
 	private static boolean isStreamerConnected = false;
 	private static int currentMessageIndex;
+	private static long startTimeMilis = 0;
 
+	public static boolean getIsSoundStreaming() {
+		return isStreamerConnected;
+	}
+	
 	public static int getCurrentMessageIndex() {
 		return currentMessageIndex;
 	}
@@ -24,6 +29,10 @@ public class SoundStreamer extends SoundStreamingParent {
 		return firstBlob;
 	}
 
+	public static long getSoundStreamingDuration() {
+		return System.currentTimeMillis() - startTimeMilis;
+	}
+	
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		if (!isStreamerConnected) {
@@ -32,6 +41,7 @@ public class SoundStreamer extends SoundStreamingParent {
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
 			// set the streamer connected
+			startTimeMilis = System.currentTimeMillis();
 			isStreamerConnected = true;
 		} else {
 			session.close();
