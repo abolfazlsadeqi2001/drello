@@ -3,6 +3,8 @@ package sockets.streaming.sound;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -44,7 +46,8 @@ public class SoundStreamer extends SoundStreamingParent {
 			startTimeMilis = System.currentTimeMillis();
 			isStreamerConnected = true;
 		} else {
-			session.close();
+			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
+			session.close(closeReason);
 		}
 	}
 
@@ -69,20 +72,18 @@ public class SoundStreamer extends SoundStreamingParent {
 	}
 
 	@OnClose
-	public void onClose(Session session) {
-		// close all clients
-		SoundClientStream.closeAllClients();
-		/*
-		 * a new streamer use another sound recorder => another sound recorder has its
-		 * own header blob => each header blob specified for a specific sound and it
-		 * cannot handle another sound => the header blob must be empty to be set by new
-		 * streamer
-		 */
-		firstBlob = null;
-		// set is streamer connected to false to accept another streamer connection
-		isStreamerConnected = false;
-		// as the stream end the current index message must be 0 to don't have any
-		// conflict with another streamer
-		currentMessageIndex = 0;
+	public void onClose(Session session,CloseReason reason) {
+		if(reason.getCloseCode() == CloseCodes.CANNOT_ACCEPT) {
+			// close all clients
+			SoundClientStream.closeAllClients();
+			// may streamer start again but the new sound has its own header for read the sound so the previous header must be removed
+			firstBlob = null;
+			// set is streamer connected to false to accept another streamer connection
+			isStreamerConnected = false;
+			/* as the stream end the current index message must be 0 to don't have any
+			* conflict with previous stream on reading in client side
+			*/
+			currentMessageIndex = 0;
+		}
 	}
 }
