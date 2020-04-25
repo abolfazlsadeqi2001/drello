@@ -1,5 +1,5 @@
 	var soundURL = "wss://"+host+":"+port+mainPage+"/sound_streamer";
-	var soundWS = new WebSocket(soundURL);
+	var soundWS;
 	var recorder;
 	// start method load on startups
 	function start() {
@@ -12,6 +12,7 @@
 	// stream read event handlers
 	function read(stream) {
 		recorder = new MediaRecorder(stream,{mimeType: mimeType});
+		soundWS = new WebSocket(soundURL);
 		recorder.ondataavailable = e => {
 			setTimeout(function(){
 				send(e.data);
