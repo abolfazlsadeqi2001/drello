@@ -1,77 +1,60 @@
-// general variables
 var soundWS;
 var isSetCurrentTime = false;
 var currentTime = 0;
 var array = [];
 var audio;
-// start method is called on startup
 function start() {
 	soundWS = new WebSocket(soundURL);
 	audio = document.querySelector("audio");
-	// ===================>handle web socket events
 	soundWS.onclose = function(){
 		location.href = mainPage;
 	}
-	soundWS.onmessage = function(e) {// set audio time or play the blob
-		if (typeof e.data === "string") {// if it is a string set audio
-			// time otherwise play the
-			// e.data(blob)
-			/*
-			 * current time = everyBlobDuration * nubmerOfBlobs
-			 */
+	soundWS.onmessage = function(e) {
+		if (typeof e.data === "string") {
+			// e.data contain number of blobs * each blob time duration = current time
 			currentTime = Number(e.data) * blobTimeDuration;
-			isSetCurrentTime = true;// prevent set default value for audio
-			// cursor
+			// prevent set default current time
+			isSetCurrentTime = true;
 		} else {
 			play(e.data);
 		}
 	};
 }
-// general functions
-function play(e) {// play the blob
-	// remove all indexes except for first one (which include headers very
-	// necessary for read)
-	while (array.length > 1) {
+function getURL (data){
+	// remove blobs that has read completely (performance)
+	while (array.length > 1 && ((audio.duration-currentTime)/blobTimeDuration) > 1 ) {
 		array.pop();
 	}
-	// push the new blob on it
-	array.push(e)
-	// create a blob of our array
+	// push new blob to array
+	array.push(data)
+	// read blob array as url
 	var blob = new Blob(array, {
 		mimeType : mimeType
 	});
-	// create a url from our blob
-	var url = URL.createObjectURL(blob);
-	// if previously audio time was not declarared use the current time of
-	// audio otherwise use the declrared value
+	return URL.createObjectURL(blob);
+}
+function play(data) {
+	var url = getURL(data);
+	// set current time
 	if (!isSetCurrentTime) {
 		currentTime = audio.currentTime;
 	} else {
 		isSetCurrentTime = false;
 	}
-	// set the src
+	
 	audio.src = url;
 }
-// load when the new music (blob) has been download and metadata set
-// correctly
 function loadNewMusic() {
-	if (audio.duration > currentTime) {// if auido.length > value-to-set
-		// set it otherwise set 0 as default
+	if (audio.duration > currentTime) {
 		audio.currentTime = currentTime;
-	} else {
-		audio.pause();
 	}
-	if (audio.paused) {// if the audio player is paused play it
+	if (audio.paused) {
 		audio.play();
 	}
 }
-// load when the audio finish (stream is closed or connection so slow to get
-// new blobs)
 function finishAudio() {
-	/*
-	 * when the audio finished the cursor is going to to be in 0 but I want
-	 * continue the sound after receiving another blob so save the cursor place
-	 */
+	// when audio finished the cursor go to 0 but after receiving new sound makes duration longer than so we need to save the current time to prevent start at beginning
 	currentTime = audio.duration;
-	isSetCurrentTime = true;// prevent set default value for audio cursor
+	// prevent set default value for audio cursor
+	isSetCurrentTime = true;
 }
