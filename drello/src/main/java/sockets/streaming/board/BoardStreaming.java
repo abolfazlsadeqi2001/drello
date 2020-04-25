@@ -24,7 +24,8 @@ public class BoardStreaming extends BoardWebSocketParent {
 	private static StringBuilder objects = new StringBuilder();// contain all objects have been gained yet
 
 	private static boolean isStreamerConnected;
-
+	private static Session serverSession = null;
+	
 	private static int streamerCurrentTime;
 
 	public static String getCanvasObject() {
@@ -41,18 +42,28 @@ public class BoardStreaming extends BoardWebSocketParent {
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		if (isStreamerConnected || !SoundStreamer.getIsSoundStreaming()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
+		if (isStreamerConnected || !SoundStreamer.isStreamerConnected()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
-		} else {// otherwise send the sound stream current time (which is the time line of board) then make the server is stream mode
+		} else {
+			serverSession = session;
+			// send current blob index
 			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getCurrentMessageIndex()));
 			isStreamerConnected = true;
+			// send start if stream started
+			if(SoundStreamer.isStreamStarted()) {
+				sendStart();
+			}
+			// configure session
+			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
+			session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
 		}
-		// configure session
-		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
-		session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
 	}
 
+	public static void sendStart() throws IOException {
+		serverSession.getBasicRemote().sendText("start");
+	}
+	
 	@OnMessage
 	public void onMessage(Session session, String message) {
 		// broadcast message

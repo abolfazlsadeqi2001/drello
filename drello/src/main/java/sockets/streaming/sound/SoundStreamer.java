@@ -12,15 +12,22 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import sockets.streaming.board.BoardStreaming;
+
 @ServerEndpoint("/sound_streamer")
 public class SoundStreamer extends SoundStreamingParent {
 	private static ByteBuffer firstBlob = null;
 	private static boolean isStreamerConnected = false;
+	private static boolean isStreamStarted = false;
 	private static int currentMessageIndex;
 	private static long startTimeMilis = 0;
-
-	public static boolean getIsSoundStreaming() {
+	
+	public static boolean isStreamerConnected() {
 		return isStreamerConnected;
+	}
+	
+	public static boolean isStreamStarted() {
+		return isStreamStarted;
 	}
 	
 	public static int getCurrentMessageIndex() {
@@ -43,7 +50,6 @@ public class SoundStreamer extends SoundStreamingParent {
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
 			// set the streamer connected
-			startTimeMilis = System.currentTimeMillis();
 			isStreamerConnected = true;
 		} else {
 			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
@@ -65,6 +71,15 @@ public class SoundStreamer extends SoundStreamingParent {
 		SoundClientStream.broadCast(buffer);
 	}
 
+	@OnMessage
+	public void onTextMessage(Session session,String str) throws IOException {
+		if(str.equals("start")) {
+			startTimeMilis = System.currentTimeMillis();
+			BoardStreaming.sendStart();
+			isStreamStarted = true;
+		}
+	}
+	
 	@OnError
 	public void onError(Throwable th) {
 		// TODO handle error
@@ -76,13 +91,11 @@ public class SoundStreamer extends SoundStreamingParent {
 		if(reason.getCloseCode() == CloseCodes.CANNOT_ACCEPT) {
 			// close all clients
 			SoundClientStream.closeAllClients();
-			// may streamer start again but the new sound has its own header for read the sound so the previous header must be removed
+			// set variables to their default values to prevent conflict with another stream
 			firstBlob = null;
-			// set is streamer connected to false to accept another streamer connection
 			isStreamerConnected = false;
-			/* as the stream end the current index message must be 0 to don't have any
-			* conflict with previous stream on reading in client side
-			*/
+			isStreamStarted = false;
+			startTimeMilis = 0;
 			currentMessageIndex = 0;
 		}
 	}
