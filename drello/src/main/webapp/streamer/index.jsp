@@ -45,7 +45,7 @@ if(!service.isAuthenticated(request)){
 		<button id="eraser" >eraser</button>
 		<input type="number" min="2" max="100" value="10" />
 		<button id="clear">clear</button>
-		<button onclick="closeConnection();">finish</button>
+		<button onclick="closeStream();">finish</button>
 	</div>
 </body>
 </html>

@@ -1,10 +1,6 @@
 	var soundURL = "wss://"+host+":"+port+mainPage+"/sound_streamer";
-	var soundWS = new WebSocket(soundURL);// to connect to database
-	;// #depend on client.html
-	var recorder;// to record the stream
-	soundWS.onclose = function(){
-		 location.href = mainPage;
-	};
+	var soundWS = new WebSocket(soundURL);
+	var recorder;
 	// start method load on startups
 	function start() {
 		// prepare media
@@ -13,26 +9,29 @@
 		// reading media
 		navigator.getUserMedia({video:false,audio:true},read,error);
 	}
-	// stream handlers (read event)
+	// stream read event handlers
 	function read(stream) {
-		// read from another source
 		recorder = new MediaRecorder(stream,{mimeType: mimeType});
 		recorder.ondataavailable = e => {
-			send(e.data);
+			setTimeout(function(){
+				send(e.data);
+			},100);
 		};
-		recorder.start(blobTimeDuration*1000);// so long but prevent delay on server because of resources and short time to send and record
+		recorder.start(blobTimeDuration*1000);
 	}
-	// stream handlers (error event)
+	// stream error handlers
 	function error(e) {
 		alert(e);
 		closeConnection();
 	}
-	// send to other sockets (a synchronized (prevent stop the recording))
+	// send a blob to server
 	function send(blob){
 		soundWS.send(blob);
 	}
-	// on close stream button click
-	function closeConnection(){
+	soundWS.onclose = function(){
+		 closeStream();
+	};
+	function closeStream(){
 		recorder.stop();
 		soundWS.close();
 		location.href=mainPage;
