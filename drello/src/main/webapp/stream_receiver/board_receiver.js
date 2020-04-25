@@ -12,7 +12,6 @@ function init(){
 	//an interval for writing points based on time
 	setInterval(function(){
 		for(var i=currentIndex; i<points.length;i++){
-			console.log(currentTime * 1000)
 			if(points[i].time <= currentTime*1000){
 				eventsHandler(points[i])
 				currentIndex = i;
@@ -22,27 +21,25 @@ function init(){
 		}
 	},100);
 }
-// get the points as msg and convert them to array of objects
 boardWS.onclose = function(){
 	location.href = mainPage;
 }
 boardWS.onmessage = function(msg){
 	var data = msg.data;
-	// read array of points object
+	// parse stringified array to an array of stringified objects
 	while(data.indexOf("},{") != -1){
 		data = data.replace("},{","}#{");
 	}
 	var array = data.split("#");
-	// parse array stringified objects to object
+	// parse the strigified objects to java script objects then push them into array
 	array.forEach(element =>{
 		element = element.trim();
 		if(element != ""){
+			// the latest element has a , which won't allowed to JSON.parse method so it must be removed
 			if(element.charAt(element.length -1) == ","){
 				element = element.substring(0,element.length -1);
 			}
-			console.log(element)
 			var elementObj = JSON.parse(element);
-			// push parsed object to points
 			points.push(elementObj);
 		}
 	});
