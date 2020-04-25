@@ -23,7 +23,7 @@
 	// stream error handlers
 	function error(e) {
 		alert(e);
-		closeConnection();
+		closeStream();
 	}
 	// send a blob to server
 	function send(blob){
