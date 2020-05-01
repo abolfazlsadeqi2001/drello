@@ -17,9 +17,7 @@ function read(stream) {
 	// start recording
 	recorder = new MediaRecorder(stream,{mimeType: mimeType});
 	recorder.ondataavailable = e => {
-		setTimeout(function(){
-			send(e.data);
-		},100);
+		soundWS.send(e.data);
 	};
 	recorder.start(blobTimeDuration*1000);
 }
@@ -28,11 +26,8 @@ function error(e) {
 	alert(e);
 	closeStream();
 }
-// send a blob to server
-function send(blob){
-	soundWS.send(blob);
-}
 function closeStream(){
 	recorder.stop();
+	soundWS.close();
 	location.href=mainPage;
 }
