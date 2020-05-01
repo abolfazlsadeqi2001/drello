@@ -18,6 +18,7 @@ public class SoundClientStream extends SoundStreamingParent {
 	/**
 	 * add new client to clients set<br>
 	 * send the header blob to read all blobs by audio player<br>
+	 * send the current time of streamer side <br>
 	 * set some variables like time out
 	 * @param session
 	 */
@@ -27,15 +28,19 @@ public class SoundClientStream extends SoundStreamingParent {
 		clients.add(session);
 		// if header blob is defined send it to client which is very important to read other blobs
 		if (SoundStreamer.getHeaderBlob() != null) {
-				session.getBasicRemote().sendBinary(SoundStreamer.getHeaderBlob());// send the header blob
-				session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getCurrentMessageIndex()));// send the number of blobs that has been received by server (very important to find the position of cursor in new client)
+			// send the header blob
+			session.getBasicRemote().sendBinary(SoundStreamer.getHeaderBlob());
+			// send current time of streamer side
+			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getCurrentMessageIndex()));
 		}
 		// set the limits for time and size
 		session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 		session.setMaxIdleTimeout(MAX_TIME_OUT);
 		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
 	}
-
+	/**
+	 * close all clients that are defined into {@link #clients}
+	 */
 	public static void closeAllClients() {
 		clients.forEach(client ->{
 				try {
@@ -45,7 +50,10 @@ public class SoundClientStream extends SoundStreamingParent {
 				}
 		});
 	}
-	
+	/**
+	 * get a blob broadcast it to all clients
+	 * @param buffer
+	 */
 	public static void broadCast(ByteBuffer buffer){
 		clients.forEach(client -> {
 			try {
@@ -55,7 +63,6 @@ public class SoundClientStream extends SoundStreamingParent {
 			}
 		});
 	}
-	
 	/**
 	 * when an error is happened log it
 	 * @param th
@@ -64,11 +71,9 @@ public class SoundClientStream extends SoundStreamingParent {
 	public void onError (Throwable th) {
 		// TODO handle error
 	}
-	
 	/**
 	 * after close connection remove it from our set
-	 * @param session valued by Jee
-	 * @param closeReason valued by Jee
+	 * @param session
 	 */
 	@OnClose
 	public void onClose(Session session) {

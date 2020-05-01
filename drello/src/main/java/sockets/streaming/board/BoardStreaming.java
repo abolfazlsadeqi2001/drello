@@ -42,13 +42,13 @@ public class BoardStreaming extends BoardWebSocketParent {
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		if (isStreamerConnected || !SoundStreamer.isStreamerConnected()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
+		if (isStreamerConnected || !SoundStreamer.isStreamStarted()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
 		} else {
 			serverSession = session;
 			// send current blob index
-			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getCurrentMessageIndex()));
+			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
 			isStreamerConnected = true;
 			// send start if stream started
 			if(SoundStreamer.isStreamStarted()) {

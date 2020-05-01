@@ -21,27 +21,40 @@ public class SoundStreamer extends SoundStreamingParent {
 	private static boolean isStreamStarted = false;
 	private static int currentMessageIndex;
 	private static long startTimeMilis = 0;
-	
-	public static boolean isStreamerConnected() {
-		return isStreamerConnected;
-	}
-	
+	/**
+	 * to get is the sound streamer allow the recording
+	 * @return
+	 */
 	public static boolean isStreamStarted() {
 		return isStreamStarted;
 	}
-	
+	/**
+	 * get the index of last received blob
+	 * FIXME remove current index message and set the duration of sound streaming
+	 * @return
+	 */
 	public static int getCurrentMessageIndex() {
 		return currentMessageIndex;
 	}
-
+	/**
+	 * get the bytes that contain the header to read the music
+	 * @return
+	 */
 	public static ByteBuffer getHeaderBlob() {
 		return firstBlob;
 	}
-
+	/**
+	 * get sound period since the streamer has allowed recording
+	 * @return
+	 */
 	public static long getSoundStreamingDuration() {
 		return System.currentTimeMillis() - startTimeMilis;
 	}
-	
+	/**
+	 * if the sound streamer has connected close this session otherwise set default values then prevent connect other sessions
+	 * @param session
+	 * @throws IOException
+	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		if (!isStreamerConnected) {
@@ -56,12 +69,20 @@ public class SoundStreamer extends SoundStreamingParent {
 			session.close(closeReason);
 		}
 	}
-
+	/**
+	 * <ol>
+	 * 	<li>get bytes of the streamed music</li>
+	 * 	<li>set header blob if the current blob is first one</li>
+	 * 	<li>increase the last blob index</li>
+	 * 	<li>broadcast received blob</li>
+	 * </ol>
+	 * @param session
+	 * @param bytes
+	 */
 	@OnMessage
 	public void onMessage(Session session, byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		// if the first blob has not been defined(contain the header to read other
-		// blobs) define it
+		// if the first blob has not been defined yet define it by current bytes
 		if (firstBlob == null) {
 			firstBlob = buffer;
 		}
@@ -70,7 +91,17 @@ public class SoundStreamer extends SoundStreamingParent {
 		// broad cast the received message
 		SoundClientStream.broadCast(buffer);
 	}
-
+	/**
+	 * if the message = start
+	 * <ol>
+	 * 	<li> set {@link #startTimeMilis} to current time</li>
+	 * 	<li> inform the board streamer that the sound stream has been started</li>
+	 * 	<li> set {@link #isStreamStarted} to true</li>
+	 * </ol>
+	 * @param session
+	 * @param str
+	 * @throws IOException
+	 */
 	@OnMessage
 	public void onTextMessage(Session session,String str) throws IOException {
 		if(str.equals("start")) {
@@ -79,16 +110,28 @@ public class SoundStreamer extends SoundStreamingParent {
 			isStreamStarted = true;
 		}
 	}
-	
+	/**
+	 * handle all errors
+	 * @param th
+	 */
 	@OnError
 	public void onError(Throwable th) {
 		// TODO handle error
 		System.out.println(th.getMessage());
 	}
-
+	/**
+	 * if the session is disconnected because of non-CANNOT_ACCEPT which means
+	 * that the session is the server session
+	 * <ol>
+	 * 	<li>close all clients that receiving the sound stream datas</li>
+	 * 	<li>set all variables to their default values</li>
+	 * </ol>
+	 * @param session
+	 * @param reason
+	 */
 	@OnClose
 	public void onClose(Session session,CloseReason reason) {
-		if(reason.getCloseCode() == CloseCodes.CANNOT_ACCEPT) {
+		if(reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			// close all clients
 			SoundClientStream.closeAllClients();
 			// set variables to their default values to prevent conflict with another stream
