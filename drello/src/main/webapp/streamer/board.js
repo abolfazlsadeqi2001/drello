@@ -116,7 +116,7 @@ function init(){
 	setInterval(function(){
 		boardWS.send(String(points));
 		points = [];
-	},captureTimeDuartion)
+	},captureTimeDuartion*1000)
 }
 // ==> push method
 function push(obj){
