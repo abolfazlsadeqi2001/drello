@@ -1,5 +1,6 @@
 var soundURL = "wss://"+host+":"+port+mainPage+"/sound_streamer";
 var soundWS = soundWS = new WebSocket(soundURL);
+soundWS.onclose = closeStream;
 var recorder;
 // start method load on startups
 function start() {
@@ -31,11 +32,7 @@ function error(e) {
 function send(blob){
 	soundWS.send(blob);
 }
-soundWS.onclose = function(){
-	 closeStream();
-};
 function closeStream(){
 	recorder.stop();
-	soundWS.close();
 	location.href=mainPage;
 }
