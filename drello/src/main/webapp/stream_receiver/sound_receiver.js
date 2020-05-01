@@ -21,11 +21,8 @@ function start() {
 	};
 }
 function getURL (data){
-	console.log("blob:"+((audio.duration-currentTime)/blobTimeDuration))
-	console.log("js current time:"+currentTime)
-	console.log("audio curernt time:"+currentTime)
 	// remove blobs that has read completely (performance)
-	while (array.length > 1 && ((audio.duration-currentTime)/blobTimeDuration) > 1 ) {
+	while ( ((audio.duration-currentTime)/blobTimeDuration) > 1 ) {
 		array.pop();
 	}
 	// push new blob to array
