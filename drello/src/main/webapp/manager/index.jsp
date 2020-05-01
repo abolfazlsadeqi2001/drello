@@ -17,6 +17,7 @@ if(!service.isAuthenticated(request)){
 <script type="text/javascript">
 <%HomePage homePage = HomePage.instance();%>
 	var todoPlans = <%=homePage.getToTeachModels() %>;
+	var rootContext = <%= "'"+application.getContextPath()+"'" %>
 </script>
 <script type="text/javascript" src="remove.js" ></script>
 </head>

@@ -17,7 +17,7 @@ canvas {
 	var port = location.port
 	var blobTimeDuration = <%out.print(SoundStreamingValues.getDelay());%>
 	var mimeType = <%out.print("'" + SoundStreamingValues.getMimeType() + "'");%>
-	var mainPage = "/drello";
+	var mainPage = <%= "'"+application.getContextPath()+"'" %>;
 	var soundURL = "wss://" + host + ':' + port + mainPage + "/sound_client";
 	var captureURL = "wss://" + host + ':' + port + mainPage + "/board_client";
 </script>

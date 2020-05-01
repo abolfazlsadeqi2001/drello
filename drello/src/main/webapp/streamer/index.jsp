@@ -24,7 +24,7 @@ if(!service.isAuthenticated(request)){
 	var mimeType = <%="'"+SoundStreamingValues.getMimeType()+"'"%>
 	var blobTimeDuration = <%out.print(SoundStreamingValues.getDelay());%>
 	var captureTimeDuartion = <%=CapturingDefaultValues.getDelay()%>
-	var mainPage = "/drello";
+	var mainPage = <%="'"+application.getContextPath()+"'" %>;
 </script>
 <%--set sound or capture script if sound or capture parameter is on --%>
 <%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"<script type='text/javascript' src='record.js' ></script>":""%>

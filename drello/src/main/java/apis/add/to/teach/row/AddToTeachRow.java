@@ -34,7 +34,7 @@ public class AddToTeachRow extends HttpServlet {
 			// TODO Error Handler
 		}
 		
-		response.sendRedirect("/drello");
+		response.sendRedirect(request.getContextPath());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

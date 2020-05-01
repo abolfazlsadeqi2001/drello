@@ -11,7 +11,7 @@ function init(){
 		removeButton.addEventListener("click",function() {
 			var obj = JSON.parse(removeButton.getAttribute("val"));
 			
-			var url = "/drello/remove_to_teach_row?";
+			var url = rootContext+"/remove_to_teach_row?";
 			url += "class="+obj.classId+"&";
 			url += "lesson="+obj.lesson+"&";
 			url += "title="+obj.title+"&";
