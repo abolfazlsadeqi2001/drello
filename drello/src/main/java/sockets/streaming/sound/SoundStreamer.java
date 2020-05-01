@@ -19,7 +19,6 @@ public class SoundStreamer extends SoundStreamingParent {
 	private static ByteBuffer firstBlob = null;
 	private static boolean isStreamerConnected = false;
 	private static boolean isStreamStarted = false;
-	private static int currentMessageIndex;
 	private static long startTimeMilis = 0;
 	/**
 	 * to get is the sound streamer allow the recording
@@ -27,14 +26,6 @@ public class SoundStreamer extends SoundStreamingParent {
 	 */
 	public static boolean isStreamStarted() {
 		return isStreamStarted;
-	}
-	/**
-	 * get the index of last received blob
-	 * FIXME remove current index message and set the duration of sound streaming
-	 * @return
-	 */
-	public static int getCurrentMessageIndex() {
-		return currentMessageIndex;
 	}
 	/**
 	 * get the bytes that contain the header to read the music
@@ -73,7 +64,6 @@ public class SoundStreamer extends SoundStreamingParent {
 	 * <ol>
 	 * 	<li>get bytes of the streamed music</li>
 	 * 	<li>set header blob if the current blob is first one</li>
-	 * 	<li>increase the last blob index</li>
 	 * 	<li>broadcast received blob</li>
 	 * </ol>
 	 * @param session
@@ -86,8 +76,6 @@ public class SoundStreamer extends SoundStreamingParent {
 		if (firstBlob == null) {
 			firstBlob = buffer;
 		}
-		// increase the message index
-		currentMessageIndex++;
 		// broad cast the received message
 		SoundClientStream.broadCast(buffer);
 	}
@@ -138,8 +126,7 @@ public class SoundStreamer extends SoundStreamingParent {
 			firstBlob = null;
 			isStreamerConnected = false;
 			isStreamStarted = false;
-			startTimeMilis = 0;
-			currentMessageIndex = 0;
+	
 		}
 	}
 }

@@ -12,7 +12,7 @@ function start() {
 	soundWS.onmessage = function(e) {
 		if (typeof e.data === "string") {
 			// e.data contain number of blobs * each blob time duration = current time
-			currentTime = Number(e.data) * blobTimeDuration;
+			currentTime = Number(e.data);
 			// prevent set default current time
 			isSetCurrentTime = true;
 		} else {

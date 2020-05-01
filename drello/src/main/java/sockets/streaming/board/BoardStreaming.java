@@ -47,7 +47,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 			session.close(reason);
 		} else {
 			serverSession = session;
-			// send current blob index
+			// send current time
 			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
 			isStreamerConnected = true;
 			// send start if stream started

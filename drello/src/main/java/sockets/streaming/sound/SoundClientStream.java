@@ -31,7 +31,7 @@ public class SoundClientStream extends SoundStreamingParent {
 			// send the header blob
 			session.getBasicRemote().sendBinary(SoundStreamer.getHeaderBlob());
 			// send current time of streamer side
-			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getCurrentMessageIndex()));
+			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
 		}
 		// set the limits for time and size
 		session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
