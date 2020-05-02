@@ -112,7 +112,7 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnError
 	public void onError(Throwable th) {
 		// TODO handle error
-		System.out.println(th.getMessage());
+		System.out.println("sound streamer: "+th.getMessage()+" => "+th.getCause().toString());
 	}
 	/**
 	 * if the session is disconnected because of non-CANNOT_ACCEPT which means

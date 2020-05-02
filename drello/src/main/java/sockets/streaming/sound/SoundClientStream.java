@@ -69,6 +69,7 @@ public class SoundClientStream extends SoundStreamingParent {
 	 */
 	@OnError
 	public void onError (Throwable th) {
+		System.out.println("sound client: "+th.getMessage()+" => "+th.getCause().toString());
 		// TODO handle error
 	}
 	/**
