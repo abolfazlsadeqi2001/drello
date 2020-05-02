@@ -133,7 +133,7 @@ public class SoundStreamer extends SoundStreamingParent {
 			firstBlob = null;
 			isStreamerConnected = false;
 			isStreamStarted = false;
-	
+			startTimeMilis = 0;
 		}
 	}
 }
