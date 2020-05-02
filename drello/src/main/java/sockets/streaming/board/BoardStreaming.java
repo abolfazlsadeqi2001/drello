@@ -72,7 +72,9 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 * @throws IOException
 	 */
 	public static void sendStart() throws IOException {
-		serverSession.getBasicRemote().sendText("start");
+		if(serverSession != null) {
+			serverSession.getBasicRemote().sendText("start");
+		}
 	}
 	/**
 	 * get a stringified JSON object array then broadcast it to receivers
