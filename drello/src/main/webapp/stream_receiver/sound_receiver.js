@@ -21,10 +21,6 @@ function start() {
 	};
 }
 function getURL (data){
-	// remove blobs that has read completely (performance)
-	while ( ((audio.duration-currentTime)/blobTimeDuration) > 1 ) {
-		array.pop();
-	}
 	// push new blob to array
 	array.push(data)
 	// read blob array as url
@@ -47,9 +43,12 @@ function play(data) {
 function loadNewMusic() {
 	if (audio.duration > currentTime) {
 		audio.currentTime = currentTime;
-	}
-	if (audio.paused) {
-		audio.play();
+		if (audio.paused) {
+			audio.play();
+		}
+	}else{
+		isSetCurrentTime = true;
+		audio.pause();
 	}
 }
 function finishAudio() {
