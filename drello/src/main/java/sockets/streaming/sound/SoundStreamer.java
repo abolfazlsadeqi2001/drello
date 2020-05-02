@@ -28,6 +28,13 @@ public class SoundStreamer extends SoundStreamingParent {
 		return isStreamStarted;
 	}
 	/**
+	 * to get is the streamer session connected
+	 * @return
+	 */
+	public static boolean isStreamerConnected() {
+		return isStreamerConnected;
+	}
+	/**
 	 * get the bytes that contain the header to read the music
 	 * @return
 	 */

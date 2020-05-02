@@ -13,7 +13,14 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/board_client")
 public class BoardStreamReceiver extends BoardWebSocketParent {
 	public static Set<Session> sessions = new HashSet<Session>();
-
+	/**
+	 * add current session to {@link #sessions}<br>
+	 * set default values like set time out<br>
+	 * if canvas object is defined send it<br>
+	 * send all has been received JSON objects<br>
+	 * @param session
+	 * @throws IOException
+	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		// add session to sessions set
@@ -28,7 +35,6 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 		// send all objects
 		session.getBasicRemote().sendText(BoardStreaming.getPointsObjects());
 	}
-
 	public static void broadcastMessage(String message) {
 		sessions.forEach(s -> {
 			try {
@@ -38,7 +44,6 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 			}
 		});
 	}
-
 	public static void closeAllClients() {
 		sessions.forEach(session -> {
 			try {
@@ -48,12 +53,19 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 			}
 		});
 	}
-
+	/**
+	 * handle all errors
+	 * @param th
+	 */
 	@OnError
 	public void error(Throwable th) {
 		System.out.println("ERROR:" + th.getMessage());
+		// TODO handle error
 	}
-
+	/**
+	 * onclose = remove current session from {@link #sessions}
+	 * @param session
+	 */
 	@OnClose
 	public void onClose(Session session) {
 		sessions.remove(session);

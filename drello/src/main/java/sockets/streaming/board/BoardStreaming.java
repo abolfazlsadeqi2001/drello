@@ -20,50 +20,76 @@ public class BoardStreaming extends BoardWebSocketParent {
 	private static final String CANVAS_TYPE = "canvas";
 	private static final String CLEAR_TYPE = "clear";
 
+	// stringified JSON objects
+	private static StringBuilder objects = new StringBuilder();
 	private static String canvasStringifiedObject;
-	private static StringBuilder objects = new StringBuilder();// contain all objects have been gained yet
 
 	private static boolean isStreamerConnected;
 	private static Session serverSession = null;
 	
-	private static int streamerCurrentTime;
-
-	public static String getCanvasObject() {
+	static String getCanvasObject() {
 		return canvasStringifiedObject;
 	}
-
-	public static String getPointsObjects() {
+	static String getPointsObjects() {
 		return objects.toString();
 	}
-
-	public static int getStreamerCurrentTime() {
-		return streamerCurrentTime;
-	}
-
+	/**
+	 * <mark>if:</mark>
+	 * <br>the sound stream session has not been connected which include the 
+	 * time line of stream or another board stream session is connected close this session
+	 * <br>
+	 * <mark>otherwise:</mark>
+	 * <br>
+	 * set {@link #isStreamerConnected} to true (prevent other connections as streamer)<br>
+	 * set server session (when the sound streamer allowed the recording serverSession must
+	 * receive start message)<br>
+	 * if the sound streamer is allowed send start event<br>
+	 * send the current time of sound stream(time line based on it) if the sound stream has been started
+	 * @param session
+	 * @throws IOException
+	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		if (isStreamerConnected || !SoundStreamer.isStreamStarted()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
+		if (isStreamerConnected || !SoundStreamer.isStreamerConnected()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
 		} else {
-			serverSession = session;
-			// send current time
-			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
 			isStreamerConnected = true;
+			serverSession = session;
 			// send start if stream started
 			if(SoundStreamer.isStreamStarted()) {
 				sendStart();
+				// send the current stream time
+				session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
 			}
 			// configure session
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
 			session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
 		}
 	}
-
+	/**
+	 * send start event to the board streamer
+	 * @throws IOException
+	 */
 	public static void sendStart() throws IOException {
 		serverSession.getBasicRemote().sendText("start");
 	}
-	
+	/**
+	 * get a stringified JSON object array then broadcast it to receivers
+	 * then read its objects
+	 * <ul>
+	 * 	<li>add them into {@link #objects}</li>
+	 * 	<li> if its type = clear remove all previous objects because clear event
+	 * 	clear all objects that has been drawn</li>
+	 * 	<li>if its type = canvas save it to {@link #canvasStringifiedObject}<br>
+	 * 	<mark>HINT</mark> if the clear event is received after canvas event which
+	 * 	contains the canvas dimensions this object will be removed and the new
+	 * 	clients won't receive the canvas dimensions which is a big problem so 
+	 * 	we save the canvas type in a particular variable to prevent it</li>
+	 * </ul>
+	 * @param session
+	 * @param message
+	 */
 	@OnMessage
 	public void onMessage(Session session, String message) {
 		// broadcast message
@@ -77,8 +103,10 @@ public class BoardStreaming extends BoardWebSocketParent {
 			if (!stringifiedObject.isBlank()) {
 				JSONObject jsonObject = new JSONObject(stringifiedObject);
 				// add current Object to objectsContainer set
+				if(!objects.toString().isBlank()) {
+					objects.append(",");
+				}
 				objects.append(stringifiedObject);
-				objects.append(",");
 				// get object type
 				String type = (String) jsonObject.get("type");
 				// if type = canvas save it as canvas object
@@ -89,31 +117,33 @@ public class BoardStreaming extends BoardWebSocketParent {
 				if (type.equals(CLEAR_TYPE)) {
 					objects = new StringBuilder();
 				}
-				// if it is the last json object (contain the last time) set the last time on it
-				if (i == stringifiedJsonArray.length - 1) {
-					streamerCurrentTime = jsonObject.getInt("time");
-				}
 			}
 		}
 	}
-
+	/**
+	 * handle all errors
+	 * @param th
+	 */
 	@OnError
 	public void error(Throwable th) {
 		System.out.println("ERROR:" + th.getMessage());
+		// TODO handle my errors
 	}
-
 	/**
-	 * TODO add clear event on points.txt
-	 * 
+	 * if session is disconnected because of non-CANNOT_ACCEPT which means that was a server session
+	 * that is disconnected close all stream receivers and set the variables to their defaults
+	 * FIXME add clear event on points.txt
 	 * @param session
 	 */
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
-			canvasStringifiedObject = null;
-			isStreamerConnected = false;
-			objects = new StringBuilder();
 			BoardStreamReceiver.closeAllClients();
+			
+			isStreamerConnected = false;
+			canvasStringifiedObject = null;
+			objects = new StringBuilder();
+			serverSession = null;
 		}
 	}
 }

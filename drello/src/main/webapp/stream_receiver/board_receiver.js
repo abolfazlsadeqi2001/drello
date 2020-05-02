@@ -35,10 +35,6 @@ boardWS.onmessage = function(msg){
 	array.forEach(element =>{
 		element = element.trim();
 		if(element != ""){
-			// the latest element has a , which won't allowed to JSON.parse method so it must be removed
-			if(element.charAt(element.length -1) == ","){
-				element = element.substring(0,element.length -1);
-			}
 			var elementObj = JSON.parse(element);
 			points.push(elementObj);
 		}
