@@ -19,7 +19,8 @@ var boardWS = new WebSocket(boardURL);
 
 // ==> handle on close
 boardWS.onclose = function(){
-	 location.href = mainPage;
+	boardWS.close();
+	location.href = mainPage;
 }
 // ==> handle on message
 boardWS.onmessage = function(e){

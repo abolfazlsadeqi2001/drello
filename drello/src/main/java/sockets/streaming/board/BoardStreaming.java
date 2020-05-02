@@ -50,21 +50,26 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		if (isStreamerConnected || !SoundStreamer.isStreamerConnected()) {// if another streamer have connected to this session or the sound streamer have not connected yet close current session
+		// if another streamer have connected to this session or the sound streamer have not connected yet close current session
+		if (isStreamerConnected || !SoundStreamer.isStreamerConnected()) {
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
 		} else {
 			isStreamerConnected = true;
 			serverSession = session;
-			// send start if stream started
-			if(SoundStreamer.isStreamStarted()) {
-				sendStart();
-				// send the current stream time
-				session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
-			}
 			// configure session
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
 			session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
+			// send start if stream started
+			if(SoundStreamer.isStreamStarted()) {
+				sendStart();
+				/*
+				 * send the current stream time if the sound streamer has not allowed
+				 * the recording and he will allow that while the board streamer connected
+				 * the current time = 0 (default value and does not need to send)
+				*/
+				session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
+			}
 		}
 	}
 	/**
@@ -84,7 +89,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 * 	<li> if its type = clear remove all previous objects because clear event
 	 * 	clear all objects that has been drawn</li>
 	 * 	<li>if its type = canvas save it to {@link #canvasStringifiedObject}<br>
-	 * 	<mark>HINT</mark> if the clear event is received after canvas event which
+	 * 	<mark>POINT</mark> if the clear event is received after canvas event which
 	 * 	contains the canvas dimensions this object will be removed and the new
 	 * 	clients won't receive the canvas dimensions which is a big problem so 
 	 * 	we save the canvas type in a particular variable to prevent it</li>

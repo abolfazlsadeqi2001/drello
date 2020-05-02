@@ -56,12 +56,12 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		if (!isStreamerConnected) {
+			// set the streamer connected
+			isStreamerConnected = true;
 			// set the limits for time and size
 			session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
-			// set the streamer connected
-			isStreamerConnected = true;
 		} else {
 			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
 			session.close(closeReason);

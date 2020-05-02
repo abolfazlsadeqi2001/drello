@@ -24,19 +24,19 @@ public class SoundClientStream extends SoundStreamingParent {
 	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		// add the current session to set of all sessions
-		clients.add(session);
-		// if header blob is defined send it to client which is very important to read other blobs
-		if (SoundStreamer.getHeaderBlob() != null) {
-			// send the header blob
-			session.getBasicRemote().sendBinary(SoundStreamer.getHeaderBlob());
-			// send current time of streamer side
-			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
-		}
 		// set the limits for time and size
 		session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 		session.setMaxIdleTimeout(MAX_TIME_OUT);
 		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
+		// if header blob is defined send it to client which is very important to read other blobs
+		if (SoundStreamer.getHeaderBlob() != null) {
+			// send current time of streamer side
+			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
+			// send the header blob
+			session.getBasicRemote().sendBinary(SoundStreamer.getHeaderBlob());
+		}
+		// add the current session to set of all sessions
+		clients.add(session);
 	}
 	/**
 	 * close all clients that are defined into {@link #clients}
