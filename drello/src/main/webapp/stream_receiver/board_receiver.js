@@ -5,25 +5,7 @@ var canvas;
 var ctx;
 
 var currentIndex = 0;
-// call on load
-function init(){
-	canvas = document.querySelector("canvas");
-	ctx = canvas.getContext("2d");
-	//an interval for writing points based on time
-	setInterval(function(){
-		for(var i=currentIndex; i<points.length;i++){
-			if(points[i].time <= audio.currentTime * 1000){
-				eventsHandler(points[i])
-				currentIndex = i;
-			}else{
-				break;
-			}
-		}
-	},100);
-}
-boardWS.onclose = function(){
-	location.href = mainPage;
-}
+// read the stringified JSON objects from received array push them into points array
 boardWS.onmessage = function(msg){
 	var data = msg.data;
 	// parse stringified array to an array of stringified objects
@@ -39,6 +21,26 @@ boardWS.onmessage = function(msg){
 			points.push(elementObj);
 		}
 	});
+}
+// go to home page
+boardWS.onclose = function(){
+	location.href = mainPage;
+}
+// call on load
+function init(){
+	canvas = document.querySelector("canvas");
+	ctx = canvas.getContext("2d");
+	//an interval for writing points based on time
+	setInterval(function(){
+		for(var i=currentIndex; i<points.length;i++){
+			if(points[i].time <= audio.currentTime * 1000){
+				eventsHandler(points[i])
+				currentIndex = i;
+			}else{
+				break;
+			}
+		}
+	},100);
 }
 // handle events based on their type
 function eventsHandler(obj){
