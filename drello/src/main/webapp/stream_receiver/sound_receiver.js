@@ -22,13 +22,14 @@ soundWS.onmessage = function(e) {
 function play(data) {
 	// set current time
 	if (!isSetCurrentTime) {
-		currentTime = audio.currentTime;
+		if(audio.currentTime != 0){
+			currentTime = audio.currentTime;
+		}
 	} else {
 		isSetCurrentTime = false;
 	}
 	// set url based on blobs
-	var url = getURL(data);
-	audio.src = url;
+	audio.src = getURL(data);
 }
 
 function getURL (data){
@@ -43,18 +44,16 @@ function getURL (data){
 
 function loadNewMusic() {
 	audio.pause();
-	if (audio.duration > currentTime) {
-		audio.playbackRate = 1.5;
-		audio.currentTime = currentTime;
-		audio.play();
-	}else{
-		isSetCurrentTime = true;
-	}
+	audio.playbackRate = 1.5;
+	audio.currentTime = currentTime;
+	audio.play();
 }
 
 function finishAudio() {
 	// when audio finished the cursor go to 0 but after receiving new sound makes duration longer than so we need to save the current time to prevent start at beginning
-	currentTime = audio.duration;
+	if(audio.duration != 0){
+		currentTime = audio.duration;
+	}
 	// prevent set default value for audio cursor
 	isSetCurrentTime = true;
 }
