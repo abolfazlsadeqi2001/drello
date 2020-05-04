@@ -22,10 +22,6 @@ boardWS.onmessage = function(msg){
 		}
 	});
 }
-// go to home page
-boardWS.onclose = function(){
-	location.href = mainPage;
-}
 // call on load
 function init(){
 	canvas = document.querySelector("canvas");

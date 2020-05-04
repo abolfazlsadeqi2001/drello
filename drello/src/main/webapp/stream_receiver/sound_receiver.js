@@ -19,10 +19,6 @@ soundWS.onmessage = function(e) {
 	}
 }
 
-soundWS.onclose = function(){
-	location.href = mainPage;
-}
-
 function play(data) {
 	// set current time
 	if (!isSetCurrentTime) {
@@ -48,7 +44,7 @@ function getURL (data){
 function loadNewMusic() {
 	audio.pause();
 	if (audio.duration > currentTime) {
-		audio.playbackRate = 2;
+		audio.playbackRate = 1.5;
 		audio.currentTime = currentTime;
 		audio.play();
 	}else{
