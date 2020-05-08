@@ -24,6 +24,7 @@ boardWS.onmessage = function(msg){
 }
 // call on load
 function init(){
+	// value the variables
 	canvas = document.querySelector("canvas");
 	ctx = canvas.getContext("2d");
 	//an interval for writing points based on time
@@ -75,4 +76,14 @@ function handleLine(obj){
     ctx.lineWidth = obj.lineWidth;
     ctx.stroke();
     ctx.closePath();
+}
+// handle fullscreen check box input on click
+function isFullScreen(ch){
+	if(ch.checked){
+		canvas.style.width = "100%";
+		canvas.style.height = "100%";
+	}else{
+		canvas.style.width = "";
+		canvas.style.height = "";
+	}
 }

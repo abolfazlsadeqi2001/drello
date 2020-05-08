@@ -10,6 +10,12 @@
 canvas {
 	border: black solid 2px;
 }
+
+.options {
+	position: absolute;
+	left : 0px;
+	top : 0px;
+}
 </style>
 <script type="text/javascript">
 	//value the general variables
@@ -25,6 +31,10 @@ canvas {
 <script type="text/javascript" src="board_receiver.js"></script>
 </head>
 <body onload="start();init();">
+	<div class="options" >
+		<input type="checkbox" onclick="isFullScreen(this);" />
+		<label>fullscreen</label>
+	</div>
 	<audio onended="finishAudio()" onloadedmetadata="loadNewMusic()"></audio>
 	<canvas></canvas>
 </body>
