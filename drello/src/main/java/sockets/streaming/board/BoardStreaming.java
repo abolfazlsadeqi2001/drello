@@ -73,6 +73,15 @@ public class BoardStreaming extends BoardWebSocketParent {
 		}
 	}
 	/**
+	 * close the board streamer session called in {@link sockets.streaming.sound.SoundStreamer#onClose(Session, CloseReason)}
+	 * @throws IOException
+	 */
+	public static void closeServer() throws IOException {
+		if(serverSession != null) {
+			serverSession.close();
+		}
+	}
+	/**
 	 * send start event to the board streamer
 	 * @throws IOException
 	 */
@@ -143,9 +152,10 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 * @param session
 	 */
 	@OnClose
-	public void onClose(Session session, CloseReason reason) {
+	public void onClose(Session session, CloseReason reason) throws IOException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			BoardStreamReceiver.closeAllClients();
+			SoundStreamer.closeServer();
 			
 			isStreamerConnected = false;
 			canvasStringifiedObject = null;

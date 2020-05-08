@@ -13,13 +13,14 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import sockets.streaming.board.BoardStreaming;
-
+// FIXME problem on allow another sound streamer
 @ServerEndpoint("/sound_streamer")
 public class SoundStreamer extends SoundStreamingParent {
 	private static ByteBuffer firstBlob = null;
 	private static boolean isStreamerConnected = false;
 	private static boolean isStreamStarted = false;
 	private static long startTimeMilis = 0;
+	private static Session serverSession = null;
 	/**
 	 * to get is the sound streamer allow the recording
 	 * @return
@@ -49,6 +50,15 @@ public class SoundStreamer extends SoundStreamingParent {
 		return System.currentTimeMillis() - startTimeMilis;
 	}
 	/**
+	 * to close the sound streamer (mostly used by {@link sockets.streaming.board.BoardStreaming#onClose(Session, CloseReason)}
+	 * @throws IOException
+	 */
+	public static void closeServer() throws IOException {
+		if(serverSession != null) {
+			serverSession.close();
+		}
+	}
+	/**
 	 * if the sound streamer has connected close this session otherwise set default values then prevent connect other sessions
 	 * @param session
 	 * @throws IOException
@@ -58,6 +68,7 @@ public class SoundStreamer extends SoundStreamingParent {
 		if (!isStreamerConnected) {
 			// set the streamer connected
 			isStreamerConnected = true;
+			serverSession = session;
 			// set the limits for time and size
 			session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
@@ -125,12 +136,15 @@ public class SoundStreamer extends SoundStreamingParent {
 	 * @param reason
 	 */
 	@OnClose
-	public void onClose(Session session,CloseReason reason) {
+	public void onClose(Session session,CloseReason reason) throws IOException {
 		if(reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			// close all clients
 			SoundClientStream.closeAllClients();
+			// close the board streamer session
+			BoardStreaming.closeServer();
 			// set variables to their default values to prevent conflict with another stream
 			firstBlob = null;
+			serverSession = null;
 			isStreamerConnected = false;
 			isStreamStarted = false;
 			startTimeMilis = 0;
