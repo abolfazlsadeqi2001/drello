@@ -1,3 +1,4 @@
+<%@page import="sockets.streaming.sound.SoundStreamer"%>
 <%@page import="pages.home.HomePage"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -21,6 +22,7 @@
 	<div class="nav">
 		<a href="manager_login">manager panel</a>
 		<a href="streamer_login">streamer panel</a>
+		<%=(SoundStreamer.isStreamStarted())?"<a href='stream_receiver'>see stream</a>":"" %>
 	</div>
 	<!-- to teach section -->
 	<h1>to teach</h1>
