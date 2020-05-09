@@ -27,7 +27,18 @@ function error(e) {
 	closeStream();
 }
 function closeStream(){
-	recorder.stop();
-	soundWS.close();
-	location.href=mainPage;
+	// stop the recorder
+	if (recorder != undefined){
+		recorder.stop();
+	}
+	/*
+	 * after stop recorder the recorder call the ondataavailable callback and send the
+	 * recorded blob that has recorded since last calling ondataavailable after that
+	 * the ws.send is called which is asynchronized so we need time to send then close
+	 * the ws and change the page url 
+	 */
+	setTimeout(function(){
+		soundWS.close();
+		location.href=mainPage;
+	},1000);
 }

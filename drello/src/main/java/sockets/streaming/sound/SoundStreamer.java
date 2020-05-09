@@ -13,7 +13,6 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import sockets.streaming.board.BoardStreaming;
-// FIXME problem on allow another sound streamer
 @ServerEndpoint("/sound_streamer")
 public class SoundStreamer extends SoundStreamingParent {
 	private static ByteBuffer firstBlob = null;
