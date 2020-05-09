@@ -34,6 +34,7 @@ if(!service.isAuthenticated(request)){
 <title>streamer</title>
 </head>
 <body <%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"onload='start()'":""%> >
+	<% if(request.getParameter("capture") != null && request.getParameter("capture").equals("on")){ %>
 	<canvas></canvas>
 	<div class="marker-container">
 		<span color="red"></span>
@@ -41,11 +42,17 @@ if(!service.isAuthenticated(request)){
 		<span color="blue"></span>
 		<span color="black"></span>
 	</div>
+	<% }else{ %>
+	<h1>sound streamer panel</h1>
+	<% } %>
 	<div class="erasers-container">
+		<% if(request.getParameter("capture") != null && request.getParameter("capture").equals("on")){ %>
 		<button id="eraser" >eraser</button>
 		<input type="number" min="2" max="100" value="10" />
 		<button id="clear">clear</button>
+		<%} %>
 		<%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"<button onclick='closeStream();'>finish</button>":""%>
 	</div>
+	
 </body>
 </html>

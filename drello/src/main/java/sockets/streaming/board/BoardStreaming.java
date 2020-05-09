@@ -14,7 +14,7 @@ import javax.websocket.Session;
 import org.json.JSONObject;
 
 import sockets.streaming.sound.SoundStreamer;
-
+// FIXME setup the on close in client side to inform user
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
 	private static final String CANVAS_TYPE = "canvas";
