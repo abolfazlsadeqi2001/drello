@@ -32,6 +32,7 @@ function init(){
 		for(var i=currentIndex; i<points.length;i++){
 			if(points[i].time <= audio.currentTime * 1000){
 				eventsHandler(points[i])
+				// save the index to don't read this index again (make conflict on board)
 				currentIndex = i;
 			}else{
 				break;

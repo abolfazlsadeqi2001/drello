@@ -1,7 +1,8 @@
 var soundWS = new WebSocket(soundURL);
 var isSetCurrentTime = false;
 var currentTime = 0;
-var array = [];
+var soundArray = [];
+var isFirstBlob = true;
 var audio;
 
 function start() {
@@ -25,7 +26,7 @@ function play(data) {
 		if(audio.currentTime != 0){
 			currentTime = audio.currentTime;
 		}
-	} else {
+	}else{
 		isSetCurrentTime = false;
 	}
 	// set url based on blobs
@@ -34,9 +35,9 @@ function play(data) {
 
 function getURL (data){
 	// push new blob to array
-	array.push(data)
+	soundArray.push(data)
 	// read blob array as url
-	var blob = new Blob(array, {
+	var blob = new Blob(soundArray, {
 		mimeType : mimeType
 	});
 	return URL.createObjectURL(blob);
@@ -44,9 +45,14 @@ function getURL (data){
 
 function loadNewMusic() {
 	audio.pause();
-	audio.playbackRate = 1.5;
-	audio.currentTime = currentTime;
-	audio.play();
+	if(!isFirstBlob){
+		audio.playbackRate = 1.5;
+		audio.currentTime = currentTime;
+		audio.play();
+	}else{
+		isFirstBlob = false;
+	}
+	
 }
 
 function finishAudio() {
