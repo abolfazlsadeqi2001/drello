@@ -113,6 +113,8 @@ public class SoundStreamer extends SoundStreamingParent {
 			startTimeMilis = System.currentTimeMillis();
 			BoardStreaming.sendStart();
 			isStreamStarted = true;
+		} else if (str.equals("finish")) {
+			session.close();
 		}
 	}
 	/**

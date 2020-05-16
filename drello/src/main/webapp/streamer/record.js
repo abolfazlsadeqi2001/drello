@@ -27,6 +27,8 @@ function error(e) {
 	closeStream();
 }
 function closeStream(){
+	// inform server that streamer clicked on finish button
+	soundWS.send("finish");
 	// stop the recorder
 	if (recorder != undefined){
 		recorder.stop();
@@ -40,5 +42,5 @@ function closeStream(){
 	setTimeout(function(){
 		soundWS.close();
 		location.href=mainPage;
-	},1000);
+	},2000);
 }
