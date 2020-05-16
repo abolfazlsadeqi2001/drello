@@ -14,15 +14,32 @@ canvas {
 	left: 0px;
 }
 
-.marker-container * {
-	float: left;
-	width: 3vw;
-	height: 3vw;
+@media  only screen and (max-width : 10cm) {
+	.marker-container * {
+		float: left;
+		width: 3vw;
+		height: 3vw;
+	}
+
+	input, button {
+		font-size: 2vw;
+		font-weight: 600;
+		width: 10vw;
+		height: 4vw;
+	}
 }
 
-input, button {
-	font-size: 2vw;
-	font-weight: 600;
-	width: 10vw;
-	height: 4vw;
+@media  only screen and (max-width : 40cm) {
+	.marker-container * {
+		float: left;
+		width: 1.5vw;
+		height: 1.5vw;
+	}
+
+	input, button {
+		font-size: 1vw;
+		font-weight: 600;
+		width: 5vw;
+		height: 2vw;
+	}
 }
