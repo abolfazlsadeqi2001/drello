@@ -22,7 +22,10 @@
 	<div class="nav">
 		<a href="manager_login">manager panel</a>
 		<a href="streamer_login">streamer panel</a>
-		<%=(SoundStreamer.isStreamStarted())?"<a href='stream_receiver'>see stream</a>":"" %>
+		<% long duration = SoundStreamer.getSoundStreamingDuration()/1000;
+		if(SoundStreamer.isStreamStarted() && duration >= 40){ %>
+			<a href='stream_receiver'>see stream</a>
+		<%} %>
 	</div>
 	<!-- to teach section -->
 	<h1>to teach</h1>
