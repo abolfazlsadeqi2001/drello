@@ -32,7 +32,7 @@ canvas {
 </head>
 <body onload="start();init();">
 	<div class="options" >
-		<input type="checkbox" onclick="isFullScreen(this);" />
+		<input type="checkbox" checked="unchecked" onclick="isFullScreen(this);" />
 		<label>fullscreen</label>
 	</div>
 	<audio onended="finishAudio()" onloadedmetadata="loadNewMusic()"></audio>
