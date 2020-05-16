@@ -107,7 +107,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 * @param message
 	 */
 	@OnMessage
-	public void onMessage(Session session, String message) {
+	public synchronized void onMessage(Session session, String message) {
 		// broadcast message
 		BoardStreamReceiver.broadcastMessage(message);
 		// read message

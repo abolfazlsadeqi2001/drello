@@ -87,7 +87,7 @@ public class SoundStreamer extends SoundStreamingParent {
 	 * @param bytes
 	 */
 	@OnMessage
-	public void onMessage(Session session, byte[] bytes) {
+	public synchronized void onMessage(Session session, byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		// if the first blob has not been defined yet define it by current bytes
 		if (firstBlob == null) {
