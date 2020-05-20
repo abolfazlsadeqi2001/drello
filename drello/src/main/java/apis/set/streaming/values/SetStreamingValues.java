@@ -18,7 +18,7 @@ public class SetStreamingValues extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		StreamerLogin.setUserName(request.getParameter("username"));
 		StreamerLogin.setPassword(request.getParameter("password"));
-		StreamerLogin.setStreamingAllowed(request.getParameter("isAllowed").equals("on"));
+		StreamerLogin.setStreamingAllowed(request.getParameter("isAllowed").equals("true"));
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

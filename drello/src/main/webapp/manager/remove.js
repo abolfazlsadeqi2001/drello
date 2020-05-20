@@ -42,7 +42,7 @@ function init(){
 function setStreamingValues(){
 	var userName = document.querySelector("#userName").value;
 	var password = document.querySelector("#password").value;
-	var isAllowed = document.querySelector("#isAllowed").value;
+	var isAllowed = document.querySelector("#isAllowed").checked;
 	
 	var url = rootContext + "/set_sreaming_values?";
 	url += "username="+userName+"&";

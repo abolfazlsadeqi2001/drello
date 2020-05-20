@@ -18,7 +18,7 @@ public class StreamerAuthentication implements AuthenticationService {
 		model2.setUserName(getField(request, "username"));
 		model2.setPassword(getField(request, "password"));
 
-		return getIsSame(model1, model2);
+		return getIsSame(model1, model2) && StreamerLogin.isStreamingAllowed();
 	}
 
 }
