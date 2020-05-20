@@ -1,32 +1,27 @@
 package configurations.streamer.login;
 
-import generals.configurations.configure.file.reader.ConfigureFileReader;
-import generals.configurations.configure.file.reader.exception.ReadingException;
-
-/**
- * read a file then use their contents for login in streamer side
- * @author abolfazlsadeqi2001
- *
- */
 public class StreamerLogin {
-private static final String PATH = "/home/abolfazlsadeqi2001/.streamer_configure";
+
+	private static String userName = "";
+	private static String password = "";
+	private static boolean isStreamingAllowed = false;
 	
-	/**
-	 * get <mark>only</mark> user name for authentication
-	 * @return
-	 * @throws ReadingException
-	 */
-	public static String getUserName() throws ReadingException {
-		ConfigureFileReader reader = new ConfigureFileReader(PATH);
-		return reader.getParameterByIndex("#", 0);
+	public static String getUserName() {
+		return userName;
 	}
-	/**
-	 * get <mark>only</mark> password for authentication
-	 * @return
-	 * @throws ReadingException
-	 */
-	public static String getPassword() throws ReadingException {
-		ConfigureFileReader reader = new ConfigureFileReader(PATH);
-		return reader.getParameterByIndex("#", 1);
+	public static void setUserName(String u) {
+		userName = u;
+	}
+	public static String getPassword() {
+		return password;
+	}
+	public static void setPassword(String pass) {
+		password = pass;
+	}
+	public static boolean isStreamingAllowed() {
+		return isStreamingAllowed;
+	}
+	public static void setStreamingAllowed(boolean is) {
+		isStreamingAllowed = is;
 	}
 }

@@ -20,6 +20,12 @@
 		<description></description>
 		<servlet-class>apis.remove.to.teach.RemoveToTeachRow</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>SetStreamingValues</servlet-name>
+		<display-name>SetStreamingValues</display-name>
+		<description></description>
+		<servlet-class>apis.set.streaming.values.SetStreamingValues</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>AddToTeachRow</servlet-name>
@@ -29,5 +35,9 @@
 	<servlet-mapping>
 		<servlet-name>RemoveToTeachRow</servlet-name>
 		<url-pattern>/remove_to_teach_row</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SetStreamingValues</servlet-name>
+		<url-pattern>/set_sreaming_values</url-pattern>
 	</servlet-mapping>
 </web-app>

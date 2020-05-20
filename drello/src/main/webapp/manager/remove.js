@@ -38,3 +38,18 @@ function init(){
 		removeTable.appendChild(newRow);
 	});
 }
+
+function setStreamingValues(){
+	var userName = document.querySelector("#userName").value;
+	var password = document.querySelector("#password").value;
+	var isAllowed = document.querySelector("#isAllowed").value;
+	
+	var url = rootContext + "/set_sreaming_values?";
+	url += "username="+userName+"&";
+	url += "password="+password+"&";
+	url += "isAllowed="+isAllowed;
+	
+	fetch(url).then(function(){
+		alert("values are set");
+	});
+}

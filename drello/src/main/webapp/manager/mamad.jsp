@@ -53,5 +53,17 @@ if(!service.isAuthenticated(request)){
 	<table class="remove" >
 		
 	</table>
+	<!-- to set streaming values -->
+	<h1>streaming values</h1>
+	<label>user name :</label>
+	<input id="userName" />
+	<br>
+	<label>password :</label>
+	<input id="password" />
+	<br>
+	<label>is streaming allowed :</label>
+	<input type="checkbox" id="isAllowed" />
+	<br>
+	<input type="button" value="set" onclick="setStreamingValues()" />
 </body>
 </html>
