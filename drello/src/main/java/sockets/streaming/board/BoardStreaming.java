@@ -201,13 +201,20 @@ public class BoardStreaming extends BoardWebSocketParent {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) throws IOException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
-			BoardStreamReceiver.closeAllClients();
-			SoundStreamer.closeServer();
-
-			isStreamerConnected = false;
-			canvasStringifiedObject = null;
-			objects = new StringBuilder();
-			serverSession = null;
+			closeStream();
+			setToDefaultValues();
 		}
+	}
+	
+	private void closeStream() throws IOException {
+		BoardStreamReceiver.closeAllClients();
+		SoundStreamer.closeServer();
+	}
+	
+	private void setToDefaultValues() {
+		isStreamerConnected = false;
+		canvasStringifiedObject = null;
+		objects = new StringBuilder();
+		serverSession = null;
 	}
 }

@@ -205,17 +205,22 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) throws IOException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
-			// close all clients
-			SoundClientStream.closeAllClients();
-			// close the board streamer session
-			BoardStreaming.closeServer();
-			// set variables to their default values to prevent conflict with another stream
-			firstBlob = null;
-			serverSession = null;
-			isStreamerConnected = false;
-			isStreamStarted = false;
-			startTimeMilis = 0;
-			streamIndex = 0;
+			closeStream();
+			setToDefaultValues();
 		}
+	}
+	
+	private void closeStream() throws IOException {
+		SoundClientStream.closeAllClients();
+		BoardStreaming.closeServer();
+	}
+	
+	private void setToDefaultValues() {
+		firstBlob = null;
+		serverSession = null;
+		isStreamerConnected = false;
+		isStreamStarted = false;
+		startTimeMilis = 0;
+		streamIndex = 0;
 	}
 }
