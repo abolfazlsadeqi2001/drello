@@ -14,6 +14,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import configuration.sockets.sound.streaming.SoundStreamingValues;
 import sockets.streaming.board.BoardStreaming;
 
 @ServerEndpoint("/sound_streamer")
@@ -28,7 +29,21 @@ public class SoundStreamer extends SoundStreamingParent {
 	private static final String STREAM_DIRECTORY_PATH = "/home/abolfazlsadeqi2001/Desktop/";
 	private static int streamIndex = 0;
 	private static final String SOUND_FILE_NAME = "sound.ogg";
+	private static int numberOfBlobsInCurrentStreamInByThisStreamer = 0;
+	private static int numberOfBlobsInPreviousStreamsInByThisStreamer = 0;
 
+	public static long getSumOfPreviousStreamsDuration() {
+		return numberOfBlobsInPreviousStreamsInByThisStreamer * SoundStreamingValues.getDelay() * 1000;
+	}
+	
+	public static String getStreamContainerDirectoryPath() {
+		return STREAM_DIRECTORY_PATH;
+	}
+	
+	public static int getStreamIndex() {
+		return streamIndex;
+	}
+	
 	public static String getStreamDirectoryPath() {
 		return STREAM_DIRECTORY_PATH + streamIndex;
 	}
@@ -93,6 +108,9 @@ public class SoundStreamer extends SoundStreamingParent {
 		if (!isStreamerConnected) {
 			setupServerSession(session);
 			setStreamIndex();
+			// setup the number of blobs
+			numberOfBlobsInPreviousStreamsInByThisStreamer += numberOfBlobsInCurrentStreamInByThisStreamer;
+			numberOfBlobsInCurrentStreamInByThisStreamer = 0;
 			// create current stream directory
 			File currentDirectory = new File(getStreamDirectoryPath());
 			currentDirectory.mkdir();
@@ -138,6 +156,8 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnMessage
 	public synchronized void onMessage(Session session, byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
+		// add 1 more blob need to add into nubmer of blobs in current stream
+		numberOfBlobsInCurrentStreamInByThisStreamer ++;
 		// if the first blob has not been defined yet define it by current bytes
 		if (firstBlob == null) {
 			firstBlob = buffer;
@@ -177,6 +197,7 @@ public class SoundStreamer extends SoundStreamingParent {
 			isStreamStarted = true;
 		} else if (str.equals("finish")) {
 			session.close();
+			numberOfBlobsInPreviousStreamsInByThisStreamer = 0;
 		}
 	}
 
@@ -207,6 +228,7 @@ public class SoundStreamer extends SoundStreamingParent {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			closeStream();
 			setToDefaultValues();
+			BoardStreaming.mergetPreviousJSONFileToCurrentFile();
 		}
 	}
 	
@@ -220,7 +242,5 @@ public class SoundStreamer extends SoundStreamingParent {
 		serverSession = null;
 		isStreamerConnected = false;
 		isStreamStarted = false;
-		startTimeMilis = 0;
-		streamIndex = 0;
 	}
 }

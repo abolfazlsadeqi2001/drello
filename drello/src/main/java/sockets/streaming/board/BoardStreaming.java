@@ -2,9 +2,9 @@ package sockets.streaming.board;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -15,11 +15,11 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import sockets.streaming.sound.SoundStreamer;
 
-// FIXME setup the on close in client side to inform user
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
 	// elements to read by JSON parser
@@ -205,16 +205,101 @@ public class BoardStreaming extends BoardWebSocketParent {
 			setToDefaultValues();
 		}
 	}
-	
+
 	private void closeStream() throws IOException {
 		BoardStreamReceiver.closeAllClients();
 		SoundStreamer.closeServer();
 	}
-	
+
 	private void setToDefaultValues() {
 		isStreamerConnected = false;
 		canvasStringifiedObject = null;
 		objects = new StringBuilder();
 		serverSession = null;
+	}
+
+	public static void mergetPreviousJSONFileToCurrentFile() {
+		try {
+			// read the previous JSON file and set the latest time in streamer side
+			// FIXME change the sound Streamer duration to sum of current and previous streams
+			long streamDuration = SoundStreamer.getSumOfPreviousStreamsDuration();
+			// read previous JSON file content
+			String previousJSONObjects = readFile(getPreviousBoardFilePath());
+			// read current JSON file
+			String currentJSONObjects = readFile(getCurrentBoardFilePath());
+			// delete JSON files
+			deletePreviousAndCurrentJSONFiles();
+			// get merged Objects
+			String mergedObjects = mergeTwoFiles(previousJSONObjects, currentJSONObjects, streamDuration);
+			// write mergedObjects into current Stream file
+			writeObjects(mergedObjects);
+		} catch (IOException e) {
+			// TODO handle error
+			e.printStackTrace();
+		}
+	}
+
+	private static String readFile(Path path) throws IOException {
+		// if the previous json file exists and has some json objects
+		if (Files.exists(path) && Files.size(path) > 0) {
+			return Files.readString(path);
+		} else {
+			return null;
+		}
+	}
+
+	private static void deletePreviousAndCurrentJSONFiles() throws IOException {
+		Files.deleteIfExists(getPreviousBoardFilePath());
+		Files.deleteIfExists(getCurrentBoardFilePath());
+	}
+	
+	private static String mergeTwoFiles(String previousObjects,String currentObjects,long previousStreamsDuration) {
+		StringBuilder mergedObjects = new StringBuilder();
+		
+		if(previousObjects != null)
+			mergedObjects.append(previousObjects);
+		
+		if(currentObjects != null && previousObjects != null && previousObjects.length() > 0 && currentObjects.length() > 0)
+			mergedObjects.append(",");
+		
+		JSONArray currentJSONArray = new JSONArray("["+currentObjects+"]");
+		
+		for (int i = 0; i < currentJSONArray.length(); i++) {
+			JSONObject obj = currentJSONArray.getJSONObject(i);
+			
+			long objTime = obj.getLong("time");
+			
+			objTime += previousStreamsDuration;
+			
+			obj.put("time", objTime);
+			
+			mergedObjects.append(obj.toString());
+			if(currentJSONArray.length()-1 != i)
+				mergedObjects.append(",");
+		}
+		
+		return mergedObjects.toString();
+	}
+	
+	private static void writeObjects(String objects) {
+		Path currentJSONFile = getCurrentBoardFilePath();
+		try {
+			Files.writeString(currentJSONFile, objects);
+		} catch (IOException e) {
+			// TODO log error
+			e.printStackTrace();
+		}
+	}
+	
+	private static Path getPreviousBoardFilePath() {
+		String previousJSONFilePath = SoundStreamer.getStreamContainerDirectoryPath()
+				+ (SoundStreamer.getStreamIndex() - 1) +"/"+ BOARD_FILE_NAME;
+		return Path.of(previousJSONFilePath);
+	}
+	
+	private static Path getCurrentBoardFilePath() {
+		String currentJSONFilePath = SoundStreamer.getStreamContainerDirectoryPath()
+				+ SoundStreamer.getStreamIndex() +"/"+ BOARD_FILE_NAME;
+		return Path.of(currentJSONFilePath);
 	}
 }
