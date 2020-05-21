@@ -32,10 +32,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	private static boolean isStreamerConnected;
 	private static Session serverSession = null;
 	// writing datas variables
-	private static final String STREAM_DIRECTORY_PATH = "/home/abolfazlsadeqi2001/Desktop/";
-	private static int streamIndex = 0;
 	private static final String BOARD_FILE_NAME = "board.json";
-	private static String fileURL = "";
 
 	static String getCanvasObject() {
 		return canvasStringifiedObject;
@@ -71,13 +68,6 @@ public class BoardStreaming extends BoardWebSocketParent {
 			session.close(reason);
 		} else {
 			setupSessionAsServerSession(session);
-			setStreamIndex();
-			// set file url
-			fileURL = STREAM_DIRECTORY_PATH + streamIndex + "/" + BOARD_FILE_NAME;
-			// create current stream directory
-			String directoryUrl = STREAM_DIRECTORY_PATH + streamIndex;
-			File currentDirectory = new File(directoryUrl);
-			currentDirectory.mkdir();
 		}
 	}
 
@@ -97,19 +87,6 @@ public class BoardStreaming extends BoardWebSocketParent {
 			 */
 			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
 		}
-	}
-
-	private void setStreamIndex() {
-		File streamDirectory = new File(STREAM_DIRECTORY_PATH);
-		File[] directories = streamDirectory.listFiles((File arg1, String arg2) -> arg1.isDirectory());
-
-		int previousIndex = 0;
-		for (File directory : directories) {
-			int directoryIndex = Integer.valueOf(directory.getName());
-			if (directoryIndex > previousIndex)
-				previousIndex = directoryIndex;
-		}
-		streamIndex = previousIndex + 1;
 	}
 
 	/**
@@ -186,12 +163,13 @@ public class BoardStreaming extends BoardWebSocketParent {
 			}
 		}
 	}
-	
+
 	private void writeMessage(String message) {
-		File file = new File(fileURL);
+		File file = new File(SoundStreamer.getStreamDirectoryPath() + "/" + BOARD_FILE_NAME);
 		long space = file.length();
-		try(FileOutputStream writer = new FileOutputStream(file, true)) {
-			// if it is not empty write a , to separate this message by previous one (if any message exists)
+		try (FileOutputStream writer = new FileOutputStream(file, true)) {
+			// if it is not empty write a , to separate this message by previous one (if any
+			// message exists)
 			if (space > 0 && message.length() > 0) {
 				writer.write(",".getBytes());
 			}
@@ -216,7 +194,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	/**
 	 * if session is disconnected because of non-CANNOT_ACCEPT which means that was
 	 * a server session that is disconnected close all stream receivers and set the
-	 * variables to their defaults FIXME add clear event on points.txt
+	 * variables to their defaults
 	 * 
 	 * @param session
 	 */
@@ -230,8 +208,6 @@ public class BoardStreaming extends BoardWebSocketParent {
 			canvasStringifiedObject = null;
 			objects = new StringBuilder();
 			serverSession = null;
-			streamIndex = 0;
-			fileURL = "";
 		}
 	}
 }
