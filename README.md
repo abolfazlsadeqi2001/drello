@@ -1,10 +1,11 @@
-** TODOs **
-- [ ] after finish the stream set streaming allowed false
-- [ ] set the stream folder from configuration file
-- [ ] add clear event after closing the session
-- [ ] setup uploading .tar file that includes 1. sound.ogg (merged with all parts) 2. board.json (merged by all parts)  3. a file named by the stream title to placed sound.ogg and board.json into a folder by a same name
+## how to use with different devices
+<ul>
+	<li>mobile (question solving)</li>
+	<li>tablet with smart phone (question solving and teaching)</li>
+	<li>smart board(capture the board) + mobile(record the sound) (teaching)</li>
+</ul>
 
-** things to know before use **
+## things to know before use
 <ul>
 	<li>many refreshes can make conflict on time</li>
 	<li>sometimes page crashed to solve that reopen the browser</li>
@@ -17,9 +18,8 @@
 	<li>read from recorded source is recommended rather than stream</li>
 </ul>
 
-** how to use **
-<ul>
-	<li>mobile (question solving)</li>
-	<li>tablet with smart phone (question solving and teaching)</li>
-	<li>smart board(capture the board) + mobile(record the sound) (teaching)</li>
-</ul>
+## TODOs
+- [ ] after finish the stream set streaming allowed false
+- [ ] set the stream folder from configuration file
+- [ ] add clear event after closing the session
+- [ ] setup uploading .tar file that includes 1. sound.ogg (merged with all parts) 2. board.json (merged by all parts)  3. a file named by the stream title to placed sound.ogg and board.json into a folder by a same name
