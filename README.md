@@ -19,7 +19,9 @@
 </ul>
 
 ## TODOs
-- [ ] after finish the stream set streaming allowed false
-- [ ] set the stream folder from configuration file
-- [ ] add clear event after closing the session
-- [ ] setup uploading .tar file that includes 1. sound.ogg (merged with all parts) 2. board.json (merged by all parts)  3. a file named by the stream title to placed sound.ogg and board.json into a folder by a same name
+- [ ] After finish the stream set streaming allowed false
+- [ ] Set the stream folder from configuration file
+- [ ] Add clear event after closing the session
+- [ ] Setup uploading .tar file that includes 1. sound.ogg (merged with all parts) 2. board.json (merged by all parts)  3. a file named by the stream title to placed sound.ogg and board.json into a folder by a same name
+- [ ] Test 5 secods for send sound blobs
+- [ ] add dark mode on it
