@@ -68,21 +68,17 @@ public class BoardStreaming extends BoardWebSocketParent {
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
 		} else {
-			setupSessionAsServerSession(session);
-		}
-	}
-
-	private void setupSessionAsServerSession(Session session) throws IOException {
-		isStreamerConnected = true;
-		serverSession = session;
-		// configure session
-		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
-		session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
-		// send start if stream started also send current time of sound stream otherwise set 0 as default
-		if (SoundStreamerValues.isStreamStarted()) {
-			sendStart();
-			String durationSinceStartSoundStreaming = String.valueOf(SoundStreamerValues.getDurationSinceStartStreaming());
-			session.getBasicRemote().sendText(durationSinceStartSoundStreaming);
+			isStreamerConnected = true;
+			serverSession = session;
+			// configure session
+			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
+			session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
+			// send start if stream started also send current time of sound stream otherwise set 0 as default
+			if (SoundStreamerValues.isStreamStarted()) {
+				sendStart();
+				String durationSinceStartSoundStreaming = String.valueOf(SoundStreamerValues.getDurationSinceStartStreaming());
+				session.getBasicRemote().sendText(durationSinceStartSoundStreaming);
+			}
 		}
 	}
 
@@ -255,20 +251,22 @@ public class BoardStreaming extends BoardWebSocketParent {
 		if(currentObjects != null && previousObjects != null && previousObjects.length() > 0 && currentObjects.length() > 0)
 			mergedObjects.append(",");
 		
-		JSONArray currentJSONArray = new JSONArray("["+currentObjects+"]");
-		
-		for (int i = 0; i < currentJSONArray.length(); i++) {
-			JSONObject obj = currentJSONArray.getJSONObject(i);
+		if(currentObjects != null) {
+			JSONArray currentJSONArray = new JSONArray("["+currentObjects+"]");
 			
-			long objTime = obj.getLong("time");
-			
-			objTime += previousStreamsDuration;
-			
-			obj.put("time", objTime);
-			
-			mergedObjects.append(obj.toString());
-			if(currentJSONArray.length()-1 != i)
-				mergedObjects.append(",");
+			for (int i = 0; i < currentJSONArray.length(); i++) {
+				JSONObject obj = currentJSONArray.getJSONObject(i);
+				
+				long objTime = obj.getLong("time");
+				
+				objTime += previousStreamsDuration;
+				
+				obj.put("time", objTime);
+				
+				mergedObjects.append(obj.toString());
+				if(currentJSONArray.length()-1 != i)
+					mergedObjects.append(",");
+			}
 		}
 		
 		return mergedObjects.toString();

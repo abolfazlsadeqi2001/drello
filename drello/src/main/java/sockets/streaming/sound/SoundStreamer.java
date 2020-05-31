@@ -57,7 +57,7 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnMessage
 	public synchronized void onMessage(Session session, byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		if (SoundStreamerValues.isHeaderBlobDefined()) {
+		if (!SoundStreamerValues.isHeaderBlobDefined()) {
 			SoundStreamerValues.setHeaderBlob(buffer);
 		}
 		// broad cast the received message

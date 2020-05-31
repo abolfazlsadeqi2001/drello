@@ -1,3 +1,4 @@
+<%@page import="configurations.sockets.streaming.sound.SoundStreamerValues"%>
 <%@page import="sockets.streaming.sound.SoundStreamer"%>
 <%@page import="pages.home.HomePage"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -22,8 +23,8 @@
 	<div class="nav">
 		<a href="manager_login">manager panel</a>
 		<a href="streamer_login">streamer panel</a>
-		<% long duration = SoundStreamer.getSoundStreamingDuration()/1000;
-		if(SoundStreamer.isStreamStarted() && duration >= 40){ %>
+		<% long duration = SoundStreamerValues.getDurationSinceStartStreaming()/1000;
+		if(SoundStreamerValues.isStreamStarted() && duration >= 40){ %>
 			<a href='stream_receiver'>see stream</a>
 		<%} %>
 	</div>

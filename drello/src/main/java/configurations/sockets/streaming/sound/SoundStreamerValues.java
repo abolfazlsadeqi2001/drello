@@ -60,14 +60,14 @@ public class SoundStreamerValues {
 	 * set the value of {@link #isStreamerConnected} to true
 	 */
 	public static void setStreamSessionFree() {
-		isStreamerConnected = true;
+		isStreamerConnected = false;
 	}
 	
 	/**
 	 * set the value of {@link #isStreamerConnected} to false
 	 */
 	public static void setStreamSessionInUsed() {
-		isStreamerConnected = false;
+		isStreamerConnected = true;
 	}
 
 	/**
