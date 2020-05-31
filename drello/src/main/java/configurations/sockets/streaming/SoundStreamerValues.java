@@ -76,7 +76,7 @@ public class SoundStreamerValues {
 	 * call {@link #setStreamerSession(Session)} and set its value to null <br>
 	 * call {@link #setStreamIsNotStarted()} to set {@link #isStreamStarted} to false <br>
 	 */
-	public static void setAllVariablesToTheirDefaults() {
+	public static void resetVariables() {
 		setHeaderBlob(null);
 		setStreamSessionFree();
 		setStreamerSession(null);

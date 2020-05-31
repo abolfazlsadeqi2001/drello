@@ -45,7 +45,7 @@ public class SoundWriter {
 	
 	public static long getAllDurationOfPreviousStreamsByThisStreamTitle() {
 		// FIXME read from blobs
-		return 1;
+		return 10000000;
 	}
 	
 	public static String getPreviousStreamContentsDirectory() {

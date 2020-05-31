@@ -115,7 +115,7 @@ public class SoundStreamer extends SoundStreamingParent {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			SoundClientStream.closeAllClients();
 			BoardStreaming.closeServer();
-			SoundStreamerValues.setAllVariablesToTheirDefaults();
+			SoundStreamerValues.resetVariables();
 		}
 	}
 }

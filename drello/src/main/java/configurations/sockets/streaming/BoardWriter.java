@@ -89,6 +89,10 @@ public class BoardWriter {
 		return Path.of(previousJSONFilePath);
 	}
 	
+	private static String getCurrentJSONFilePath() {
+		return  SoundWriter.getCurrentStreamContentsDirectory() + getBoardFileName();
+	}
+	
 	private static Path getCurrentBoardFilePath() {
 		return Path.of(getCurrentJSONFilePath());
 	}
@@ -107,15 +111,6 @@ public class BoardWriter {
 		} catch (IOException e) {
 			// TODO handle error
 		}
-	}
-	
-	
-	private static String getCurrentJSONFilePath() {
-		return  getCurrentStreamContentsDirecotory() + getBoardFileName();
-	}
-	
-	private static String getCurrentStreamContentsDirecotory() {
-		return SoundWriter.getCurrentStreamContentsDirectory();
 	}
 	
 	public static String getBoardFileName() {
