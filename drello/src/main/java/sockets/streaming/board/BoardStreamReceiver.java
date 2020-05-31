@@ -59,7 +59,6 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 	 */
 	@OnError
 	public void error(Throwable th) {
-		System.out.println("board client: "+th.getMessage()+" => "+th.getCause().toString());
 		// TODO handle error
 	}
 	/**

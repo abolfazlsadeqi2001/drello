@@ -18,6 +18,7 @@ import javax.websocket.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import configurations.sockets.streaming.sound.SoundStreamerValues;
 import sockets.streaming.sound.SoundStreamer;
 
 @ServerEndpoint("/board_stream")
@@ -63,7 +64,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	public void onOpen(Session session) throws IOException {
 		// if another streamer have connected to this session or the sound streamer have
 		// not connected yet close current session
-		if (isStreamerConnected || !SoundStreamer.isStreamerConnected()) {
+		if (isStreamerConnected || !SoundStreamerValues.isStreamSessionInUsed()) {
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
 		} else {
@@ -77,15 +78,11 @@ public class BoardStreaming extends BoardWebSocketParent {
 		// configure session
 		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
 		session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
-		// send start if stream started
-		if (SoundStreamer.isStreamStarted()) {
+		// send start if stream started also send current time of sound stream otherwise set 0 as default
+		if (SoundStreamerValues.isStreamStarted()) {
 			sendStart();
-			/*
-			 * send the current stream time if the sound streamer has not allowed the
-			 * recording and he will allow that while the board streamer connected the
-			 * current time = 0 (default value and does not need to send)
-			 */
-			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
+			String durationSinceStartSoundStreaming = String.valueOf(SoundStreamerValues.getDurationSinceStartStreaming());
+			session.getBasicRemote().sendText(durationSinceStartSoundStreaming);
 		}
 	}
 
@@ -208,7 +205,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 
 	private void closeStream() throws IOException {
 		BoardStreamReceiver.closeAllClients();
-		SoundStreamer.closeServer();
+		SoundStreamerValues.closeStreamerSession();
 	}
 
 	private void setToDefaultValues() {

@@ -11,6 +11,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import configurations.sockets.streaming.sound.SoundStreamerValues;
+
 @ServerEndpoint("/sound_client")
 public class SoundClientStream extends SoundStreamingParent {
 	public static Set<Session> clients = new HashSet<Session>();
@@ -29,11 +31,11 @@ public class SoundClientStream extends SoundStreamingParent {
 		session.setMaxIdleTimeout(MAX_TIME_OUT);
 		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
 		// if header blob is defined send it to client which is very important to read other blobs
-		if (SoundStreamer.getHeaderBlob() != null) {
+		if (SoundStreamerValues.getHeaderBlob() != null) {
 			// send current time of streamer side
-			session.getBasicRemote().sendText(String.valueOf(SoundStreamer.getSoundStreamingDuration()));
+			session.getBasicRemote().sendText(String.valueOf(SoundStreamerValues.getDurationSinceStartStreaming()));
 			// send the header blob
-			session.getBasicRemote().sendBinary(SoundStreamer.getHeaderBlob());
+			session.getBasicRemote().sendBinary(SoundStreamerValues.getHeaderBlob());
 		}
 		// add the current session to set of all sessions
 		clients.add(session);
@@ -59,7 +61,7 @@ public class SoundClientStream extends SoundStreamingParent {
 			try {
 				client.getBasicRemote().sendBinary(buffer);
 			} catch (IOException e) {
-				e.printStackTrace();
+				// TODO handle error
 			}
 		});
 	}
@@ -69,7 +71,6 @@ public class SoundClientStream extends SoundStreamingParent {
 	 */
 	@OnError
 	public void onError (Throwable th) {
-		System.out.println("sound client: "+th.getMessage()+" => "+th.getCause().toString());
 		// TODO handle error
 	}
 	/**

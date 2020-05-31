@@ -15,16 +15,11 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import configuration.sockets.sound.streaming.SoundStreamingValues;
+import configurations.sockets.streaming.sound.SoundStreamerValues;
 import sockets.streaming.board.BoardStreaming;
 
 @ServerEndpoint("/sound_streamer")
 public class SoundStreamer extends SoundStreamingParent {
-	// stream variables
-	private static ByteBuffer firstBlob = null;
-	private static boolean isStreamerConnected = false;
-	private static boolean isStreamStarted = false;
-	private static long startTimeMilis = 0;
-	private static Session serverSession = null;
 	// writing data variables
 	private static final String STREAM_DIRECTORY_PATH = "/home/abolfazlsadeqi2001/Desktop/";
 	private static int streamIndex = 0;
@@ -49,54 +44,6 @@ public class SoundStreamer extends SoundStreamingParent {
 	}
 
 	/**
-	 * to get is the sound streamer allow the recording
-	 * 
-	 * @return
-	 */
-	public static boolean isStreamStarted() {
-		return isStreamStarted;
-	}
-
-	/**
-	 * to get is the streamer session connected
-	 * 
-	 * @return
-	 */
-	public static boolean isStreamerConnected() {
-		return isStreamerConnected;
-	}
-
-	/**
-	 * get the bytes that contain the header to read the music
-	 * 
-	 * @return
-	 */
-	public static ByteBuffer getHeaderBlob() {
-		return firstBlob;
-	}
-
-	/**
-	 * get sound period since the streamer has allowed recording
-	 * 
-	 * @return
-	 */
-	public static long getSoundStreamingDuration() {
-		return System.currentTimeMillis() - startTimeMilis;
-	}
-
-	/**
-	 * to close the sound streamer (mostly used by
-	 * {@link sockets.streaming.board.BoardStreaming#onClose(Session, CloseReason)}
-	 * 
-	 * @throws IOException
-	 */
-	public static void closeServer() throws IOException {
-		if (serverSession != null) {
-			serverSession.close();
-		}
-	}
-
-	/**
 	 * if the sound streamer has connected close this session otherwise set default
 	 * values then prevent connect other sessions
 	 * 
@@ -105,29 +52,25 @@ public class SoundStreamer extends SoundStreamingParent {
 	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		if (!isStreamerConnected) {
-			setupServerSession(session);
+		if (SoundStreamerValues.isStreamSessionInUsed()) {
+			// close the current session because we cannot handle two sessions at a same time
+			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
+			session.close(closeReason);
+		} else {
 			setStreamIndex();
+			SoundStreamerValues.setStreamerSession(session);
+			SoundStreamerValues.setStreamSessionInUsed();
+			// set the limits for time and size
+			session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
+			session.setMaxIdleTimeout(MAX_TIME_OUT);
+			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
 			// setup the number of blobs
 			numberOfBlobsInPreviousStreamsInByThisStreamer += numberOfBlobsInCurrentStreamInByThisStreamer;
 			numberOfBlobsInCurrentStreamInByThisStreamer = 0;
 			// create current stream directory
 			File currentDirectory = new File(getStreamDirectoryPath());
 			currentDirectory.mkdir();
-		} else {
-			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
-			session.close(closeReason);
 		}
-	}
-
-	private void setupServerSession(Session session) {
-		// set the streamer connected
-		isStreamerConnected = true;
-		serverSession = session;
-		// set the limits for time and size
-		session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
-		session.setMaxIdleTimeout(MAX_TIME_OUT);
-		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
 	}
 
 	private void setStreamIndex() {
@@ -158,9 +101,8 @@ public class SoundStreamer extends SoundStreamingParent {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		// add 1 more blob need to add into nubmer of blobs in current stream
 		numberOfBlobsInCurrentStreamInByThisStreamer ++;
-		// if the first blob has not been defined yet define it by current bytes
-		if (firstBlob == null) {
-			firstBlob = buffer;
+		if (SoundStreamerValues.isHeaderBlobDefined()) {
+			SoundStreamerValues.setHeaderBlob(buffer);
 		}
 		// broad cast the received message
 		SoundClientStream.broadCast(buffer);
@@ -192,9 +134,10 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnMessage
 	public void onTextMessage(Session session, String str) throws IOException {
 		if (str.equals("start")) {
-			startTimeMilis = System.currentTimeMillis();
+			long currentMiliSeconds = System.currentTimeMillis();
+			SoundStreamerValues.setMiliSecondsOnStartStreaming(currentMiliSeconds);
 			BoardStreaming.sendStart();
-			isStreamStarted = true;
+			SoundStreamerValues.setStreamStarted();
 		} else if (str.equals("finish")) {
 			session.close();
 			numberOfBlobsInPreviousStreamsInByThisStreamer = 0;
@@ -209,7 +152,6 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnError
 	public void onError(Throwable th) {
 		// TODO handle error
-		System.out.println("sound streamer: " + th.getMessage() + " => " + th.getCause().toString());
 	}
 
 	/**
@@ -226,21 +168,10 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) throws IOException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
-			closeStream();
-			setToDefaultValues();
+			SoundClientStream.closeAllClients();
+			BoardStreaming.closeServer();
+			SoundStreamerValues.setAllVariablesToTheirDefaults();
 			BoardStreaming.mergetPreviousJSONFileToCurrentFile();
 		}
-	}
-	
-	private void closeStream() throws IOException {
-		SoundClientStream.closeAllClients();
-		BoardStreaming.closeServer();
-	}
-	
-	private void setToDefaultValues() {
-		firstBlob = null;
-		serverSession = null;
-		isStreamerConnected = false;
-		isStreamStarted = false;
 	}
 }
