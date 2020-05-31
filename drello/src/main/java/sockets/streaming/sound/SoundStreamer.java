@@ -12,8 +12,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import configurations.sockets.streaming.sound.SoundStreamerValues;
-import configurations.sockets.streaming.sound.SoundWriter;
+import configurations.sockets.streaming.SoundStreamerValues;
+import configurations.sockets.streaming.SoundWriter;
 import sockets.streaming.board.BoardStreaming;
 
 @ServerEndpoint("/sound_streamer")

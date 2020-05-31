@@ -1,4 +1,4 @@
-package configurations.sockets.streaming.sound;
+package configurations.sockets.streaming;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

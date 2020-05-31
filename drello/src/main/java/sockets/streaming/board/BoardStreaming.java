@@ -1,10 +1,7 @@
 package sockets.streaming.board;
 
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -15,11 +12,10 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import configurations.sockets.streaming.sound.SoundStreamerValues;
-import configurations.sockets.streaming.sound.SoundWriter;
+import configurations.sockets.streaming.BoardWriter;
+import configurations.sockets.streaming.SoundStreamerValues;
 
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
@@ -32,8 +28,6 @@ public class BoardStreaming extends BoardWebSocketParent {
 	// stream variables
 	private static boolean isStreamerConnected;
 	private static Session serverSession = null;
-	// writing datas variables
-	private static final String BOARD_FILE_NAME = "board.json";
 
 	static String getCanvasObject() {
 		return canvasStringifiedObject;
@@ -126,7 +120,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	public synchronized void onMessage(Session session, String message) {
 		BoardStreamReceiver.broadcastMessage(message);
 		addJSONToStrinBuilder(message);
-		writeMessage(message);
+		BoardWriter.writeMessage(message);
 	}
 
 	private void addJSONToStrinBuilder(String message) {
@@ -157,22 +151,6 @@ public class BoardStreaming extends BoardWebSocketParent {
 		}
 	}
 
-	private void writeMessage(String message) {
-		File file = new File(SoundWriter.getCurrentStreamContentsDirectory() + BOARD_FILE_NAME);
-		long space = file.length();
-		try (FileOutputStream writer = new FileOutputStream(file, true)) {
-			// if it is not empty write a , to separate this message by previous one (if any
-			// message exists)
-			if (space > 0 && message.length() > 0) {
-				writer.write(",".getBytes());
-			}
-			writer.write(message.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-			// TODO handle error
-		}
-	}
-
 	/**
 	 * handle all errors
 	 * 
@@ -197,7 +175,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 			BoardStreamReceiver.closeAllClients();
 			SoundStreamerValues.closeStreamerSession();
 			setToDefaultValues();
-			mergetPreviousJSONFileToCurrentFile();
+			BoardWriter.mergetPreviousJSONFileToCurrentFile();
 		}
 	}
 
@@ -208,87 +186,5 @@ public class BoardStreaming extends BoardWebSocketParent {
 		serverSession = null;
 	}
 
-	public static void mergetPreviousJSONFileToCurrentFile() {
-		try {
-			// read the previous JSON file and set the latest time in streamer side
-			long streamDuration = SoundWriter.getAllDurationOfPreviousStreamsByThisStreamTitle();
-			// read previous JSON file content
-			String previousJSONObjects = readFile(getPreviousBoardFilePath());
-			// read current JSON file
-			String currentJSONObjects = readFile(getCurrentBoardFilePath());
-			// delete JSON files
-			deletePreviousAndCurrentJSONFiles();
-			// get merged Objects
-			String mergedObjects = mergeTwoFiles(previousJSONObjects, currentJSONObjects, streamDuration);
-			// write mergedObjects into current Stream file
-			writeObjects(mergedObjects);
-		} catch (IOException e) {
-			// TODO handle error
-			e.printStackTrace();
-		}
-	}
-
-	private static String readFile(Path path) throws IOException {
-		// if the previous json file exists and has some json objects
-		if (Files.exists(path) && Files.size(path) > 0) {
-			return Files.readString(path);
-		} else {
-			return null;
-		}
-	}
-
-	private static void deletePreviousAndCurrentJSONFiles() throws IOException {
-		Files.deleteIfExists(getPreviousBoardFilePath());
-		Files.deleteIfExists(getCurrentBoardFilePath());
-	}
 	
-	private static String mergeTwoFiles(String previousObjects,String currentObjects,long previousStreamsDuration) {
-		StringBuilder mergedObjects = new StringBuilder();
-		
-		if(previousObjects != null)
-			mergedObjects.append(previousObjects);
-		
-		if(currentObjects != null && previousObjects != null && previousObjects.length() > 0 && currentObjects.length() > 0)
-			mergedObjects.append(",");
-		
-		if(currentObjects != null) {
-			JSONArray currentJSONArray = new JSONArray("["+currentObjects+"]");
-			
-			for (int i = 0; i < currentJSONArray.length(); i++) {
-				JSONObject obj = currentJSONArray.getJSONObject(i);
-				
-				long objTime = obj.getLong("time");
-				
-				objTime += previousStreamsDuration;
-				
-				obj.put("time", objTime);
-				
-				mergedObjects.append(obj.toString());
-				if(currentJSONArray.length()-1 != i)
-					mergedObjects.append(",");
-			}
-		}
-		
-		return mergedObjects.toString();
-	}
-	
-	private static void writeObjects(String objects) {
-		Path currentJSONFile = getCurrentBoardFilePath();
-		try {
-			Files.writeString(currentJSONFile, objects);
-		} catch (IOException e) {
-			// TODO log error
-			e.printStackTrace();
-		}
-	}
-	
-	private static Path getPreviousBoardFilePath() {
-		String previousJSONFilePath = SoundWriter.getPreviousStreamContentsDirectory()+ BOARD_FILE_NAME;
-		return Path.of(previousJSONFilePath);
-	}
-	
-	private static Path getCurrentBoardFilePath() {
-		String currentJSONFilePath = SoundWriter.getCurrentStreamContentsDirectory()+ BOARD_FILE_NAME;
-		return Path.of(currentJSONFilePath);
-	}
 }

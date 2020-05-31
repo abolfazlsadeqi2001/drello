@@ -1,4 +1,4 @@
-<%@page import="configurations.sockets.streaming.sound.SoundStreamerValues"%>
+<%@page import="configurations.sockets.streaming.SoundStreamerValues"%>
 <%@page import="sockets.streaming.sound.SoundStreamer"%>
 <%@page import="pages.home.HomePage"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
