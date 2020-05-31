@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import configurations.sockets.streaming.sound.SoundStreamerValues;
-import sockets.streaming.sound.SoundStreamer;
+import configurations.sockets.streaming.sound.SoundWriter;
 
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
@@ -162,7 +162,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	}
 
 	private void writeMessage(String message) {
-		File file = new File(SoundStreamer.getStreamDirectoryPath() + "/" + BOARD_FILE_NAME);
+		File file = new File(SoundWriter.getCurrentStreamContentsDirectory() + BOARD_FILE_NAME);
 		long space = file.length();
 		try (FileOutputStream writer = new FileOutputStream(file, true)) {
 			// if it is not empty write a , to separate this message by previous one (if any
@@ -218,8 +218,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	public static void mergetPreviousJSONFileToCurrentFile() {
 		try {
 			// read the previous JSON file and set the latest time in streamer side
-			// FIXME change the sound Streamer duration to sum of current and previous streams
-			long streamDuration = SoundStreamer.getSumOfPreviousStreamsDuration();
+			long streamDuration = SoundWriter.getAllDurationOfPreviousStreamsByThisStreamTitle();
 			// read previous JSON file content
 			String previousJSONObjects = readFile(getPreviousBoardFilePath());
 			// read current JSON file
@@ -289,14 +288,12 @@ public class BoardStreaming extends BoardWebSocketParent {
 	}
 	
 	private static Path getPreviousBoardFilePath() {
-		String previousJSONFilePath = SoundStreamer.getStreamContainerDirectoryPath()
-				+ (SoundStreamer.getStreamIndex() - 1) +"/"+ BOARD_FILE_NAME;
+		String previousJSONFilePath = SoundWriter.getPreviousStreamContentsDirectory()+ BOARD_FILE_NAME;
 		return Path.of(previousJSONFilePath);
 	}
 	
 	private static Path getCurrentBoardFilePath() {
-		String currentJSONFilePath = SoundStreamer.getStreamContainerDirectoryPath()
-				+ SoundStreamer.getStreamIndex() +"/"+ BOARD_FILE_NAME;
+		String currentJSONFilePath = SoundWriter.getCurrentStreamContentsDirectory()+ BOARD_FILE_NAME;
 		return Path.of(currentJSONFilePath);
 	}
 }

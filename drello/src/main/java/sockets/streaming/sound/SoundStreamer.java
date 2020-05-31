@@ -14,34 +14,12 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import configuration.sockets.sound.streaming.SoundStreamingValues;
 import configurations.sockets.streaming.sound.SoundStreamerValues;
+import configurations.sockets.streaming.sound.SoundWriter;
 import sockets.streaming.board.BoardStreaming;
 
 @ServerEndpoint("/sound_streamer")
 public class SoundStreamer extends SoundStreamingParent {
-	// writing data variables
-	private static final String STREAM_DIRECTORY_PATH = "/home/abolfazlsadeqi2001/Desktop/";
-	private static int streamIndex = 0;
-	private static final String SOUND_FILE_NAME = "sound.ogg";
-	private static int numberOfBlobsInCurrentStreamInByThisStreamer = 0;
-	private static int numberOfBlobsInPreviousStreamsInByThisStreamer = 0;
-
-	public static long getSumOfPreviousStreamsDuration() {
-		return numberOfBlobsInPreviousStreamsInByThisStreamer * SoundStreamingValues.getDelay() * 1000;
-	}
-	
-	public static String getStreamContainerDirectoryPath() {
-		return STREAM_DIRECTORY_PATH;
-	}
-	
-	public static int getStreamIndex() {
-		return streamIndex;
-	}
-	
-	public static String getStreamDirectoryPath() {
-		return STREAM_DIRECTORY_PATH + streamIndex;
-	}
 
 	/**
 	 * if the sound streamer has connected close this session otherwise set default
@@ -64,17 +42,14 @@ public class SoundStreamer extends SoundStreamingParent {
 			session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
-			// setup the number of blobs
-			numberOfBlobsInPreviousStreamsInByThisStreamer += numberOfBlobsInCurrentStreamInByThisStreamer;
-			numberOfBlobsInCurrentStreamInByThisStreamer = 0;
 			// create current stream directory
-			File currentDirectory = new File(getStreamDirectoryPath());
+			File currentDirectory = new File(SoundWriter.getCurrentStreamContentsDirectory());
 			currentDirectory.mkdir();
 		}
 	}
 
 	private void setStreamIndex() {
-		File streamDirectory = new File(STREAM_DIRECTORY_PATH);
+		File streamDirectory = new File(SoundWriter.getStreamFolderContentsContainerDirectoryPath());
 		File[] directories = streamDirectory.listFiles((File arg1, String arg2) -> arg1.isDirectory());
 
 		int previousIndex = 0;
@@ -83,7 +58,7 @@ public class SoundStreamer extends SoundStreamingParent {
 			if (directoryIndex > previousIndex)
 				previousIndex = directoryIndex;
 		}
-		streamIndex = previousIndex + 1;
+		SoundWriter.setStreamIndex(previousIndex + 1);
 	}
 
 	/**
@@ -99,8 +74,6 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnMessage
 	public synchronized void onMessage(Session session, byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		// add 1 more blob need to add into nubmer of blobs in current stream
-		numberOfBlobsInCurrentStreamInByThisStreamer ++;
 		if (SoundStreamerValues.isHeaderBlobDefined()) {
 			SoundStreamerValues.setHeaderBlob(buffer);
 		}
@@ -110,7 +83,7 @@ public class SoundStreamer extends SoundStreamingParent {
 	}
 
 	private void writeMessage(byte[] bytes) {
-		File file = new File(SoundStreamer.getStreamDirectoryPath()+"/"+SOUND_FILE_NAME);
+		File file = new File(SoundWriter.getCurrentStreamContentsDirectory()+SoundWriter.getSoundFileName());
 		try(FileOutputStream writer = new FileOutputStream(file, true)) {
 			writer.write(bytes);
 		} catch (IOException e) {
@@ -140,7 +113,6 @@ public class SoundStreamer extends SoundStreamingParent {
 			SoundStreamerValues.setStreamStarted();
 		} else if (str.equals("finish")) {
 			session.close();
-			numberOfBlobsInPreviousStreamsInByThisStreamer = 0;
 		}
 	}
 
