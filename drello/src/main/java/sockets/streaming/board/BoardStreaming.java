@@ -12,30 +12,12 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
-import org.json.JSONObject;
-
+import configurations.sockets.streaming.BoardParser;
 import configurations.sockets.streaming.BoardWriter;
 import configurations.sockets.streaming.SoundStreamerValues;
 
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
-	// elements to read by JSON parser
-	private static final String CANVAS_TYPE = "canvas";
-	private static final String CLEAR_TYPE = "clear";
-	// stringified JSON objects
-	private static StringBuilder objects = new StringBuilder();
-	private static String canvasStringifiedObject;
-	// stream variables
-	private static boolean isStreamerConnected;
-	private static Session serverSession = null;
-
-	static String getCanvasObject() {
-		return canvasStringifiedObject;
-	}
-
-	static String getPointsObjects() {
-		return objects.toString();
-	}
 
 	/**
 	 * <mark>if:</mark> <br>
@@ -58,12 +40,12 @@ public class BoardStreaming extends BoardWebSocketParent {
 	public void onOpen(Session session) throws IOException {
 		// if another streamer have connected to this session or the sound streamer have
 		// not connected yet close current session
-		if (isStreamerConnected || !SoundStreamerValues.isStreamSessionInUsed()) {
+		if (BoardParser.isStreamerConnected() || !SoundStreamerValues.isStreamSessionInUsed()) {
 			CloseReason reason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is using this server");
 			session.close(reason);
 		} else {
-			isStreamerConnected = true;
-			serverSession = session;
+			BoardParser.setIsStreamerConnected(true);
+			BoardParser.setServerSession(session);
 			// configure session
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
 			session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
@@ -83,8 +65,8 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 * @throws IOException
 	 */
 	public static void closeServer() throws IOException {
-		if (serverSession != null) {
-			serverSession.close();
+		if (BoardParser.isServerSessionDefined()) {
+			BoardParser.getServerSession().close();
 		}
 	}
 
@@ -94,8 +76,8 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 * @throws IOException
 	 */
 	public static void sendStart() throws IOException {
-		if (serverSession != null) {
-			serverSession.getBasicRemote().sendText("start");
+		if (BoardParser.isServerSessionDefined()) {
+			BoardParser.getServerSession().getBasicRemote().sendText("start");
 		}
 	}
 
@@ -119,36 +101,8 @@ public class BoardStreaming extends BoardWebSocketParent {
 	@OnMessage
 	public synchronized void onMessage(Session session, String message) {
 		BoardStreamReceiver.broadcastMessage(message);
-		addJSONToStrinBuilder(message);
+		BoardParser.addJSONToStrinBuilder(message);
 		BoardWriter.writeMessage(message);
-	}
-
-	private void addJSONToStrinBuilder(String message) {
-		// read message
-		String stringifiedArray = message.replaceAll("\\},\\{", "}#{");
-		String[] stringifiedJsonArray = stringifiedArray.split("#");
-		// read objects
-		for (int i = 0; i < stringifiedJsonArray.length; i++) {
-			String stringifiedObject = stringifiedJsonArray[i];
-			if (!stringifiedObject.isBlank()) {
-				JSONObject jsonObject = new JSONObject(stringifiedObject);
-				// add current Object to objectsContainer set
-				if (!objects.toString().isBlank()) {
-					objects.append(",");
-				}
-				objects.append(stringifiedObject);
-				// get object type
-				String type = (String) jsonObject.get("type");
-				// if type = canvas save it as canvas object
-				if (type.equals(CANVAS_TYPE)) {
-					canvasStringifiedObject = stringifiedObject;
-				}
-				// if type = clear clear the set of objects saved until now
-				if (type.equals(CLEAR_TYPE)) {
-					objects = new StringBuilder();
-				}
-			}
-		}
 	}
 
 	/**
@@ -174,17 +128,9 @@ public class BoardStreaming extends BoardWebSocketParent {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			BoardStreamReceiver.closeAllClients();
 			SoundStreamerValues.closeStreamerSession();
-			setToDefaultValues();
+			BoardParser.resetVariables();
 			BoardWriter.mergetPreviousJSONFileToCurrentFile();
 		}
 	}
-
-	private void setToDefaultValues() {
-		isStreamerConnected = false;
-		canvasStringifiedObject = null;
-		objects = new StringBuilder();
-		serverSession = null;
-	}
-
 	
 }

@@ -10,6 +10,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import configurations.sockets.streaming.BoardParser;
+
 @ServerEndpoint("/board_client")
 public class BoardStreamReceiver extends BoardWebSocketParent {
 	public static Set<Session> sessions = new HashSet<Session>();
@@ -29,11 +31,11 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 		session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE_SIZE);
 		session.setMaxIdleTimeout(TIME_OUT_PER_MILI_SECONDS);
 		// send canvas size if exists
-		if (BoardStreaming.getCanvasObject() != null) {
-			session.getBasicRemote().sendText(BoardStreaming.getCanvasObject());
+		if (BoardParser.getCanvasObject() != null) {
+			session.getBasicRemote().sendText(BoardParser.getCanvasObject());
 		}
 		// send all objects
-		session.getBasicRemote().sendText(BoardStreaming.getPointsObjects());
+		session.getBasicRemote().sendText(BoardParser.getPointsObjects());
 	}
 	public static void broadcastMessage(String message) {
 		sessions.forEach(s -> {
