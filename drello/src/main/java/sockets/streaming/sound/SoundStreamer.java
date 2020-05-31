@@ -1,7 +1,5 @@
 package sockets.streaming.sound;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -35,30 +33,15 @@ public class SoundStreamer extends SoundStreamingParent {
 			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
 			session.close(closeReason);
 		} else {
-			setStreamIndex();
+			SoundWriter.setStreamIndex();
+			SoundWriter.createFolderForCurrentStreamIndex();
 			SoundStreamerValues.setStreamerSession(session);
 			SoundStreamerValues.setStreamSessionInUsed();
 			// set the limits for time and size
 			session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
 			session.setMaxTextMessageBufferSize(MAX_TEXT_MESSAGE);
-			// create current stream directory
-			File currentDirectory = new File(SoundWriter.getCurrentStreamContentsDirectory());
-			currentDirectory.mkdir();
 		}
-	}
-
-	private void setStreamIndex() {
-		File streamDirectory = new File(SoundWriter.getStreamFolderContentsContainerDirectoryPath());
-		File[] directories = streamDirectory.listFiles((File arg1, String arg2) -> arg1.isDirectory());
-
-		int previousIndex = 0;
-		for (File directory : directories) {
-			int directoryIndex = Integer.valueOf(directory.getName());
-			if (directoryIndex > previousIndex)
-				previousIndex = directoryIndex;
-		}
-		SoundWriter.setStreamIndex(previousIndex + 1);
 	}
 
 	/**
@@ -79,17 +62,7 @@ public class SoundStreamer extends SoundStreamingParent {
 		}
 		// broad cast the received message
 		SoundClientStream.broadCast(buffer);
-		writeMessage(bytes);
-	}
-
-	private void writeMessage(byte[] bytes) {
-		File file = new File(SoundWriter.getCurrentStreamContentsDirectory()+SoundWriter.getSoundFileName());
-		try(FileOutputStream writer = new FileOutputStream(file, true)) {
-			writer.write(bytes);
-		} catch (IOException e) {
-			e.printStackTrace();
-			// TODO handle error
-		}
+		SoundWriter.writeMessage(bytes);
 	}
 	
 	/**
@@ -143,7 +116,6 @@ public class SoundStreamer extends SoundStreamingParent {
 			SoundClientStream.closeAllClients();
 			BoardStreaming.closeServer();
 			SoundStreamerValues.setAllVariablesToTheirDefaults();
-			BoardStreaming.mergetPreviousJSONFileToCurrentFile();
 		}
 	}
 }

@@ -1,5 +1,9 @@
 package configurations.sockets.streaming.sound;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import generals.configurations.configure.file.reader.ConfigureFileReader;
 import generals.configurations.configure.file.reader.exception.ReadingException;
 
@@ -11,6 +15,33 @@ public class SoundWriter {
 	private static final String SOUND_WRITING_FOLDER = "/home/abolfazlsadeqi2001/Desktop/";
 
 	private static int streamIndex = 0;
+	
+	public static void writeMessage(byte[] bytes) {
+		File file = new File(getCurrentStreamContentsDirectory()+getSoundFileName());
+		try(FileOutputStream writer = new FileOutputStream(file, true)) {
+			writer.write(bytes);
+		} catch (IOException e) {
+			// TODO handle error
+		}
+	}
+	
+	public static void createFolderForCurrentStreamIndex() {
+		File currentDirectory = new File(getCurrentStreamContentsDirectory());
+		currentDirectory.mkdir();
+	}
+	
+	public static void setStreamIndex() {
+		File streamDirectory = new File(SoundWriter.getStreamFolderContentsContainerDirectoryPath());
+		File[] directories = streamDirectory.listFiles((File arg1, String arg2) -> arg1.isDirectory());
+
+		int previousIndex = 0;
+		for (File directory : directories) {
+			int directoryIndex = Integer.valueOf(directory.getName());
+			if (directoryIndex > previousIndex)
+				previousIndex = directoryIndex;
+		}
+		setStreamIndex(previousIndex + 1);
+	}
 	
 	public static long getAllDurationOfPreviousStreamsByThisStreamTitle() {
 		// FIXME read from blobs
