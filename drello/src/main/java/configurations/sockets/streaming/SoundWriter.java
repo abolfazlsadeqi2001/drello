@@ -3,12 +3,7 @@ package configurations.sockets.streaming;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.SequenceInputStream;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import generals.configurations.configure.file.reader.ConfigureFileReader;
@@ -16,7 +11,7 @@ import generals.configurations.configure.file.reader.exception.ReadingException;
 
 public class SoundWriter {
 	
-	private static final String SOUND_FILE_NAME = "sound.ogg";
+	private static final String OGG_SOUND_FILE_NAME = "sound.ogg";
 
 	private static final String SOUND_WRITER_CONFIGURER_FILE = "/home/abolfazlsadeqi2001/.sound_writer_config";
 	private static final String SOUND_WRITING_FOLDER = "/home/abolfazlsadeqi2001/Desktop/";
@@ -24,29 +19,13 @@ public class SoundWriter {
 	private static int streamIndex = 0;
 	
 	public static void appendPreviousSoundToCurrent() throws UnsupportedAudioFileException, IOException {
-		File previousFile = new File(getPreviousSoundFile());
-		if (!previousFile.exists())
-			return;
-		AudioInputStream previousAudio = AudioSystem.getAudioInputStream(previousFile);
-		
-		File currentFile = new File(getCurrentSoundFile());
-		if (!currentFile.exists())
-			return;
-		AudioInputStream currentAudio = AudioSystem.getAudioInputStream(currentFile);
-		
-		SequenceInputStream sis = new SequenceInputStream(previousAudio,currentAudio);
-		AudioFormat format = previousAudio.getFormat();
-		long sumOfTwoFilesDuration = previousAudio.getFrameLength()+currentAudio.getFrameLength();
-		AudioInputStream appendedFile = new AudioInputStream(sis,format,sumOfTwoFilesDuration);
-		
-		previousFile.delete();
-		currentFile.delete();
-		
-		AudioSystem.write(appendedFile, AudioFileFormat.Type.WAVE, currentFile);
+		SoundAppender.convertOggToWav(getPreviousOggSoundFile(), SoundAppender.getPreviousWavSoundFile());
+		SoundAppender.convertOggToWav(getCurrentOggSoundFile(), SoundAppender.getCurrentWavSoundFile());
+		SoundAppender.appendPreviousSoundToCurrent();
 	}
 	
 	public static void writeMessage(byte[] bytes) {
-		File file = new File(getCurrentSoundFile());
+		File file = new File(getCurrentOggSoundFile());
 		try(FileOutputStream writer = new FileOutputStream(file, true)) {
 			writer.write(bytes);
 		} catch (IOException e) {
@@ -54,12 +33,12 @@ public class SoundWriter {
 		}
 	}
 	
-	private static String getCurrentSoundFile() {
-		return getCurrentStreamContentsDirectory()+getSoundFileName();
+	static String getCurrentOggSoundFile() {
+		return getCurrentStreamContentsDirectory()+getSoundOggFileName();
 	}
 	
-	private static String getPreviousSoundFile() {
-		return getPreviousStreamContentsDirectory()+getSoundFileName();
+	static String getPreviousOggSoundFile() {
+		return getPreviousStreamContentsDirectory()+getSoundOggFileName();
 	}
 	
 	public static void createFolderForCurrentStreamIndex() {
@@ -93,8 +72,8 @@ public class SoundWriter {
 		return getStreamFolderContentsContainerDirectoryPath() + getStreamIndex() + "/";
 	}
 	
-	public static String getSoundFileName() {
-		return SOUND_FILE_NAME;
+	public static String getSoundOggFileName() {
+		return OGG_SOUND_FILE_NAME;
 	}
 	
 	public static int getStreamIndex() {

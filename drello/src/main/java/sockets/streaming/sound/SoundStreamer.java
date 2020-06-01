@@ -13,6 +13,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import configurations.sockets.streaming.SoundAppender;
 import configurations.sockets.streaming.SoundStreamerValues;
 import configurations.sockets.streaming.SoundWriter;
 import sockets.streaming.board.BoardStreaming;
