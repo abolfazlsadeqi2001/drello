@@ -23,20 +23,21 @@ public class SoundAppender {
 	}
 	
 	static void convertOggToWav(String sourcePath,String destinationPath) throws UnsupportedAudioFileException, IOException {
-		File audioFile = new File(sourcePath);
-		if (!audioFile.exists())
+		File sourceFile = new File(sourcePath);
+		if(!sourceFile.exists())
 			return;
-		AudioInputStream audioIS = AudioSystem.getAudioInputStream(audioFile);
 		
-		AudioFormat baseFormat = audioIS.getFormat();
-		AudioFormat decodedFormat = new AudioFormat(
-                AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(),
-                16, baseFormat.getChannels(), baseFormat.getChannels() * 2,
-                baseFormat.getSampleRate(), false);
-		AudioInputStream currentConvertedAudio = AudioSystem.getAudioInputStream(decodedFormat,audioIS);
+		String commandTemplate = "sox %s %s rate 22050";
+		String command = String.format(commandTemplate, sourcePath,destinationPath);
+		
+		Process child = Runtime.getRuntime().exec(command);
+		while(child.isAlive()) {
+			
+		}
 		
 		File destinationFile = new File(destinationPath);
-		AudioSystem.write(currentConvertedAudio, AudioFileFormat.Type.WAVE, destinationFile);
+		if(destinationFile.exists())
+			sourceFile.delete();
 	}
 	
 	static void appendPreviousSoundToCurrent() throws UnsupportedAudioFileException, IOException {
