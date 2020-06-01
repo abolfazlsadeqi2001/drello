@@ -16,7 +16,7 @@ import generals.configurations.configure.file.reader.exception.ReadingException;
 
 public class SoundWriter {
 	
-	private static final String SOUND_FILE_NAME = "sound.wav";
+	private static final String SOUND_FILE_NAME = "sound.ogg";
 
 	private static final String SOUND_WRITER_CONFIGURER_FILE = "/home/abolfazlsadeqi2001/.sound_writer_config";
 	private static final String SOUND_WRITING_FOLDER = "/home/abolfazlsadeqi2001/Desktop/";
