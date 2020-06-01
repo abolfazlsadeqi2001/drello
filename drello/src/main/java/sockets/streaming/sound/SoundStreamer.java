@@ -3,6 +3,7 @@ package sockets.streaming.sound;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.OnClose;
@@ -109,13 +110,15 @@ public class SoundStreamer extends SoundStreamingParent {
 	 * 
 	 * @param session
 	 * @param reason
+	 * @throws UnsupportedAudioFileException 
 	 */
 	@OnClose
-	public void onClose(Session session, CloseReason reason) throws IOException {
+	public void onClose(Session session, CloseReason reason) throws IOException, UnsupportedAudioFileException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			SoundClientStream.closeAllClients();
 			BoardStreaming.closeServer();
 			SoundStreamerValues.resetVariables();
+			SoundWriter.appendPreviousSoundToCurrent();
 		}
 	}
 }
