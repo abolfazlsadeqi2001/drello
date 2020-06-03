@@ -1,3 +1,4 @@
+<%@page import="configuration.sockets.sound.streaming.SoundStreamingValues"%>
 <%@page import="configurations.sockets.streaming.SoundStreamerValues"%>
 <%@page import="sockets.streaming.sound.SoundStreamer"%>
 <%@page import="pages.home.HomePage"%>
@@ -24,7 +25,8 @@
 		<a href="manager_login">manager panel</a>
 		<a href="streamer_login">streamer panel</a>
 		<% long duration = SoundStreamerValues.getDurationSinceStartStreaming()/1000;
-		if(SoundStreamerValues.isStreamStarted() && duration >= 40){ %>
+		int allowedSkipDuration = SoundStreamingValues.getDelay();
+		if(SoundStreamerValues.isStreamStarted() && duration >= allowedSkipDuration){ %>
 			<a href='stream_receiver'>see stream</a>
 		<%} %>
 	</div>
