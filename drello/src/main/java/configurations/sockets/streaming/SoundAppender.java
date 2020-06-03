@@ -27,7 +27,7 @@ public class SoundAppender {
 		if(!sourceFile.exists())
 			return;
 		
-		String commandTemplate = "sox %s %s rate 22050";
+		String commandTemplate = "sox %s %s";
 		String command = String.format(commandTemplate, sourcePath,destinationPath);
 		
 		Process child = Runtime.getRuntime().exec(command);
