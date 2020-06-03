@@ -14,7 +14,8 @@ canvas {
 	left: 0px;
 }
 
-.marker-container * {
+@media screen and (max-width: 20cm) {
+	.marker-container * {
 		float: left;
 		width: 3vw;
 		height: 3vw;
@@ -26,8 +27,9 @@ canvas {
 		width: 10vw;
 		height: 4vw;
 	}
+}
 
-@media  only screen and (min-width : 10cm) {
+@media screen and (min-width: 20cm) {
 	.marker-container * {
 		float: left;
 		width: 1.5vw;
