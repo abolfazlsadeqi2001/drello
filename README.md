@@ -8,7 +8,6 @@
 ## things to know before use
 <ul>
 	<li>many refreshes can make conflict on time</li>
-	<li>sometimes page crashed to solve that reopen the browser</li>
 	<li>in stream side if your canvas size does not fill the screen refresh the page </li>
 	<li>don't use chrome only latest version of firefox is recommended</li>
 	<li>allow autoplay in firefox permissions</li>
@@ -19,6 +18,7 @@
 </ul>
 
 ## TODOs
+- [ ] solve problem on merging
 - [ ] After finish the stream set streaming allowed false
 - [ ] setup finish button
 - [ ] Add clear event after closing the session
