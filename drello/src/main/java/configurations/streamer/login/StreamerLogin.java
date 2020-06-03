@@ -2,9 +2,9 @@ package configurations.streamer.login;
 
 public class StreamerLogin {
 
-	private static String userName = "";
-	private static String password = "";
-	private static boolean isStreamingAllowed = false;
+	private static String userName = "mamad";
+	private static String password = "1234";
+	private static boolean isStreamingAllowed = true;
 	
 	public static String getUserName() {
 		return userName;
