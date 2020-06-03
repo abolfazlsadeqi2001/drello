@@ -29,7 +29,7 @@ canvas {
 	}
 }
 
-@media  only screen and (max-width : 40cm) {
+@media  only screen and (min-width : 10cm) {
 	.marker-container * {
 		float: left;
 		width: 1.5vw;
