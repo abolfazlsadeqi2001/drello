@@ -46,7 +46,7 @@ function getURL (data){
 function loadNewMusic() {
 	audio.pause();
 	if(!isFirstBlob){
-		audio.playbackRate = 1.5;
+		audio.playbackRate = 1.14;
 		audio.currentTime = currentTime;
 		audio.play();
 	}else{
