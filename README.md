@@ -18,7 +18,6 @@
 </ul>
 
 ## TODOs
-- [ ] solve problem on merging
 - [ ] After finish the stream set streaming allowed false
 - [ ] setup finish button
 - [ ] Add clear event after closing the session

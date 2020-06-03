@@ -41,26 +41,29 @@ public class SoundAppender {
 	}
 	
 	static void appendPreviousSoundToCurrent() throws UnsupportedAudioFileException, IOException {
+		File destinationFile = new File(getCurrentWavSoundFile());
+		
 		File previousFile = new File(getPreviousWavSoundFile());
 		if (!previousFile.exists())
 			return;
 		AudioInputStream previousAudio = AudioSystem.getAudioInputStream(previousFile);
 		
 		File currentFile = new File(getCurrentWavSoundFile());
-		if (!currentFile.exists())
-			return;
-		AudioInputStream currentAudio = AudioSystem.getAudioInputStream(currentFile);
-		
-		SequenceInputStream sis = new SequenceInputStream(previousAudio,currentAudio);
-		AudioFormat format = previousAudio.getFormat();
-		long sumOfTwoFilesDuration = previousAudio.getFrameLength()+currentAudio.getFrameLength();
-		AudioInputStream appendedFile = new AudioInputStream(sis,format,sumOfTwoFilesDuration);
-		
-		previousFile.delete();
-		currentFile.delete();
-		
-		File destinationFile = new File(getCurrentWavSoundFile());
-		AudioSystem.write(appendedFile, AudioFileFormat.Type.WAVE, destinationFile);
+		if (!currentFile.exists()) {
+			previousFile.renameTo(destinationFile);
+		} else {
+			AudioInputStream currentAudio = AudioSystem.getAudioInputStream(currentFile);
+			
+			SequenceInputStream sis = new SequenceInputStream(previousAudio,currentAudio);
+			AudioFormat format = previousAudio.getFormat();
+			long sumOfTwoFilesDuration = previousAudio.getFrameLength()+currentAudio.getFrameLength();
+			AudioInputStream appendedFile = new AudioInputStream(sis,format,sumOfTwoFilesDuration);
+			
+			previousFile.delete();
+			currentFile.delete();
+
+			AudioSystem.write(appendedFile, AudioFileFormat.Type.WAVE, destinationFile);
+		}
 	}
 
 }
