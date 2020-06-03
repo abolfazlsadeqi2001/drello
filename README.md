@@ -20,8 +20,7 @@
 
 ## TODOs
 - [ ] After finish the stream set streaming allowed false
-- [ ] Set the stream folder from configuration file
+- [ ] setup finish button
 - [ ] Add clear event after closing the session
-- [ ] Setup uploading .tar file that includes 1. sound.ogg (merged with all parts) 2. board.json (merged by all parts)  3. a file named by the stream title to placed sound.ogg and board.json into a folder by a same name
-- [ ] Test 5 secods for send sound blobs
+- [ ] implements chat system in realtime teaching mode
 - [ ] add dark mode on it
