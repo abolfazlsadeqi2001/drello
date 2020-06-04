@@ -105,7 +105,7 @@ public class BoardWriter {
 		return Path.of(previousJSONFilePath);
 	}
 	
-	private static String getCurrentJSONFilePath() {
+	static String getCurrentJSONFilePath() {
 		return  SoundWriter.getCurrentStreamContentsDirectory() + getBoardFileName();
 	}
 	
@@ -113,7 +113,11 @@ public class BoardWriter {
 		return Path.of(getCurrentJSONFilePath());
 	}
 	
-	public static String getBoardFileName() {
+	private static String getBoardFileName() {
 		return BOARD_FILE_NAME;
+	}
+	
+	static String getDestinationBoardFileOfFinishedStream() {
+		return SoundWriter.getStreamFolderContentsContainerDirectoryPath() + getBoardFileName(); 
 	}
 }

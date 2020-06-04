@@ -1,6 +1,9 @@
 package configurations.sockets.streaming;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.SequenceInputStream;
 
@@ -13,6 +16,57 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class SoundAppender {
 	
 	private static final String WAV_SOUND_FILE =  "sound.wav";
+	
+	public static void finishStream() throws IOException {
+		moveFilesToStreamDirectory();
+		changeBoardFileContentsToArray();
+		deleteAllFoldersOfCurrentStream();
+	}
+	
+	private static void changeBoardFileContentsToArray() throws IOException {
+		File board = new File(BoardWriter.getDestinationBoardFileOfFinishedStream());
+		
+		FileInputStream fis = new FileInputStream(board);
+		byte[] boardBytes = fis.readAllBytes();
+		fis.close();
+		
+		String body = "[";
+		for (byte b : boardBytes) {
+			body+=(char)b;
+		}
+		body+="]";
+		
+		FileOutputStream fos = new FileOutputStream(board);
+		fos.write(body.getBytes());
+		fos.close();
+	}
+	
+	private static void deleteAllFoldersOfCurrentStream() {
+		int i = 0;
+		while(true) {
+			i++;
+			File currentDirectory = new File(SoundWriter.getStreamFolderContentsContainerDirectoryPath()+i);
+			if(currentDirectory.exists()) {
+				currentDirectory.delete();
+			}else {
+				break;
+			}
+		}
+	}
+	
+	private static void moveFilesToStreamDirectory() {
+		File sourceBoardFile = new File(BoardWriter.getCurrentJSONFilePath());
+		File destinationBoardFile = new File(BoardWriter.getDestinationBoardFileOfFinishedStream());
+		sourceBoardFile.renameTo(destinationBoardFile);
+		
+		File sourceSoundFile = new File(getCurrentWavSoundFile());
+		File destinationSoundFile = new File(getDestinationSoundOfFinishedStream());
+		sourceSoundFile.renameTo(destinationSoundFile);
+	}
+	
+	private static String getDestinationSoundOfFinishedStream() {
+		return SoundWriter.getStreamFolderContentsContainerDirectoryPath() + WAV_SOUND_FILE;
+	}
 	
 	static long getPreviousWavFileDuration() {
 		File previousSound = new File(getPreviousWavSoundFile());

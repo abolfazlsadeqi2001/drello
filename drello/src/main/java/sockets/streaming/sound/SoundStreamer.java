@@ -14,6 +14,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import configurations.sockets.streaming.BoardWriter;
+import configurations.sockets.streaming.SoundAppender;
 import configurations.sockets.streaming.SoundStreamerValues;
 import configurations.sockets.streaming.SoundWriter;
 import configurations.streamer.login.StreamerLogin;
@@ -22,13 +23,6 @@ import sockets.streaming.board.BoardStreaming;
 @ServerEndpoint("/sound_streamer")
 public class SoundStreamer extends SoundStreamingParent {
 
-	/**
-	 * if the sound streamer has connected close this session otherwise set default
-	 * values then prevent connect other sessions
-	 * 
-	 * @param session
-	 * @throws IOException
-	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		if (SoundStreamerValues.isStreamSessionInUsed()) {
@@ -47,16 +41,6 @@ public class SoundStreamer extends SoundStreamingParent {
 		}
 	}
 
-	/**
-	 * <ol>
-	 * <li>get bytes of the streamed music</li>
-	 * <li>set header blob if the current blob is first one</li>
-	 * <li>broadcast received blob</li>
-	 * </ol>
-	 * 
-	 * @param session
-	 * @param bytes
-	 */
 	@OnMessage
 	public synchronized void onMessage(Session session, byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
@@ -68,18 +52,6 @@ public class SoundStreamer extends SoundStreamingParent {
 		SoundWriter.writeMessage(bytes);
 	}
 	
-	/**
-	 * if the message = start
-	 * <ol>
-	 * <li>set {@link #startTimeMilis} to current time</li>
-	 * <li>inform the board streamer that the sound stream has been started</li>
-	 * <li>set {@link #isStreamStarted} to true</li>
-	 * </ol>
-	 * 
-	 * @param session
-	 * @param str
-	 * @throws IOException
-	 */
 	@OnMessage
 	public void onTextMessage(Session session, String str) throws IOException {
 		if (str.equals("start")) {
@@ -93,37 +65,24 @@ public class SoundStreamer extends SoundStreamingParent {
 		}
 	}
 
-	/**
-	 * handle all errors
-	 * 
-	 * @param th
-	 */
 	@OnError
 	public void onError(Throwable th) {
 		// TODO handle error
 	}
 
-	/**
-	 * if the session is disconnected because of non-CANNOT_ACCEPT which means that
-	 * the session is the server session
-	 * <ol>
-	 * <li>close all clients that receiving the sound stream datas</li>
-	 * <li>set all variables to their default values</li>
-	 * </ol>
-	 * 
-	 * @param session
-	 * @param reason
-	 * @throws UnsupportedAudioFileException 
-	 */
 	@OnClose
 	public void onClose(Session session, CloseReason reason) throws IOException, UnsupportedAudioFileException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
 			SoundStreamerValues.resetVariables();
 			SoundClientStream.closeAllClients();
 			BoardStreaming.closeServer();
+			
 			SoundWriter.updatePreviousStreamsDurationByThisStreamTitle();
 			SoundWriter.appendPreviousSoundToCurrent();
 			BoardWriter.mergetPreviousJSONFileToCurrentFile();
+			
+			if(!StreamerLogin.isStreamingAllowed())
+				SoundAppender.finishStream();
 		}
 	}
 }
