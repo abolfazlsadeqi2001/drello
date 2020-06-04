@@ -13,9 +13,10 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import configurations.sockets.streaming.SoundAppender;
+import configurations.sockets.streaming.BoardWriter;
 import configurations.sockets.streaming.SoundStreamerValues;
 import configurations.sockets.streaming.SoundWriter;
+import configurations.streamer.login.StreamerLogin;
 import sockets.streaming.board.BoardStreaming;
 
 @ServerEndpoint("/sound_streamer")
@@ -87,6 +88,7 @@ public class SoundStreamer extends SoundStreamingParent {
 			BoardStreaming.sendStart();
 			SoundStreamerValues.setStreamStarted();
 		} else if (str.equals("finish")) {
+			StreamerLogin.setStreamingAllowed(false);
 			session.close();
 		}
 	}
@@ -116,10 +118,12 @@ public class SoundStreamer extends SoundStreamingParent {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) throws IOException, UnsupportedAudioFileException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
+			SoundStreamerValues.resetVariables();
 			SoundClientStream.closeAllClients();
 			BoardStreaming.closeServer();
-			SoundStreamerValues.resetVariables();
+			SoundWriter.updatePreviousStreamsDurationByThisStreamTitle();
 			SoundWriter.appendPreviousSoundToCurrent();
+			BoardWriter.mergetPreviousJSONFileToCurrentFile();
 		}
 	}
 }

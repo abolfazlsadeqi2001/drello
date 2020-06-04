@@ -18,6 +18,8 @@ public class SoundWriter {
 
 	private static int streamIndex = 0;
 	
+	private static long previousStreamsDuration;
+	
 	public static void appendPreviousSoundToCurrent() throws UnsupportedAudioFileException, IOException {
 		SoundAppender.convertOggToWav(getPreviousOggSoundFile(), SoundAppender.getPreviousWavSoundFile());
 		SoundAppender.convertOggToWav(getCurrentOggSoundFile(), SoundAppender.getCurrentWavSoundFile());
@@ -59,9 +61,12 @@ public class SoundWriter {
 		setStreamIndex(previousIndex + 1);
 	}
 	
+	public static void updatePreviousStreamsDurationByThisStreamTitle() {
+		previousStreamsDuration = SoundAppender.getPreviousWavFileDuration();
+	}
+	
 	public static long getAllDurationOfPreviousStreamsByThisStreamTitle() {
-		// FIXME read from blobs
-		return 10000000;
+		return previousStreamsDuration;
 	}
 	
 	public static String getPreviousStreamContentsDirectory() {

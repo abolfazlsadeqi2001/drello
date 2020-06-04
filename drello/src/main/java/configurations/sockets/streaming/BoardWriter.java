@@ -31,15 +31,6 @@ public class BoardWriter {
 		}
 	}
 
-	private static String readFile(Path path) throws IOException {
-		// if the previous json file exists and has some json objects
-		if (Files.exists(path) && Files.size(path) > 0) {
-			return Files.readString(path);
-		} else {
-			return null;
-		}
-	}
-
 	private static void deletePreviousAndCurrentJSONFiles() throws IOException {
 		Files.deleteIfExists(getPreviousBoardFilePath());
 		Files.deleteIfExists(getCurrentBoardFilePath());
@@ -84,19 +75,6 @@ public class BoardWriter {
 		}
 	}
 	
-	private static Path getPreviousBoardFilePath() {
-		String previousJSONFilePath = SoundWriter.getPreviousStreamContentsDirectory()+ BoardWriter.getBoardFileName();
-		return Path.of(previousJSONFilePath);
-	}
-	
-	private static String getCurrentJSONFilePath() {
-		return  SoundWriter.getCurrentStreamContentsDirectory() + getBoardFileName();
-	}
-	
-	private static Path getCurrentBoardFilePath() {
-		return Path.of(getCurrentJSONFilePath());
-	}
-	
 	public static void writeMessage(String message) {
 		File file = new File(getCurrentJSONFilePath());
 		long space = file.length();
@@ -111,6 +89,28 @@ public class BoardWriter {
 		} catch (IOException e) {
 			// TODO handle error
 		}
+	}
+	
+	private static String readFile(Path path) throws IOException {
+		// if the previous json file exists and has some json objects
+		if (Files.exists(path) && Files.size(path) > 0) {
+			return Files.readString(path);
+		} else {
+			return null;
+		}
+	}
+	
+	private static Path getPreviousBoardFilePath() {
+		String previousJSONFilePath = SoundWriter.getPreviousStreamContentsDirectory()+ BoardWriter.getBoardFileName();
+		return Path.of(previousJSONFilePath);
+	}
+	
+	private static String getCurrentJSONFilePath() {
+		return  SoundWriter.getCurrentStreamContentsDirectory() + getBoardFileName();
+	}
+	
+	private static Path getCurrentBoardFilePath() {
+		return Path.of(getCurrentJSONFilePath());
 	}
 	
 	public static String getBoardFileName() {

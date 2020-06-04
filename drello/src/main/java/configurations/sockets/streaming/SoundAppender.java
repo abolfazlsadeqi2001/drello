@@ -14,6 +14,23 @@ public class SoundAppender {
 	
 	private static final String WAV_SOUND_FILE =  "sound.wav";
 	
+	static long getPreviousWavFileDuration() {
+		File previousSound = new File(getPreviousWavSoundFile());
+		
+		if(!previousSound.exists()) {
+			return 0;
+		}
+		
+		try {
+			AudioInputStream previousAudio = AudioSystem.getAudioInputStream(previousSound);
+			AudioFormat format = previousAudio.getFormat();
+			long frames = previousAudio.getFrameLength();
+			return (long) (frames / format.getFrameRate())*1000;  
+		} catch (UnsupportedAudioFileException | IOException e) {
+			return 0;
+		}
+	}
+	
 	static String getCurrentWavSoundFile() {
 		return SoundWriter.getCurrentStreamContentsDirectory() + WAV_SOUND_FILE;
 	}

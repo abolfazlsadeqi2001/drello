@@ -125,10 +125,9 @@ public class BoardStreaming extends BoardWebSocketParent {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) throws IOException {
 		if (reason.getCloseCode() != CloseCodes.CANNOT_ACCEPT) {
+			BoardParser.resetVariables();
 			BoardStreamReceiver.closeAllClients();
 			SoundStreamerValues.closeStreamerSession();
-			BoardParser.resetVariables();
-			BoardWriter.mergetPreviousJSONFileToCurrentFile();
 		}
 	}
 	
