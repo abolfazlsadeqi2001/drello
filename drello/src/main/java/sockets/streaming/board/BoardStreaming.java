@@ -112,7 +112,6 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 */
 	@OnError
 	public void error(Throwable th) {
-		System.out.println("board server: " + th.getMessage() + " => " + th.getCause().toString());
 		// TODO handle my errors
 	}
 
