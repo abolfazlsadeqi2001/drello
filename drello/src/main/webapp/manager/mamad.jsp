@@ -20,6 +20,7 @@ if(!service.isAuthenticated(request)){
 	var rootContext = <%= "'"+application.getContextPath()+"'" %>
 </script>
 <script type="text/javascript" src="remove.js" ></script>
+<script type="text/javascript" src="save.js" ></script>
 </head>
 <html>
 <body onload="init()">
@@ -65,5 +66,24 @@ if(!service.isAuthenticated(request)){
 	<input type="checkbox" id="isAllowed" />
 	<br>
 	<input type="button" value="set" onclick="setStreamingValues()" />
+	<!-- to save the finished stream -->
+	<h1>save the finished stream</h1>
+	<label>class:</label>
+	<select id="save_stream_class" >
+		<%=homePage.getClassesSelectInputBody() %>
+	</select>
+	<br>
+	<label>lesson:</label>
+	<select id="save_stream_lesson">
+		<%=homePage.getLessonsSelectInputBody()%>
+	</select>
+	<br>
+	<label>Teacher:</label>
+	<input type="text" placeholder="teacher" id="save_stream_teacher" />
+	<br>
+	<label>title:</label>
+	<input type="text" placeholder="title" id="save_stream_title"/>
+	<br>
+	<button onclick="saveStream()">save</button>
 </body>
 </html>

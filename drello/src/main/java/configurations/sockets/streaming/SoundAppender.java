@@ -2,7 +2,6 @@ package configurations.sockets.streaming;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.SequenceInputStream;
@@ -21,6 +20,38 @@ public class SoundAppender {
 		moveFilesToStreamDirectory();
 		changeBoardFileContentsToArray();
 		deleteAllFoldersOfCurrentStream();
+	}
+	
+	public static void convertFinalWavToOgg() {
+		String sourcePath = getFinalWavSoundFile().getAbsolutePath();
+		String destinationPath = SoundWriter.getStreamFolderContentsContainerDirectoryPath() + SoundWriter.getSoundOggFileName();
+		
+		File sourceFile = new File(sourcePath);
+		if(!sourceFile.exists())
+			return;
+		
+		String commandTemplate = "sox %s %s";
+		String command = String.format(commandTemplate, sourcePath,destinationPath);
+		
+		Process child = null;
+		try {
+			child = Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		}
+		while(child != null && child.isAlive()) {
+			
+		}
+		
+		File destinationFile = new File(destinationPath);
+		if(destinationFile.exists())
+			sourceFile.delete();
+	}
+	
+	static File getFinalWavSoundFile() {
+		String path = SoundWriter.getStreamFolderContentsContainerDirectoryPath() + WAV_SOUND_FILE;
+		File convertedWavFile = new File(path);
+		return convertedWavFile;
 	}
 	
 	private static void changeBoardFileContentsToArray() throws IOException {

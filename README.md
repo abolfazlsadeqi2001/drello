@@ -18,8 +18,10 @@
 </ul>
 
 ## TODOs
-- [ ] After finish the stream set streaming allowed false
-- [ ] setup finish button
 - [ ] Add clear event after closing the session
-- [ ] implements chat system in realtime teaching mode
-- [ ] add dark mode on it
+- [ ] Add taughts table into welcome page
+- [ ] Setup the filtering on it
+- [ ] Implements simple username autherization (with mobile and username)
+- [ ] Implements better UI
+- [ ] Implements change night and day mode
+- [ ] Implements chat system in realtime teaching mode

@@ -26,6 +26,12 @@
 		<description></description>
 		<servlet-class>apis.set.streaming.values.SetStreamingValues</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>SaveStream</servlet-name>
+		<display-name>SaveStream</display-name>
+		<description></description>
+		<servlet-class>apis.save.stream.SaveStream</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>AddToTeachRow</servlet-name>
@@ -39,5 +45,9 @@
 	<servlet-mapping>
 		<servlet-name>SetStreamingValues</servlet-name>
 		<url-pattern>/set_sreaming_values</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SaveStream</servlet-name>
+		<url-pattern>/save_stream</url-pattern>
 	</servlet-mapping>
 </web-app>

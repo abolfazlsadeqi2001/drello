@@ -12,6 +12,12 @@ import org.json.JSONObject;
 public class BoardWriter {
 	private static final String BOARD_FILE_NAME = "board.json";
 	
+	static File getFinishedBoardFile() {
+		String path = SoundWriter.getStreamFolderContentsContainerDirectoryPath()+BOARD_FILE_NAME;
+		File finalBoardFile = new File(path);
+		return finalBoardFile;
+	}
+	
 	public static void mergetPreviousJSONFileToCurrentFile() {
 		try {
 			// read the previous JSON file and set the latest time in streamer side
@@ -113,7 +119,7 @@ public class BoardWriter {
 		return Path.of(getCurrentJSONFilePath());
 	}
 	
-	private static String getBoardFileName() {
+	public static String getBoardFileName() {
 		return BOARD_FILE_NAME;
 	}
 	

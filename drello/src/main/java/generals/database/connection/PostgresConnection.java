@@ -91,8 +91,10 @@ public class PostgresConnection {
 
 				statement.executeQuery(query);// execute query
 			} catch (SQLException e) {// any exception throw query exception
-				// TODO implements error handler
-				throw new QueryExecutationException();
+				if(!e.getMessage().contains("No results were returned by the query.")) {
+					// TODO implements error handler
+					throw new QueryExecutationException();
+				}
 			}
 		} else {// if connection is not defined throw connection error
 			throw new ConnectionNotDefinedException();
