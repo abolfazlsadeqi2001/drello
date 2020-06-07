@@ -21,6 +21,7 @@
 - [ ] Add clear event after closing the session
 - [ ] Add taughts table into welcome page
 - [ ] Setup the filtering on it
+- [ ] Add color picker beside markers
 - [ ] Implements simple username autherization (with mobile and username)
 - [ ] Implements better UI
 - [ ] Implements change night and day mode
