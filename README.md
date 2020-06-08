@@ -19,6 +19,8 @@
 
 ## TODOs
 - [ ] Add clear event after closing the session
+- [ ] Set duration of stream
+- [ ] Set size of finished stream
 - [ ] Add taughts table into welcome page
 - [ ] Setup the filtering on it
 - [ ] Add color picker beside markers
