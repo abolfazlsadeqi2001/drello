@@ -14,6 +14,7 @@ import generals.database.connection.exceptions.QueryExecutationException;
 public class StreamSaver {
 	private static final String SAVE_STREAM_CONFIGURE_FILE = "/home/abolfazlsadeqi2001/.save_stream";
 	
+	
 	public static String saveFinishedStream(String title,String teacher,String lesson,String className) {
 		if (!SoundAppender.getFinalWavSoundFile().exists()) {
 			return "sound file does not exists";
@@ -25,11 +26,6 @@ public class StreamSaver {
 
 		if (isTitleExists(title)) {
 			return "another title exists";
-		}
-
-		boolean isSaved = saveNewStreamDatas(title,teacher,className, lesson);
-		if (!isSaved) {
-			return "the datas are not saved into database";
 		}
 		
 		ConfigureFileReader reader;
@@ -49,9 +45,27 @@ public class StreamSaver {
 			return "problem on moving file";
 		}
 		
+		long size = getStreamContentsSize(streamsDirectory,title);
+
+		boolean isSaved = saveNewStreamDatas(title,teacher,className, lesson,size);
+		if (!isSaved) {
+			return "the datas are not saved into database";
+		}
+
 		return "saved";
 	}
 
+	private static long getStreamContentsSize(String rootDir,String title) {
+		long size = 0;
+		
+		File boardFile = new File(rootDir+"/"+title+"/"+BoardWriter.getBoardFileName());
+		File soundFile = new File(rootDir+"/"+title+"/"+SoundWriter.getSoundOggFileName());
+		
+		size += soundFile.length()/1024;
+		size += boardFile.length()/1024;
+		return size;
+	}
+	
 	private static boolean isTitleExists(String title) {
 		PostgresConnection con = null;
 		try {
@@ -69,14 +83,14 @@ public class StreamSaver {
 		}
 	}
 
-	private static boolean saveNewStreamDatas(String title, String teacher, String className, String lesson) {
+	private static boolean saveNewStreamDatas(String title, String teacher, String className, String lesson,long size) {
 		PostgresConnection con = null;
 		try {
 			con = new PostgresConnection();
 
-			String queryTemplate = "INSERT INTO taughts(title,teacher,class,lesson) VALUES('%s','%s','%s','%s')";
-			String query = String.format(queryTemplate, title, teacher, className, lesson);
-
+			String queryTemplate = "INSERT INTO taughts(title,teacher,class,lesson,size) VALUES('%s','%s','%s','%s','%d')";
+			String query = String.format(queryTemplate, title, teacher, className, lesson,size);
+			
 			con.defaultOperators(query);
 
 			return true;
