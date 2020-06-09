@@ -14,7 +14,7 @@ canvas {
 	left: 0px;
 }
 
-@media screen and (max-width: 20cm) {
+@media (max-width: 20cm),(orientation : landscape) {
 	.marker-container * {
 		float: left;
 		width: 3vw;
@@ -29,7 +29,22 @@ canvas {
 	}
 }
 
-@media screen and (min-width: 20cm) {
+@media (max-width: 20cm),(orientation : portrait) {
+	.marker-container * {
+		float: left;
+		width: 3vh;
+		height: 3vh;
+	}
+
+	input, button {
+		font-size: 2vh;
+		font-weight: 600;
+		width: 10vh;
+		height: 4vh;
+	}
+}
+
+@media (min-width: 20cm) {
 	.marker-container * {
 		float: left;
 		width: 1.5vw;
