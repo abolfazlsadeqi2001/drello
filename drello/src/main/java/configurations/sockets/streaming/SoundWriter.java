@@ -62,7 +62,7 @@ public class SoundWriter {
 	}
 	
 	public static void updatePreviousStreamsDurationByThisStreamTitle() {
-		previousStreamsDuration = SoundAppender.getPreviousWavFileDuration();
+		previousStreamsDuration = SoundAppender.getWavFileDuration(SoundAppender.getPreviousWavSoundFile());
 	}
 	
 	public static long getAllDurationOfPreviousStreamsByThisStreamTitle() {

@@ -28,6 +28,8 @@ public class StreamSaver {
 			return "another title exists";
 		}
 		
+		String duration = getDuration();
+		
 		ConfigureFileReader reader;
 		String streamsDirectory;
 		try {
@@ -46,20 +48,39 @@ public class StreamSaver {
 		}
 		
 		long size = getStreamContentsSize(streamsDirectory,title);
-
-		boolean isSaved = saveNewStreamDatas(title,teacher,className, lesson,size);
+		
+		boolean isSaved = saveNewStreamDatas(title,teacher,className, lesson,size,duration);
 		if (!isSaved) {
-			return "the datas are not saved into database";
+			return "the datas were not saved into database";
 		}
 
 		return "saved";
 	}
 
+	private static String getDuration() {
+		long seconds = SoundAppender.getWavFileDuration(SoundAppender.getFinalWavSoundFile().getAbsolutePath())/1000;
+		
+		int minutes = 0;
+		int hours = 0;
+		
+		while(seconds > 59) {
+			seconds -= 59;
+			minutes += 1;
+		}
+		
+		while(minutes > 59) {
+			minutes -= 59;
+			hours += 1;
+		}
+		
+		return "{"+hours+":"+minutes+":"+seconds+"}";
+	}
+	
 	private static long getStreamContentsSize(String rootDir,String title) {
 		long size = 0;
 		
-		File boardFile = new File(rootDir+"/"+title+"/"+BoardWriter.getBoardFileName());
-		File soundFile = new File(rootDir+"/"+title+"/"+SoundWriter.getSoundOggFileName());
+		File boardFile = new File(getMovedBoardFile(rootDir, title));
+		File soundFile = new File(getMovedSoundFile(rootDir, title));
 		
 		size += soundFile.length()/1024;
 		size += boardFile.length()/1024;
@@ -83,13 +104,13 @@ public class StreamSaver {
 		}
 	}
 
-	private static boolean saveNewStreamDatas(String title, String teacher, String className, String lesson,long size) {
+	private static boolean saveNewStreamDatas(String title, String teacher, String className, String lesson,long size,String duration) {
 		PostgresConnection con = null;
 		try {
 			con = new PostgresConnection();
 
-			String queryTemplate = "INSERT INTO taughts(title,teacher,class,lesson,size) VALUES('%s','%s','%s','%s','%d')";
-			String query = String.format(queryTemplate, title, teacher, className, lesson,size);
+			String queryTemplate = "INSERT INTO taughts(title,teacher,class,lesson,size,duration) VALUES('%s','%s','%s','%s','%d','%s')";
+			String query = String.format(queryTemplate, title, teacher, className, lesson,size,duration);
 			
 			con.defaultOperators(query);
 
@@ -115,7 +136,7 @@ public class StreamSaver {
 		boolean isBoardFileMoved = false;
 		{	
 			String sourceBoardPath = SoundWriter.getStreamFolderContentsContainerDirectoryPath()+BoardWriter.getBoardFileName();
-			String destinationBoardPath = rootDir+"/"+title+"/"+BoardWriter.getBoardFileName();
+			String destinationBoardPath = getMovedBoardFile(rootDir, title);
 		
 			File sourceBoardFile = new File(sourceBoardPath);
 			isBoardFileMoved = sourceBoardFile.renameTo(new File(destinationBoardPath));
@@ -124,12 +145,20 @@ public class StreamSaver {
 		boolean isSoundFileMoved = false;
 		{	
 			String sourceBoardPath = SoundWriter.getStreamFolderContentsContainerDirectoryPath()+SoundWriter.getSoundOggFileName();
-			String destinationBoardPath = rootDir+"/"+title+"/"+SoundWriter.getSoundOggFileName();
+			String destinationBoardPath = getMovedSoundFile(rootDir,title);
 		
 			File sourceBoardFile = new File(sourceBoardPath);
 			isSoundFileMoved = sourceBoardFile.renameTo(new File(destinationBoardPath));
 		}
 		
 		return isSoundFileMoved && isBoardFileMoved;
+	}
+	
+	private static String getMovedSoundFile(String rootDir,String title) {
+		return rootDir+"/"+title+"/"+SoundWriter.getSoundOggFileName();
+	}
+	
+	private static String getMovedBoardFile(String rootDir,String title) {
+		return rootDir+"/"+title+"/"+BoardWriter.getBoardFileName();
 	}
 }

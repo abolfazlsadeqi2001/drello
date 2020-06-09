@@ -99,8 +99,8 @@ public class SoundAppender {
 		return SoundWriter.getStreamFolderContentsContainerDirectoryPath() + WAV_SOUND_FILE;
 	}
 	
-	static long getPreviousWavFileDuration() {
-		File previousSound = new File(getPreviousWavSoundFile());
+	public static long getWavFileDuration(String path) {
+		File previousSound = new File(path);
 		
 		if(!previousSound.exists()) {
 			return 0;
