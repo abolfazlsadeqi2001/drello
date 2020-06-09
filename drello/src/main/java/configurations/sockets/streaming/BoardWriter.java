@@ -36,7 +36,7 @@ public class BoardWriter {
 			// TODO handle error
 		}
 	}
-
+	
 	private static void deletePreviousAndCurrentJSONFiles() throws IOException {
 		Files.deleteIfExists(getPreviousBoardFilePath());
 		Files.deleteIfExists(getCurrentBoardFilePath());
@@ -45,8 +45,14 @@ public class BoardWriter {
 	private static String mergeTwoFiles(String previousObjects,String currentObjects,long previousStreamsDuration) {
 		StringBuilder mergedObjects = new StringBuilder();
 		
-		if(previousObjects != null)
+		if(previousObjects != null) {
 			mergedObjects.append(previousObjects);
+			
+			// to add clear event after previous stream
+			String clearObjectTemplate = ",{\"type\":\"clear\",\"time\":%d}";
+			String clearObject = String.format(clearObjectTemplate, previousStreamsDuration);
+			mergedObjects.append(clearObject);
+		}
 		
 		if(currentObjects != null && previousObjects != null && previousObjects.length() > 0 && currentObjects.length() > 0)
 			mergedObjects.append(",");
