@@ -30,10 +30,10 @@ public class SoundStreamer extends SoundStreamingParent {
 			CloseReason closeReason = new CloseReason(CloseCodes.CANNOT_ACCEPT, "another streamer is streaming");
 			session.close(closeReason);
 		} else {
+			SoundStreamerValues.setStreamSessionInUsed();
+			SoundStreamerValues.setStreamerSession(session);
 			SoundWriter.setStreamIndex();
 			SoundWriter.createFolderForCurrentStreamIndex();
-			SoundStreamerValues.setStreamerSession(session);
-			SoundStreamerValues.setStreamSessionInUsed();
 			// set the limits for time and size
 			session.setMaxBinaryMessageBufferSize(MAX_BINARRY_MESSAGE);
 			session.setMaxIdleTimeout(MAX_TIME_OUT);
