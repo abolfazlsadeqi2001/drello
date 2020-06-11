@@ -24,61 +24,61 @@
 </head>
 <body onload="init();setup();">
 	<div class="nav">
-		<a href="manager_login">manager panel</a>
-		<a href="streamer_login">streamer panel</a>
+		<a href="manager_login">پنل مدیریت</a>
+		<a href="streamer_login">پنل تدریس</a>
 		<% long duration = SoundStreamerValues.getDurationSinceStartStreaming()/1000;
 		int allowedSkipDuration = SoundStreamingValues.getDelay();
 		if(SoundStreamerValues.isStreamStarted() && duration >= allowedSkipDuration){ %>
-			<a href='stream_receiver'>see stream</a>
+			<a href='stream_receiver'>تماشای تدریس زنده</a>
 		<%} %>
 	</div>
 	<!-- to teach section -->
-	<h1>to teach</h1>
+	<h1>برنامه تدریس آنلاین</h1>
 	
 	<select id="classSelector">
-	<option value='all'>all</option>
+	<option value='all'>همه</option>
 		<%=homePage.getClassesSelectInputBody() %>
 	</select>
 	
 	<select id="lessonSelector">
-	<option value='all'>all</option>
+	<option value='all'>همه</option>
 		<%=homePage.getLessonsSelectInputBody() %>
 	</select>
 	
 	<table class="toTeachTable" border="2">
 		<tr>
-			<td>title</td>
-			<td>lesson</td>
-			<td>class</td>
-			<td>teacher</td>
-			<td>month</td>
-			<td>day</td>
-			<td>hour</td>
-			<td>minute</td>
+			<td>عنوان</td>
+			<td>درس</td>
+			<td>کلاس</td>
+			<td>معلم</td>
+			<td>ماه</td>
+			<td>روز</td>
+			<td>ساعت</td>
+			<td>دقیقه</td>
 		</tr>
 	</table>
 	
 	<!-- taught lessons -->
-	<h1>Taught lessons</h1>
+	<h1>درس های تدریس شده</h1>
 	
 	<select id="classFilter">
-	<option value='all'>all</option>
+	<option value='all'>همه</option>
 		<%=homePage.getClassesSelectInputBody() %>
 	</select>
 	
 	<select id="lessonFilter">
-	<option value='all'>all</option>
+	<option value='all'>همه</option>
 		<%=homePage.getLessonsSelectInputBody() %>
 	</select>
 	
 	<table class="taughtLessons" border="2">
 		<tr>
-			<td>title</td>
-			<td>lesson</td>
-			<td>class</td>
-			<td>teacher</td>
-			<td>duration</td>
-			<td>size</td>
+			<td>عنوان تدریس</td>
+			<td>درس</td>
+			<td>کلاس</td>
+			<td>معلم</td>
+			<td>زمان</td>
+			<td>حجم بر حسب مگابایت</td>
 		</tr>
 	</table>
 </body>

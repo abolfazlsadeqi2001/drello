@@ -82,8 +82,8 @@ public class StreamSaver {
 		File boardFile = new File(getMovedBoardFile(rootDir, title));
 		File soundFile = new File(getMovedSoundFile(rootDir, title));
 		
-		size += soundFile.length()/1024;
-		size += boardFile.length()/1024;
+		size += soundFile.length()/(1024*1024);
+		size += boardFile.length()/(1024*1024);
 		return size;
 	}
 	

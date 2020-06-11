@@ -4,6 +4,7 @@
 <%@page import="pages.home.HomePage"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="configurations.manager.login.ManagerLogin"%>
+<%@page contentType="text/html; charset=utf-8" %>
 <%-- authentication --%>
 <%
 AuthenticationService service = AuthenticationLocator.getService(AuthenticationServiceTypes.manager);
@@ -25,7 +26,7 @@ if(!service.isAuthenticated(request)){
 <html>
 <body onload="init()">
 	<!-- add new to teach row -->
-	<h1>add new to teach plan</h1>
+	<h1>اضافه کردن برنامه تدریس آنلاین</h1>
 	<form action="../add_to_teach_row" method="GET" >
 		<label>class:</label>
 		<select name="class" >

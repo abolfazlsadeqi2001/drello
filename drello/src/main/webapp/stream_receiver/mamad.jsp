@@ -1,4 +1,5 @@
 <%@page import="configuration.sockets.sound.streaming.SoundStreamingValues"%>
+<%@page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 <title>stream</title>
@@ -33,7 +34,7 @@ canvas {
 <body onload="start();init();">
 	<div class="options" >
 		<input type="checkbox" onclick="isFullScreen(this);" />
-		<label>fullscreen</label>
+		<label>تمام صفحه</label>
 	</div>
 	<audio onended="finishAudio()" onloadedmetadata="loadNewMusic()"></audio>
 	<canvas></canvas>

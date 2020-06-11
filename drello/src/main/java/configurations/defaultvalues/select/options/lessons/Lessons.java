@@ -9,7 +9,7 @@ import generals.html.elements.generator.ElementGenerator;
  */
 public class Lessons {
 	private static final String[] lessons = new String[] {
-			"physic","hesaban","hendese","gossaste","riazi","shimi","farsi","dini","zaban","sabke zendegi","arabic","jame shenasi","salamat"
+			"فیزیک","حسابان","هندسه","گسسته","ریاضی","شیمی","فارسی","دینی","زبان","سبک زندگی","عربی","جامعه شناسی","سلامت"
 	};
 	
 	public static String selectInputBody;

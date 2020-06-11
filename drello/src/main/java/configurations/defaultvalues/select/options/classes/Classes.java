@@ -8,7 +8,7 @@ import generals.html.elements.generator.ElementGenerator;
  */
 public class Classes {
 		private static final String[] classes = new String[] {
-				"10 Tajrobi","10 Riazi","10 Ensani","11 Tajrobi","11 Riazi","11 Ensani","12 Tajrobi","12 Riazi","12 Ensani"
+				"10 تجربی","10 ریاضی","10 انسانی","11 تجربی","11 ریاضی","11 انسانی","12 تجربی","12 ریاضی","12 انسانی"
 		};
 		
 		private static String classesSelectInputBody ;

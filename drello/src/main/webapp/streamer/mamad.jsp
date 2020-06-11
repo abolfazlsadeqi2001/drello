@@ -47,11 +47,11 @@ if(!service.isAuthenticated(request)){
 	<% } %>
 	<div class="erasers-container">
 		<% if(request.getParameter("capture") != null && request.getParameter("capture").equals("on")){ %>
-		<button id="eraser" >eraser</button>
+		<button id="eraser" >پاک کن</button>
 		<input type="number" min="2" max="100" value="10" />
-		<button id="clear">clear</button>
+		<button id="clear">سفید</button>
 		<%} %>
-		<%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"<button onclick='closeStream();'>finish</button>":""%>
+		<%=(request.getParameter("sound") != null && request.getParameter("sound").equals("on"))?"<button onclick='closeStream();'>اتمام</button>":""%>
 	</div>
 	
 </body>
