@@ -21,8 +21,8 @@
 - [X] Add clear event after closing the session
 - [X] Set duration of stream
 - [X] Set size of finished stream
-- [ ] Add taughts table into welcome page
-- [ ] Setup the filtering on it
+- [X] Add taughts table into welcome page
+- [X] Setup the filtering on it
 - [ ] Setup read a finished stream
 - [ ] Add color picker beside markers
 - [ ] Implements simple username autherization (with mobile and username)

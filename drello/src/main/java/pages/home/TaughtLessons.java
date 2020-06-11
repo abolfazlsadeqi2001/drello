@@ -62,7 +62,7 @@ public class TaughtLessons {
 		body.append(set.getString("teacher"));
 		body.append("\",");
 		
-		body.append("\"class\":\"");
+		body.append("\"classId\":\"");
 		body.append(set.getString("class"));
 		body.append("\",");
 		

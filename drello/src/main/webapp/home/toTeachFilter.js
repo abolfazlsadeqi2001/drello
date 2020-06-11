@@ -6,44 +6,15 @@ var lessonToTeachFilter = "all";
 // called on startup
 function init(){
 	toTeachTable = document.querySelector(".toTeachTable");
-	// value the todo plans array from to teach table
-	var toTeachTableRows = document.querySelectorAll(".toTeachTable tr");
-	for(var i=0;i < toTeachTableRows.length;i++){
-		// skip header row
-		if(i == 0 || toTeachTableRows[i].children[0] == undefined){
-			continue;
-		}
-		
-		var c = toTeachTableRows[i].children;
-		todoPlans.push({
-			title : c[0].innerHTML,
-			lesson : c[1].innerHTML,
-			classId : c[2].innerHTML,
-			teacher : c[3].innerHTML,
-			month : c[4].innerHTML,
-			day : c[5].innerHTML,
-			hour : c[6].innerHTML,
-			minute : c[7].innerHTML
-		});
-	}
 	// find class selector
 	classToTeachSelector = document.querySelector("#classSelector");
-	var classToTeachSelectoreInnerHTML = classToTeachSelector.innerHTML;
-	classToTeachSelector.innerHTML = "";
-	classToTeachSelector.innerHTML += "<option value='all'>all</option>";
-	classToTeachSelector.innerHTML += classToTeachSelectoreInnerHTML;
 	// handle change event
 	classToTeachSelector.addEventListener("change",()=>{
 		classToTeachFilter = classToTeachSelector.value;
 		doNewFilters();
 	});
-	// find lesson selector
-	lessonToTeachSelector = document.querySelector("#lessonSelector");
-	var lessonToTeachSelectoreInnerHTML = lessonToTeachSelector.innerHTML;
-	lessonToTeachSelector.innerHTML = "";
-	lessonToTeachSelector.innerHTML += "<option value='all'>all</option>";
-	lessonToTeachSelector.innerHTML += lessonToTeachSelectoreInnerHTML;
 	// handle change event
+	lessonToTeachSelector = document.querySelector("#lessonSelector");
 	lessonToTeachSelector.addEventListener("change",()=>{
 		lessonToTeachFilter = lessonToTeachSelector.value.toLowerCase().trim();
 		doNewFilters();
@@ -80,7 +51,7 @@ function doNewFilters(){
 }
 // to clear all rows of a table exclude header row
 function clearTable(){
-	var rows = document.querySelectorAll("table tr");
+	var rows = document.querySelectorAll("table.toTeachTable tr");
 	for(var i=0; i<rows.length; i++){
 		if(i != 0){
 			rows[i].remove();
