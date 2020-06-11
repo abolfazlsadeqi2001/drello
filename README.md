@@ -23,6 +23,7 @@
 - [X] Set size of finished stream
 - [ ] Add taughts table into welcome page
 - [ ] Setup the filtering on it
+- [ ] Setup read a finished stream
 - [ ] Add color picker beside markers
 - [ ] Implements simple username autherization (with mobile and username)
 - [ ] Implements better UI
