@@ -7,7 +7,7 @@ function saveStream(){
 	let url = rootContext+"/save_stream?";
 	url += "class="+className+"&";
 	url += "lesson="+lesson+"&";
-	url += "title="+title+"&";
+	url += "title="+title.replace(" ","_")+"&";
 	url += "teacher="+teacher;
 	
 	fetch(url).then(response => response.text()).then(data=>{
