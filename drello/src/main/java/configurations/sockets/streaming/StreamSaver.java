@@ -12,7 +12,7 @@ import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
 
 public class StreamSaver {
-	private static final String SAVE_STREAM_CONFIGURE_FILE = "/home/abolfazlsadeqi2001/.save_stream";
+	private static final String SAVE_STREAM_CONFIGURE_FILE = "/configurations/save_stream";
 	
 	
 	public static String saveFinishedStream(String title,String teacher,String lesson,String className) {

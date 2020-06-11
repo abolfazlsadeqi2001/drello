@@ -13,7 +13,7 @@ public class SoundWriter {
 	
 	private static final String OGG_SOUND_FILE_NAME = "sound.ogg";
 
-	private static final String SOUND_WRITER_CONFIGURER_FILE = "/home/abolfazlsadeqi2001/.sound_writer_config";
+	private static final String SOUND_WRITER_CONFIGURER_FILE = "/configurations/sound_writer_config";
 	private static final String SOUND_WRITING_FOLDER = "/home/abolfazlsadeqi2001/Desktop/";
 
 	private static int streamIndex = 0;

@@ -18,7 +18,7 @@ import generals.configurations.configure.file.reader.exception.ReadingException;
  * @author abolfazlsadeqi2001
  */
 public class ConnectionValues {
-	private static final String POSTGRESQL_CONFIGURE_FILE_PATH = "/home/abolfazlsadeqi2001/.psql_configure";
+	private static final String POSTGRESQL_CONFIGURE_FILE_PATH = "/configurations/psql_configure";
 	private static final String POSTGRESQL_DEFAULT_USER = "postgres";
 	private static final String POSTGRESQL_DEFAULT_PASSWORD = "1234";
 	

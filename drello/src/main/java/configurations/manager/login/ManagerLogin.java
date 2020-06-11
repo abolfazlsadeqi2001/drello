@@ -9,7 +9,7 @@ import generals.configurations.configure.file.reader.exception.ReadingException;
  *
  */
 public class ManagerLogin {
-	private static final String PATH = "/home/abolfazlsadeqi2001/.manager_configure";
+	private static final String PATH = "/configurations/manager_configure";
 	
 	/**
 	 * get <mark>only</mark> user name for authentication
