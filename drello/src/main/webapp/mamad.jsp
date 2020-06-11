@@ -7,6 +7,7 @@
 <html>
 <head>
 <% HomePage homePage = HomePage.instance(); %>
+<% System.out.println(homePage.getTaughtLessons()); %>
 <meta charset="UTF-8">
 <meta name="author" content="abolfazlsadeqi2001" />
 <meta name="description" content="Home page" />

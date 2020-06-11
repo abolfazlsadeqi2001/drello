@@ -20,6 +20,10 @@ public class HomePage {
 	
 	private HomePage() {}
 	
+	public static String getTaughtLessons() {
+		return TaughtLessons.getTaughtObjects();
+	}
+	
 	/**
 	 * a proxy for {@link configurations.defaultvalues.select.options.classes.Classes}
 	 * @return
@@ -64,6 +68,7 @@ public class HomePage {
 	 */
 	private void updateRepository() throws EstablishConnectionException, QueryExecutationException, ConnectionNotDefinedException {
 		toTeachTable.updateRepository();
+		TaughtLessons.updateTaughtLessons();
 		// update last updated time
 		lastUpdateMilis = System.currentTimeMillis();
 	}
