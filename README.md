@@ -23,7 +23,8 @@
 - [X] Set size of finished stream
 - [X] Add taughts table into welcome page
 - [X] Setup the filtering on it
-- [ ] Setup read a finished stream
+- [X] Setup read a finished stream
+- [ ] Setup timeline on audio in finished stream reader
 - [ ] Add color picker beside markers
 - [ ] Implements simple username autherization (with mobile and username)
 - [ ] Implements better UI
