@@ -62,7 +62,7 @@ public class ToTeachTable {
 				toTeachModels.add(model);
 			}
 		} catch (SQLException e) {
-			ErrorLogger.logError(ToTeachTable.class, "setToTeacghModels", e.getMessage(),e.getLocalizedMessage());
+			ErrorLogger.logError(ToTeachTable.class, "setToTeacghModels", e.getMessage());
 			throw new QueryExecutationException();
 		}
 	}

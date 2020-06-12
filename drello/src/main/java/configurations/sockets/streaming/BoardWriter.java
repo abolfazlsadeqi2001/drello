@@ -35,7 +35,7 @@ public class BoardWriter {
 			// write mergedObjects into current Stream file
 			writeObjects(mergedObjects);
 		} catch (IOException e) {
-			ErrorLogger.logError(BoardWriter.class, "mergetPreviousJSONFileToCurrentFile", e.getMessage(),e.getLocalizedMessage());
+			ErrorLogger.logError(BoardWriter.class, "mergetPreviousJSONFileToCurrentFile", e.getMessage());
 		}
 	}
 	
@@ -101,7 +101,7 @@ public class BoardWriter {
 			}
 			writer.write(message.getBytes());
 		} catch (IOException e) {
-			ErrorLogger.logError(BoardWriter.class, "writeMessage", e.getMessage(),e.getLocalizedMessage());
+			ErrorLogger.logError(BoardWriter.class, "writeMessage", e.getMessage());
 		}
 	}
 	

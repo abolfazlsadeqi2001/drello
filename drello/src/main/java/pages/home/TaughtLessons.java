@@ -41,7 +41,7 @@ public class TaughtLessons {
 			con.close();
 		} catch (EstablishConnectionException | QueryExecutationException | ConnectionNotDefinedException | SQLException e) {
 			e.printStackTrace();
-			ErrorLogger.logError(TaughtLessons.class, "updateTaughtLessons", e.getMessage(),e.getLocalizedMessage());
+			ErrorLogger.logError(TaughtLessons.class, "updateTaughtLessons", e.getMessage());
 		}
 		
 	}

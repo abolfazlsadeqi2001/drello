@@ -12,7 +12,7 @@ public class PageHandler {
 			ConfigureFileReader reader = new ConfigureFileReader(CONFIG_FILE);
 			return reader.getParameterByIndex("#", 0);
 		} catch (ReadingException e) {
-			ErrorLogger.logError(PageHandler.class, "getFinishedStreamContentsContext", e.getMessage(),e.getLocalizedMessage());
+			ErrorLogger.logError(PageHandler.class, "getFinishedStreamContentsContext", e.getMessage());
 			return "";
 		}
 	}

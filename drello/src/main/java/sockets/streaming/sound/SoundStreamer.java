@@ -68,7 +68,7 @@ public class SoundStreamer extends SoundStreamingParent {
 
 	@OnError
 	public void onError(Throwable th) {
-		ErrorLogger.logError(SoundStreamer.class, "onError", th.getMessage(),th.getLocalizedMessage());
+		ErrorLogger.logError(SoundStreamer.class, "onError", th.getMessage());
 	}
 
 	@OnClose

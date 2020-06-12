@@ -99,7 +99,7 @@ public class StreamSaver {
 			return responseSet.next();
 		} catch (EstablishConnectionException | QueryExecutationException | ConnectionNotDefinedException
 				| SQLException e) {
-			ErrorLogger.logError(StreamSaver.class, "isTitleExists", e.getMessage(), e.getLocalizedMessage());
+			ErrorLogger.logError(StreamSaver.class, "isTitleExists", e.getMessage());
 			if (con != null) {
 				con.close();
 			}
@@ -120,7 +120,7 @@ public class StreamSaver {
 
 			return true;
 		} catch (ConnectionNotDefinedException | QueryExecutationException | EstablishConnectionException e) {
-			ErrorLogger.logError(StreamSaver.class, "saveNewStreamDatas", e.getMessage(), e.getLocalizedMessage());
+			ErrorLogger.logError(StreamSaver.class, "saveNewStreamDatas", e.getMessage());
 			if (con != null) {
 				con.close();
 			}
@@ -144,7 +144,7 @@ public class StreamSaver {
 		try {
 			Runtime.getRuntime().exec(String.format(moveCommandTemplate, sourceBoardPath,destBoard));
 		} catch (IOException e) {
-			ErrorLogger.logError(StreamSaver.class, "moveFiles", e.getMessage(), e.getLocalizedMessage());
+			ErrorLogger.logError(StreamSaver.class, "moveFiles", e.getMessage());
 			return false;
 		}
 		
@@ -154,7 +154,7 @@ public class StreamSaver {
 		try {
 			Runtime.getRuntime().exec(String.format(moveCommandTemplate, sourceOggPath,destOgg));
 		} catch (IOException e) {
-			ErrorLogger.logError(StreamSaver.class, "moveFiles", e.getMessage(), e.getLocalizedMessage());
+			ErrorLogger.logError(StreamSaver.class, "moveFiles", e.getMessage());
 			return false;
 		}
 		
