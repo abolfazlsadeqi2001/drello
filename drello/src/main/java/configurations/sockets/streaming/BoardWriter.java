@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import generals.error.logger.ErrorLogger;
+
 public class BoardWriter {
 	private static final String BOARD_FILE_NAME = "board.json";
 	
@@ -33,7 +35,7 @@ public class BoardWriter {
 			// write mergedObjects into current Stream file
 			writeObjects(mergedObjects);
 		} catch (IOException e) {
-			// TODO handle error
+			ErrorLogger.logError(BoardWriter.class, "mergetPreviousJSONFileToCurrentFile", e);
 		}
 	}
 	
@@ -83,7 +85,7 @@ public class BoardWriter {
 		try {
 			Files.writeString(currentJSONFile, objects);
 		} catch (IOException e) {
-			// TODO log error
+			ErrorLogger.logError(BoardWriter.class, "writeObjects", e, "problem on write json objects");
 		}
 	}
 	
@@ -99,7 +101,7 @@ public class BoardWriter {
 			}
 			writer.write(message.getBytes());
 		} catch (IOException e) {
-			// TODO handle error
+			ErrorLogger.logError(BoardWriter.class, "writeMessage", e);
 		}
 	}
 	

@@ -2,7 +2,6 @@ package configurations.manager.login;
 
 import generals.configurations.configure.file.reader.ConfigureFileReader;
 import generals.configurations.configure.file.reader.exception.ReadingException;
-//TODO write authentication system
 /**
  * read a file then use their contents for login in manager side
  * @author abolfazlsadeqi2001

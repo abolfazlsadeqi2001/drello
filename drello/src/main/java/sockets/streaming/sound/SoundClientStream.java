@@ -12,6 +12,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import configurations.sockets.streaming.SoundStreamerValues;
+import generals.error.logger.ErrorLogger;
 
 @ServerEndpoint("/sound_client")
 public class SoundClientStream extends SoundStreamingParent {
@@ -48,7 +49,7 @@ public class SoundClientStream extends SoundStreamingParent {
 				try {
 					client.close();
 				} catch (IOException e) {
-					// TODO handle error
+					ErrorLogger.logError(SoundClientStream.class, "closeAllClients", e);
 				}
 		});
 	}
@@ -61,7 +62,7 @@ public class SoundClientStream extends SoundStreamingParent {
 			try {
 				client.getBasicRemote().sendBinary(buffer);
 			} catch (IOException e) {
-				// TODO handle error
+				ErrorLogger.logError(SoundClientStream.class, "broadCast", e);
 			}
 		});
 	}
@@ -71,7 +72,7 @@ public class SoundClientStream extends SoundStreamingParent {
 	 */
 	@OnError
 	public void onError (Throwable th) {
-		// TODO handle error
+		ErrorLogger.logError(SoundClientStream.class, "onError", new Exception(th));
 	}
 	/**
 	 * after close connection remove it from our set

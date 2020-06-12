@@ -12,6 +12,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import generals.error.logger.ErrorLogger;
+
 public class SoundAppender {
 	
 	private static final String WAV_SOUND_FILE =  "sound.wav";
@@ -37,7 +39,7 @@ public class SoundAppender {
 		try {
 			child = Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			ErrorLogger.logError(SoundAppender.class, "convertFinalWavToOgg", e);
 		}
 		while(child != null && child.isAlive()) {
 			

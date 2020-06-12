@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
+import generals.error.logger.ErrorLogger;
 import pages.home.models.ToTeachModel;
 import pages.home.models.ToTeachMvc;
 
@@ -31,7 +32,7 @@ public class AddToTeachRow extends HttpServlet {
 			ToTeachMvc.setToDatabase(model);
 		} catch (EstablishConnectionException | ConnectionNotDefinedException | QueryExecutationException e) {
 			response.setStatus(503);
-			// TODO Error Handler
+			ErrorLogger.logError(AddToTeachRow.class, "doGet", e);
 		}
 		
 		response.sendRedirect(request.getContextPath());

@@ -10,6 +10,7 @@ import generals.database.connection.PostgresConnection;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
+import generals.error.logger.ErrorLogger;
 import pages.home.models.ToTeachModel;
 
 public class ToTeachTable {
@@ -61,7 +62,7 @@ public class ToTeachTable {
 				toTeachModels.add(model);
 			}
 		} catch (SQLException e) {
-			// TODO handle error
+			ErrorLogger.logError(ToTeachTable.class, "setToTeacghModels", e);
 			throw new QueryExecutationException();
 		}
 	}

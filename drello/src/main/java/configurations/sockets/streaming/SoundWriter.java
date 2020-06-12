@@ -8,6 +8,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import generals.configurations.configure.file.reader.ConfigureFileReader;
 import generals.configurations.configure.file.reader.exception.ReadingException;
+import generals.error.logger.ErrorLogger;
 
 public class SoundWriter {
 	
@@ -31,7 +32,7 @@ public class SoundWriter {
 		try(FileOutputStream writer = new FileOutputStream(file, true)) {
 			writer.write(bytes);
 		} catch (IOException e) {
-			// TODO handle error
+			ErrorLogger.logError(SoundWriter.class, "writeMessage", e);
 		}
 	}
 	

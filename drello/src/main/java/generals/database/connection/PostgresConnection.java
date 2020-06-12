@@ -12,6 +12,7 @@ import configurations.database.postgresql.ConnectionValues;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
+import generals.error.logger.ErrorLogger;
 
 /**
  * this class provide some features to execute your sqls into psql<br>
@@ -43,7 +44,7 @@ public class PostgresConnection {
 			Class.forName("org.postgresql.Driver");
 			con = DriverManager.getConnection(url, userName, password);
 		} catch (SQLException | ClassNotFoundException e) {
-			// TODO implements error handler
+			ErrorLogger.logError(PostgresConnection.class, "", e);
 			throw new EstablishConnectionException();
 		}
 	}
@@ -66,7 +67,7 @@ public class PostgresConnection {
 
 				result = statement.executeQuery(query);// execute query return the result
 			} catch (SQLException e) {// any exception throw query exception
-				// TODO implements error handler
+				ErrorLogger.logError(PostgresConnection.class, "queryOperator", e);
 				throw new QueryExecutationException();
 			}
 		} else {// if connection is not defined throw connection error
@@ -91,8 +92,8 @@ public class PostgresConnection {
 
 				statement.executeQuery(query);// execute query
 			} catch (SQLException e) {// any exception throw query exception
+				ErrorLogger.logError(PostgresConnection.class, "defaultOperators", e);
 				if(!e.getMessage().contains("No results were returned by the query.")) {
-					// TODO implements error handler
 					throw new QueryExecutationException();
 				}
 			}
@@ -112,7 +113,7 @@ public class PostgresConnection {
 			statement.close();
 			con.close();
 		}catch(SQLException e) {
-			// TODO implements error handler
+			ErrorLogger.logError(PostgresConnection.class, "close", e);
 		}
 	}
 }

@@ -15,6 +15,7 @@ import javax.websocket.Session;
 import configurations.sockets.streaming.BoardParser;
 import configurations.sockets.streaming.BoardWriter;
 import configurations.sockets.streaming.SoundStreamerValues;
+import generals.error.logger.ErrorLogger;
 
 @ServerEndpoint("/board_stream")
 public class BoardStreaming extends BoardWebSocketParent {
@@ -112,7 +113,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 */
 	@OnError
 	public void error(Throwable th) {
-		// TODO handle my errors
+		ErrorLogger.logError(BoardStreaming.class, "error", new Exception(th));
 	}
 
 	/**

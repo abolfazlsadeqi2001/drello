@@ -18,6 +18,7 @@ import configurations.sockets.streaming.SoundAppender;
 import configurations.sockets.streaming.SoundStreamerValues;
 import configurations.sockets.streaming.SoundWriter;
 import configurations.streamer.login.StreamerLogin;
+import generals.error.logger.ErrorLogger;
 import sockets.streaming.board.BoardStreaming;
 
 @ServerEndpoint("/sound_streamer")
@@ -67,7 +68,7 @@ public class SoundStreamer extends SoundStreamingParent {
 
 	@OnError
 	public void onError(Throwable th) {
-		// TODO handle error
+		ErrorLogger.logError(SoundStreamer.class, "onError", new Exception(th));
 	}
 
 	@OnClose

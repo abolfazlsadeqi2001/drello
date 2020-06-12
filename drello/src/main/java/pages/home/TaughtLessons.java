@@ -7,6 +7,7 @@ import generals.database.connection.PostgresConnection;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
+import generals.error.logger.ErrorLogger;
 
 public class TaughtLessons {
 	private static String TAUGHT_OBJECTS = "";
@@ -40,7 +41,7 @@ public class TaughtLessons {
 			con.close();
 		} catch (EstablishConnectionException | QueryExecutationException | ConnectionNotDefinedException | SQLException e) {
 			e.printStackTrace();
-			// TODO Auto-generated catch block
+			ErrorLogger.logError(TaughtLessons.class, "updateTaughtLessons", e);
 		}
 		
 	}

@@ -1,6 +1,7 @@
 package apis.remove.to.teach;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
+import generals.error.logger.ErrorLogger;
 import pages.home.models.ToTeachModel;
 import pages.home.models.ToTeachMvc;
 
@@ -21,7 +23,7 @@ public class RemoveToTeachRow extends HttpServlet {
 		try {
 			ToTeachMvc.deleteFromDatabase(model);
 		} catch (EstablishConnectionException | ConnectionNotDefinedException | QueryExecutationException e) {
-			// TODO implements error handler
+			ErrorLogger.logError(RemoveToTeachRow.class, "doGet", e);
 		}
 	}
 

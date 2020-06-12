@@ -14,7 +14,6 @@ import generals.configurations.configure.file.reader.exception.ReadingException;
  * <b>warning the order must follow the top order </b>
  * and different them with a | for each parameter <br>
  * like root#1234#jdbc:postgresql://localhost:5432/drello
- * TODO write test
  * @author abolfazlsadeqi2001
  */
 public class ConnectionValues {

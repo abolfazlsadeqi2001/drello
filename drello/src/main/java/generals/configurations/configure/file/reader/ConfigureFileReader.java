@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import generals.configurations.configure.file.reader.exception.ReadingException;
-// TODO add default splitter
+import generals.error.logger.ErrorLogger;
 /**
  * this class provide some features to read a configure file
  * ,a configure file content must look like this :<br>
@@ -67,7 +67,7 @@ public class ConfigureFileReader {
 			body = Files.readString(path);
 			bodiesMap.put(pathText, body);
 		} catch (IOException e) {
-			// TODO implements error handler
+			ErrorLogger.logError(ConfigureFileReader.class, "readFile", e);
 			throw new ReadingException();
 		}
 	}

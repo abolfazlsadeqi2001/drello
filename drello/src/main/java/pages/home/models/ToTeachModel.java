@@ -3,10 +3,7 @@ package pages.home.models;
 /**
  * this model is used to create a row in to teach tables which include all
  * required fields as getter and setter and has a method called compareByDate
- * which compare using 1 0 -1 to compare the date of current object with another
- * TODO write test for to teach table fields(primary,not null,length) on
- * database TODO throw exception for out of range in setter methods
- * 
+ * which compare using 1 0 -1 to compare the date of current object with another * 
  * @author abolfazlsadeqi2001
  *
  */

@@ -10,6 +10,7 @@ import generals.database.connection.PostgresConnection;
 import generals.database.connection.exceptions.ConnectionNotDefinedException;
 import generals.database.connection.exceptions.EstablishConnectionException;
 import generals.database.connection.exceptions.QueryExecutationException;
+import generals.error.logger.ErrorLogger;
 
 public class StreamSaver {
 	private static final String SAVE_STREAM_CONFIGURE_FILE = "/configurations/save_stream";
@@ -96,7 +97,7 @@ public class StreamSaver {
 			return responseSet.next();
 		} catch (EstablishConnectionException | QueryExecutationException | ConnectionNotDefinedException
 				| SQLException e) {
-			// TODO Auto-generated catch block
+			ErrorLogger.logError(StreamSaver.class, "isTitleExists", e);
 			if (con != null) {
 				con.close();
 			}
@@ -116,7 +117,7 @@ public class StreamSaver {
 
 			return true;
 		} catch (ConnectionNotDefinedException | QueryExecutationException | EstablishConnectionException e) {
-			// TODO Auto-generated catch block
+			ErrorLogger.logError(StreamSaver.class, "saveNewStreamDatas", e);
 			if(con != null) {
 				con.close();
 			}

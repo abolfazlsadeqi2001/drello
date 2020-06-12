@@ -11,6 +11,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import configurations.sockets.streaming.BoardParser;
+import generals.error.logger.ErrorLogger;
 
 @ServerEndpoint("/board_client")
 public class BoardStreamReceiver extends BoardWebSocketParent {
@@ -42,7 +43,7 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 			try {
 				s.getBasicRemote().sendText(message);
 			} catch (IOException e) {
-				// TODO handle error
+				ErrorLogger.logError(BoardStreamReceiver.class, "broadcastMessage", e);
 			}
 		});
 	}
@@ -51,7 +52,7 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 			try {
 				session.close();
 			} catch (IOException e) {
-				// TODO handle error
+				ErrorLogger.logError(BoardStreamReceiver.class, "closeAllClients", e);
 			}
 		});
 	}
@@ -61,7 +62,7 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 	 */
 	@OnError
 	public void error(Throwable th) {
-		// TODO handle error
+		ErrorLogger.logError(BoardStreamReceiver.class, "error", new Exception(th));
 	}
 	/**
 	 * onclose = remove current session from {@link #sessions}
