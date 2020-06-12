@@ -26,11 +26,11 @@
 - [X] Setup the filtering on it
 - [X] Setup read a finished stream
 - [ ] find the solution for problem on resutlset closed
-- [ ] Setup timeline on audio in finished stream reader
-- [ ] Add timer in stream side
 - [ ] Add option to remove a finished stream by title
 - [ ] Add color picker beside markers
-- [ ] Implements simple username autherization (with mobile and username)
+- [ ] Setup timeline on audio in finished stream reader
+- [ ] Add timer in stream side
+- [ ] Implements chat system in realtime teaching mode
 - [ ] Implements better UI
 - [ ] Implements change night and day mode
-- [ ] Implements chat system in realtime teaching mode
+- [ ] Implements simple username autherization (with mobile and username)
