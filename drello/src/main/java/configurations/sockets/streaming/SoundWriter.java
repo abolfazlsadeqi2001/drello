@@ -32,7 +32,7 @@ public class SoundWriter {
 		try(FileOutputStream writer = new FileOutputStream(file, true)) {
 			writer.write(bytes);
 		} catch (IOException e) {
-			ErrorLogger.logError(SoundWriter.class, "writeMessage", e);
+			ErrorLogger.logError(SoundWriter.class, "writeMessage", e.getMessage(),e.getLocalizedMessage());
 		}
 	}
 	

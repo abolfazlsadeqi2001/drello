@@ -49,7 +49,7 @@ public class SoundClientStream extends SoundStreamingParent {
 				try {
 					client.close();
 				} catch (IOException e) {
-					ErrorLogger.logError(SoundClientStream.class, "closeAllClients", e);
+					ErrorLogger.logError(SoundClientStream.class, "closeAllClients", e.getMessage(),e.getLocalizedMessage());
 				}
 		});
 	}
@@ -62,7 +62,7 @@ public class SoundClientStream extends SoundStreamingParent {
 			try {
 				client.getBasicRemote().sendBinary(buffer);
 			} catch (IOException e) {
-				ErrorLogger.logError(SoundClientStream.class, "broadCast", e);
+				ErrorLogger.logError(SoundClientStream.class, "broadCast", e.getMessage(),e.getLocalizedMessage());
 			}
 		});
 	}
@@ -72,7 +72,7 @@ public class SoundClientStream extends SoundStreamingParent {
 	 */
 	@OnError
 	public void onError (Throwable th) {
-		ErrorLogger.logError(SoundClientStream.class, "onError", new Exception(th));
+		ErrorLogger.logError(SoundClientStream.class, "onError", th.getMessage(),th.getLocalizedMessage());
 	}
 	/**
 	 * after close connection remove it from our set

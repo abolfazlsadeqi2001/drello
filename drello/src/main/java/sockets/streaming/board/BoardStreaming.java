@@ -113,7 +113,7 @@ public class BoardStreaming extends BoardWebSocketParent {
 	 */
 	@OnError
 	public void error(Throwable th) {
-		ErrorLogger.logError(BoardStreaming.class, "error", new Exception(th));
+		ErrorLogger.logError(BoardStreaming.class, "error", th.getMessage(),th.getLocalizedMessage());
 	}
 
 	/**

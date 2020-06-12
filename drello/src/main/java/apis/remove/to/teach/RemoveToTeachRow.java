@@ -23,7 +23,7 @@ public class RemoveToTeachRow extends HttpServlet {
 		try {
 			ToTeachMvc.deleteFromDatabase(model);
 		} catch (EstablishConnectionException | ConnectionNotDefinedException | QueryExecutationException e) {
-			ErrorLogger.logError(RemoveToTeachRow.class, "doGet", e);
+			ErrorLogger.logError(RemoveToTeachRow.class, "doGet", e.getMessage(),e.getLocalizedMessage());
 		}
 	}
 

@@ -39,7 +39,7 @@ public class SoundAppender {
 		try {
 			child = Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
-			ErrorLogger.logError(SoundAppender.class, "convertFinalWavToOgg", e);
+			ErrorLogger.logError(SoundAppender.class, "convertFinalWavToOgg", e.getMessage(),e.getLocalizedMessage());
 		}
 		while(child != null && child.isAlive()) {
 			

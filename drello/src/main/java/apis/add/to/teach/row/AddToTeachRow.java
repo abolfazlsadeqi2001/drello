@@ -32,7 +32,7 @@ public class AddToTeachRow extends HttpServlet {
 			ToTeachMvc.setToDatabase(model);
 		} catch (EstablishConnectionException | ConnectionNotDefinedException | QueryExecutationException e) {
 			response.setStatus(503);
-			ErrorLogger.logError(AddToTeachRow.class, "doGet", e);
+			ErrorLogger.logError(AddToTeachRow.class, "doGet", e.getMessage(),e.getLocalizedMessage());
 		}
 		
 		response.sendRedirect(request.getContextPath());

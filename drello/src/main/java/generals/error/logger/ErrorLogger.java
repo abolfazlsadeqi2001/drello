@@ -11,22 +11,22 @@ import generals.configurations.configure.file.reader.exception.ReadingException;
 public class ErrorLogger {
 	private static final String CONFIG_FILE = "/configurations/error_logger";
 	
-	public static void logError(Class c,String methodName,Exception e) {
-		logError(c,methodName,e,"null");
+	public static void logError(Class c,String methodName,String exceptionMessage,String localize) {
+		logError(c,methodName,exceptionMessage,localize,"null");
 	}
 	
-	public static void logError(Class c,String methodName,Exception e,String message) {
+	public static void logError(Class c,String methodName,String exceptionMessage,String localize,String message) {
 		try {
 			Method method = c.getMethod(methodName);
-			logError(method,e,message);
-		} catch (NoSuchMethodException | SecurityException e1) {
-			logError(null,e,message);
+			logingError(c,method,exceptionMessage,localize,message);
+		} catch (NoSuchMethodException | NullPointerException | SecurityException e1) {
+			logingError(c,null,exceptionMessage,localize,message);
 		}
 	}
 	
-	private static void logError(Method method,Exception e,String message) {
+	private static void logingError(Class c,Method method,String exceptionMessage,String localize,String message) {
 		File file = getLoggerFile();
-		String text = processErrorText(method, e, message);
+		String text = processErrorText(c,method, exceptionMessage,localize, message);
 		writeIntoLogger(file, text);
 	}
 	
@@ -37,28 +37,25 @@ public class ErrorLogger {
 		}
 	}
 	
-	private static String processErrorText(Method method,Exception e,String message) {
-		String className = method.getClass().getName();
-		String errorMessage = e.getMessage();
-		String cause = e.getCause().toString();
-		String localize = e.getLocalizedMessage();
+	private static String processErrorText(Class c,Method method,String exceptionMessage,String localize,String message) {
+		String className = c.getName();
 		String time = LocalDateTime.now().toString();
-		String methodName; 
+		
+		String methodName = ""; 
 		if(method == null) {
 			methodName = "null";
 		} else {
 			methodName = method.getName();
 		}
 		
-		String textTemplate = "ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR"+ 
-		"class : %s \n"+
-		"method : %s \n"+
-		"message : %s \n"+
-		"cause : %s \n"
+		String textTemplate = "ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR_ERROR\n"
+		+"class : %s \n"
+		+"method : %s \n"
+		+"message : %s \n"
 		+"localize : %s \n"
 		+"time : %s \n";
 		
-		return String.format(textTemplate, className,methodName,errorMessage,cause,localize,time);
+		return String.format(textTemplate, className,methodName,exceptionMessage,localize,time);
 	}
 	
 	private static File getLoggerFile() {

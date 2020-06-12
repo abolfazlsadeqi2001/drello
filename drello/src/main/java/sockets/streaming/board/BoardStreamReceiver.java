@@ -43,7 +43,7 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 			try {
 				s.getBasicRemote().sendText(message);
 			} catch (IOException e) {
-				ErrorLogger.logError(BoardStreamReceiver.class, "broadcastMessage", e);
+				ErrorLogger.logError(BoardStreamReceiver.class, "broadcastMessage", e.getMessage(),e.getLocalizedMessage());
 			}
 		});
 	}
@@ -52,7 +52,7 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 			try {
 				session.close();
 			} catch (IOException e) {
-				ErrorLogger.logError(BoardStreamReceiver.class, "closeAllClients", e);
+				ErrorLogger.logError(BoardStreamReceiver.class, "closeAllClients", e.getMessage(),e.getLocalizedMessage());
 			}
 		});
 	}
@@ -62,7 +62,7 @@ public class BoardStreamReceiver extends BoardWebSocketParent {
 	 */
 	@OnError
 	public void error(Throwable th) {
-		ErrorLogger.logError(BoardStreamReceiver.class, "error", new Exception(th));
+		ErrorLogger.logError(BoardStreamReceiver.class, "error", th.getMessage(),th.getLocalizedMessage());
 	}
 	/**
 	 * onclose = remove current session from {@link #sessions}

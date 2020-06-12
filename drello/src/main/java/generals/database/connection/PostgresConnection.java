@@ -44,7 +44,8 @@ public class PostgresConnection {
 			Class.forName("org.postgresql.Driver");
 			con = DriverManager.getConnection(url, userName, password);
 		} catch (SQLException | ClassNotFoundException e) {
-			ErrorLogger.logError(PostgresConnection.class, "", e);
+			System.out.println(e.getMessage());
+			ErrorLogger.logError(PostgresConnection.class, "", e.getMessage(),e.getLocalizedMessage());
 			throw new EstablishConnectionException();
 		}
 	}
@@ -67,7 +68,7 @@ public class PostgresConnection {
 
 				result = statement.executeQuery(query);// execute query return the result
 			} catch (SQLException e) {// any exception throw query exception
-				ErrorLogger.logError(PostgresConnection.class, "queryOperator", e);
+				ErrorLogger.logError(PostgresConnection.class, "queryOperator", e.getMessage(),e.getLocalizedMessage());
 				throw new QueryExecutationException();
 			}
 		} else {// if connection is not defined throw connection error
@@ -92,7 +93,7 @@ public class PostgresConnection {
 
 				statement.executeQuery(query);// execute query
 			} catch (SQLException e) {// any exception throw query exception
-				ErrorLogger.logError(PostgresConnection.class, "defaultOperators", e);
+				ErrorLogger.logError(PostgresConnection.class, "defaultOperators", e.getMessage(),e.getLocalizedMessage());
 				if(!e.getMessage().contains("No results were returned by the query.")) {
 					throw new QueryExecutationException();
 				}
@@ -113,7 +114,7 @@ public class PostgresConnection {
 			statement.close();
 			con.close();
 		}catch(SQLException e) {
-			ErrorLogger.logError(PostgresConnection.class, "close", e);
+			ErrorLogger.logError(PostgresConnection.class, "close", e.getMessage(),e.getLocalizedMessage());
 		}
 	}
 }

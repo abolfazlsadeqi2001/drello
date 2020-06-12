@@ -67,7 +67,7 @@ public class ConfigureFileReader {
 			body = Files.readString(path);
 			bodiesMap.put(pathText, body);
 		} catch (IOException e) {
-			ErrorLogger.logError(ConfigureFileReader.class, "readFile", e);
+			ErrorLogger.logError(ConfigureFileReader.class, "readFile in configure file reader", e.getMessage(),e.getLocalizedMessage());
 			throw new ReadingException();
 		}
 	}
