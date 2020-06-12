@@ -17,7 +17,7 @@ public class StreamSaver {
 	
 	public static String saveFinishedStream(String title,String teacher,String lesson,String className) {
 		if (!SoundAppender.getFinalWavSoundFile().exists()) {
-			return "sound file does not exists";
+			return "sound file does not exist";
 		}
 
 		if (!BoardWriter.getFinishedBoardFile().exists()) {

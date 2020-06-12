@@ -63,7 +63,8 @@ function addTaughtRow(obj){
 	var row = document.createElement("tr");
 	
 	var titleColumn = document.createElement("td");
-	titleColumn.innerHTML = obj.title;
+	var url = "finished_stream_reader?title="+obj.title;
+	titleColumn.innerHTML = "<a href='"+url+"' >"+obj.title+"</a>";
 	row.appendChild(titleColumn);
 	
 	var lessonColumn = document.createElement("td");
